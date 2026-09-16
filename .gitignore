@@ -1,0 +1,21 @@
+# ===== IDE / 编辑器 =====
+.idea/
+.vscode/
+.hbuilderx/
+*.iml
+*.iws
+*.ipr
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+
+# ===== 依赖与构建产物 =====
+node_modules/
+target/
+dist/
+unpackage/
+
+# ===== 日志与临时文件 =====
+*.log
+*.tmp
