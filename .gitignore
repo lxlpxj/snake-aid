@@ -1,18 +1,23 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+# ===== Java (Spring Boot) =====
+target/
+*.class
+*.jar
+*.war
+*.iml
+.idea/
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
 
-# Other files and folders
-.settings/
+# ===== Node (uni-app / Vue) =====
+node_modules/
+dist/
+unpackage/
+.hbuilderx/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# ===== 通用 =====
+.DS_Store
+Thumbs.db
