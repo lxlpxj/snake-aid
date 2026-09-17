@@ -1,0 +1,15 @@
+# 第一阶段：构建 jar 包
+# ⚠️ 如果你的项目是 Java 8，请把下面的 17 改成 8
+FROM maven:3.8.6-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# 第二阶段：运行 jar 包
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
