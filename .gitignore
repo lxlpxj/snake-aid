@@ -21,6 +21,10 @@ node_modules/
 dist/
 unpackage/
 
+# ===== 用户上传文件 (运行时资源) =====
+uploads/
+snake-aid-backend/uploads/
+
 # ===== 日志与临时文件 =====
 *.log
 *.tmp
@@ -30,3 +34,8 @@ yarn-error.log*
 
 # ===== Docker 数据卷 =====
 mysql_data/
+
+# 忽略本地配置文件
+snake-aid-backend/src/main/resources/application.yml
+snake-aid-backend/src/main/resources/application.properties
+snake-aid-backend/src/main/resources/application-dev.yml
