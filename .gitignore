@@ -34,6 +34,13 @@ yarn-error.log*
 
 # ===== Docker 数据卷 =====
 mysql_data/
+snake-mysql-data/
+snake-redis-data/
+
+# ===== 本地敏感配置（.env.example 是模板，.env 有真实值）=====
+.env
+.env.local
+.env.*.local
 
 # 忽略本地配置文件
 snake-aid-backend/src/main/resources/application.yml

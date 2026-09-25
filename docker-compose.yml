@@ -1,50 +1,135 @@
+﻿# ============================================================
+# 蛇伤急救系统 —— Docker Compose（本地构建产物 + Docker 运行）
+# ============================================================
+# 前提（本地已完成）：
+#   后端: cd snake-aid-backend && mvn clean package -DskipTests
+#   前端: cd snake-admin-web && npm install && npm run build
+#
+# 一键启动：
+#   docker compose up -d --build
+#
+# 访问：
+#   管理后台:   http://localhost
+#   后端 API:   http://localhost:8080/api/swagger-ui.html
+#   MySQL:     localhost:3306  root / root123456
+#   Redis:     localhost:6379
+# ============================================================
+
 services:
-  # 1. MySQL 数据库
+  # ----------------------------------------------------------
+  # 1. MySQL 8.0 —— 数据库
+  # ----------------------------------------------------------
   mysql:
     image: mysql:8.0
     container_name: snake-mysql
-    restart: always
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root123456  # 数据库 root 密码
-      MYSQL_DATABASE: snake_aid        # 自动创建的数据库名
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123456}
+      MYSQL_DATABASE: snake
       TZ: Asia/Shanghai
+      LANG: C.UTF-8
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
-      - ./mysql_data:/var/lib/mysql    # 数据持久化
-      - ./docs/sql:/docker-entrypoint-initdb.d # 自动执行 init.sql
+      - snake-mysql-data:/var/lib/mysql
+      # 自动初始化（仅空卷时执行一次，用 backend 下最新版）
+      - ./snake-aid-backend/docs/sql:/docker-entrypoint-initdb.d:ro
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root123456}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
     networks:
-      - snake-network
+      - snake-net
 
-  # 2. Redis 缓存
+  # ----------------------------------------------------------
+  # 2. Redis 7 —— 短信验证码 / 缓存
+  # ----------------------------------------------------------
   redis:
-    image: redis:7.0
+    image: redis:7.0-alpine
     container_name: snake-redis
-    restart: always
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "6379:6379"
+    volumes:
+      - snake-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     networks:
-      - snake-network
+      - snake-net
 
-  # 3. Spring Boot 后端
+  # ----------------------------------------------------------
+  # 3. Spring Boot 后端 —— 本地已打好 jar，Docker 只负责运行
+  # ----------------------------------------------------------
   backend:
-    build: ./snake-aid-backend         # 去这个目录找 Dockerfile
+    build:
+      context: ./snake-aid-backend
+      dockerfile: Dockerfile
     container_name: snake-backend
-    restart: always
+    restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
-      # ⚠️ 极其重要：这里是在 Docker 内部网络，主机名必须写 mysql 和 redis，绝不能写 localhost！
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/snake_aid?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      # MySQL（用服务名 snake-mysql 在自定义网络内互访）
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/snake?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root123456
-      SPRING_REDIS_HOST: redis
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123456}
+      # Redis
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      # 应用自定义
+      APP_UPLOAD_DIR: /app/uploads
+      APP_AMAP_KEY: ${AMAP_KEY:-your_amap_key_here}
+      JWT_SECRET: ${JWT_SECRET:-please-change-to-a-long-random-string}
+      JWT_EXPIRE_HOURS: "24"
+      JAVA_OPTS: -Xms256m -Xmx512m -Duser.timezone=Asia/Shanghai
+      TZ: Asia/Shanghai
+    volumes:
+      - snake-uploads:/app/uploads
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
-      - snake-network
+      - snake-net
 
+  # ----------------------------------------------------------
+  # 4. Nginx + 前端 —— 本地已 build 好 dist，Docker 只负责运行
+  # ----------------------------------------------------------
+  frontend:
+    build:
+      context: ./snake-admin-web
+      dockerfile: Dockerfile
+    container_name: snake-frontend
+    restart: unless-stopped
+    ports:
+      - "8081:80"          # 如果本地 80 被 IIS/其他占用，改成 "8081:80"
+    depends_on:
+      - backend          # 后端先起
+    networks:
+      - snake-net
+
+# ============================================================
+# 持久化数据卷
+# ============================================================
+volumes:
+  snake-mysql-data:
+  snake-redis-data:
+  snake-uploads:
+
+# ============================================================
+# 自定义 bridge 网络（容器间用服务名互访）
+# ============================================================
 networks:
-  snake-network:
+  snake-net:
     driver: bridge

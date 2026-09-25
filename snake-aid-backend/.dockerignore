@@ -1,0 +1,28 @@
+﻿# ==== 运行时产物 ====
+target/
+uploads/
+*.log
+*.tmp
+
+# ==== Git ====
+.git/
+.gitignore
+
+# ==== IDE ====
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# ==== 本地敏感配置（保留 application.yml.example 作为默认配置模板）====
+src/main/resources/application.yml
+src/main/resources/application-dev.yml
+src/main/resources/application.properties
+
+# ==== 测试 ====
+src/test/
+
+# ==== Docker ====
+Dockerfile
+.dockerignore
