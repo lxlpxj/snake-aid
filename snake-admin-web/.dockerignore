@@ -1,0 +1,27 @@
+# ==== 本地安装产物（Docker 会自己 npm install）====
+node_modules/
+dist/
+
+# ==== Git ====
+.git/
+.gitignore
+
+# ==== IDE ====
+.idea/
+.vscode/
+.hbuilderx/
+*.iml
+
+# ==== 环境配置 ====
+.env
+.env.local
+.env.*.local
+
+# ==== 测试 ====
+coverage/
+.DS_Store
+npm-debug.log*
+
+# ==== Docker 自身 ====
+Dockerfile
+.dockerignore
