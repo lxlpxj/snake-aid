@@ -1,111 +1,137 @@
-{
-	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "毒蛇自救",
-				"navigationBarBackgroundColor": "#E53935",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/emergency/emergency",
-			"style": {
-				"navigationBarTitleText": "紧急自救",
-				"navigationBarBackgroundColor": "#E53935",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/snake/list",
-			"style": {
-				"navigationBarTitleText": "蛇种图库",
-				"navigationBarBackgroundColor": "#2E7D32",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/hospital/list",
-			"style": {
-				"navigationBarTitleText": "就近医院",
-				"navigationBarBackgroundColor": "#1565C0",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/mine/mine",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#455A64",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/snake/detail",
-			"style": {
-				"navigationBarTitleText": "蛇种详情"
-			}
-		},
-		{
-			"path": "pages/guide/guide",
-			"style": {
-				"navigationBarTitleText": "自救指引"
-			}
-		},
-		{
-			"path": "pages/guide/steps",
-			"style": {
-				"navigationBarTitleText": "自救步骤"
-			}
-		},
-		{
-			"path": "pages/mine/login",
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
-		},
-		{
-			"path": "pages/mine/admin-entry",
-			"style": {
-				"navigationBarTitleText": "管理后台"
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "毒蛇自救",
-		"navigationBarBackgroundColor": "#FFFFFF",
-		"backgroundColor": "#F5F5F5",
-		"backgroundTextStyle": "light"
-	},
-	"tabBar": {
-		"color": "#9E9E9E",
-		"selectedColor": "#E53935",
-		"backgroundColor": "#FFFFFF",
-		"borderStyle": "black",
-		"list": [
-			{
-				"pagePath": "pages/index/index",
-				"text": "首页"
-			},
-			{
-				"pagePath": "pages/snake/list",
-				"text": "蛇种"
-			},
-			{
-				"pagePath": "pages/hospital/list",
-				"text": "医院"
-			},
-			{
-				"pagePath": "pages/mine/mine",
-				"text": "我的"
-			}
-		]
-	},
-	"permission": {
-		"scope.userLocation": {
-			"desc": "用于查找附近有血清的医院"
-		}
-	},
-	"uniIdRouter": {}
+﻿{
+    "pages":  [
+                  {
+                      "path":  "pages/index/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "毒蛇自救",
+                                    "navigationBarBackgroundColor":  "#E53935",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/emergency/emergency",
+                      "style":  {
+                                    "navigationBarTitleText":  "紧急自救",
+                                    "navigationBarBackgroundColor":  "#E53935",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/snake/list",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇种图库",
+                                    "navigationBarBackgroundColor":  "#2E7D32",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/hospital/list",
+                      "style":  {
+                                    "navigationBarTitleText":  "就近医院",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/mine",
+                      "style":  {
+                                    "navigationBarTitleText":  "我的",
+                                    "navigationBarBackgroundColor":  "#455A64",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/snake/detail",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇种详情"
+                                }
+                  },
+                  {
+                      "path":  "pages/guide/guide",
+                      "style":  {
+                                    "navigationBarTitleText":  "自救指引"
+                                }
+                  },
+                  {
+                      "path":  "pages/guide/steps",
+                      "style":  {
+                                    "navigationBarTitleText":  "自救步骤"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/login",
+                      "style":  {
+                                    "navigationBarTitleText":  "登录"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/admin-entry",
+                      "style":  {
+                                    "navigationBarTitleText":  "管理后台"
+                                }
+                  },
+                  {
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇种图库",
+                                    "navigationBarBackgroundColor":  "#2E7D32",
+                                    "navigationBarTextStyle":  "white"
+                                },
+                      "path":  "pages/snake/gallery"
+                  },
+                  {
+                      "style":  {
+                                    "navigationBarTitleText":  "就近医院",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                },
+                      "path":  "pages/hospital/nearby"
+                  },
+                  {
+                      "style":  {
+                                    "navigationBarTitleText":  "我的",
+                                    "navigationBarBackgroundColor":  "#455A64",
+                                    "navigationBarTextStyle":  "white"
+                                },
+                      "path":  "pages/mine/profile"
+                  }
+              ],
+    "globalStyle":  {
+                        "navigationBarTextStyle":  "black",
+                        "navigationBarTitleText":  "毒蛇自救",
+                        "navigationBarBackgroundColor":  "#FFFFFF",
+                        "backgroundColor":  "#F5F5F5",
+                        "backgroundTextStyle":  "light"
+                    },
+    "tabBar":  {
+                   "color":  "#9E9E9E",
+                   "selectedColor":  "#E53935",
+                   "backgroundColor":  "#FFFFFF",
+                   "borderStyle":  "black",
+                   "list":  [
+                                {
+                                    "pagePath":  "pages/index/index",
+                                    "text":  "首页"
+                                },
+                                {
+                                    "pagePath":  "pages/snake/list",
+                                    "text":  "蛇种"
+                                },
+                                {
+                                    "pagePath":  "pages/hospital/list",
+                                    "text":  "医院"
+                                },
+                                {
+                                    "pagePath":  "pages/mine/mine",
+                                    "text":  "我的"
+                                }
+                            ]
+               },
+    "permission":  {
+                       "scope.userLocation":  {
+                                                  "desc":  "用于查找附近有血清的医院"
+                                              }
+                   },
+    "uniIdRouter":  {
+
+                    }
 }

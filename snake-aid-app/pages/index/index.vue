@@ -136,27 +136,20 @@ export default {
 			uni.navigateTo({ url: '/pages/guide/steps' })
 		},
 		goSnakeList() {
-			uni.switchTab({ url: '/pages/snake/list' })
+			uni.navigateTo({ url: '/pages/snake/gallery' })
 		},
 		goHospital() {
-			uni.switchTab({ url: '/pages/hospital/list' })
+			uni.navigateTo({ url: '/pages/hospital/nearby' })
 		},
 		goGuide() {
 			uni.navigateTo({ url: '/pages/guide/guide' })
 		},
 		goFeatures() {
-			// 特征筛选已集成在蛇种列表页，切过去自动展开筛选面板
-			uni.switchTab({ url: '/pages/snake/list' })
-			setTimeout(() => {
-				const pages = getCurrentPages()
-				const snakeList = pages.find(p => p.route === 'pages/snake/list')
-				if (snakeList && snakeList.showFeatureFilter !== undefined) {
-					snakeList.showFeatureFilter = true
-				}
-			}, 300)
+			// 特征筛选入口：跳独立的 gallery 页（有返回键）
+			uni.navigateTo({ url: '/pages/snake/gallery?feature=true' })
 		},
 		goArticles() {
-			uni.switchTab({ url: '/pages/snake/list' })
+			uni.navigateTo({ url: '/pages/snake/gallery' })
 		},
 		goSnakeDetail(id) {
 			uni.navigateTo({ url: '/pages/snake/detail?id=' + id })

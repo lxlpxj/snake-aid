@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="steps">
 		<!-- 顶部免责声明条（FR8，固定显示，不可关闭） -->
 		<view class="disclaimer-bar">
@@ -143,9 +143,9 @@ export default {
 	},
 	methods: {
 		onTypeChange(e) { this.typeIndex = Number(e.detail.value) },
-		goSnake() { uni.switchTab({ url: '/pages/snake/list' }) },
+		goSnake() { uni.navigateTo({ url: '/pages/snake/gallery' }) },
 		call120() { uni.makePhoneCall({ phoneNumber: '120' }) },
-		goHospital() { uni.switchTab({ url: '/pages/hospital/list' }) }
+		goHospital() { uni.navigateTo({ url: '/pages/hospital/nearby' }) }
 	}
 }
 </script>

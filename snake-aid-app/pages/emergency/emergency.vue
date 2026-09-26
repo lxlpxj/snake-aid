@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="emergency-page">
 		<!-- 顶部免责声明条（固定显示，不可关闭） -->
 		<view class="disclaimer-bar">
@@ -55,10 +55,10 @@ export default {
 			uni.navigateTo({ url: '/pages/guide/steps' })
 		},
 		goSnakeIdentify() {
-			uni.switchTab({ url: '/pages/snake/list' })
+			uni.navigateTo({ url: '/pages/snake/gallery' })
 		},
 		goHospital() {
-			uni.switchTab({ url: '/pages/hospital/list' })
+			uni.navigateTo({ url: '/pages/hospital/nearby' })
 		},
 		call120() {
 			uni.makePhoneCall({ phoneNumber: '120' })

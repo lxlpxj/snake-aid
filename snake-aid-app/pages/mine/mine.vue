@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="mine">
 		<!-- 用户信息卡片 -->
 		<view class="user-card" @click="goLogin">
@@ -101,9 +101,9 @@ export default {
 				}
 			})
 		},
-		toEmergency() { uni.switchTab({ url: '/pages/emergency/emergency' }) },
-		toSnake() { uni.switchTab({ url: '/pages/snake/list' }) },
-		toHospital() { uni.switchTab({ url: '/pages/hospital/list' }) },
+		toEmergency() { uni.navigateTo({ url: '/pages/emergency/emergency' }) },
+		toSnake() { uni.navigateTo({ url: '/pages/snake/gallery' }) },
+		toHospital() { uni.navigateTo({ url: '/pages/hospital/nearby' }) },
 		toAdmin() {
 			// #ifdef H5
 			window.location.href = 'http://localhost:5173/#/pages/mine/admin-entry'

@@ -74,13 +74,15 @@ CREATE TABLE snake_species (
   symptoms         TEXT          COMMENT '被咬后特异性症状',
   first_aid_specifics TEXT       COMMENT '特异性处理要点',
   status           INT           NOT NULL DEFAULT 2 COMMENT '0-草稿 1-待审 2-已发布 3-已下线',
+  audit_status     INT           NOT NULL DEFAULT 1 COMMENT '0-草稿 1-待审 2-已发布 3-已驳回',
   audit_by         BIGINT        DEFAULT NULL,
   audit_time       DATETIME      DEFAULT NULL,
   create_time      DATETIME      DEFAULT CURRENT_TIMESTAMP,
   is_deleted       INT           NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   KEY idx_poisonous (is_poisonous),
-  KEY idx_status (status)
+  KEY idx_status (status),
+  KEY idx_audit_status (audit_status)
 ) ENGINE=InnoDB COMMENT='蛇种识别图库';
 
 INSERT INTO snake_species (name, scientific_name, is_poisonous, venom_type, head_shape, pattern, color, tail_shape, appearance_desc, distribution, symptoms, first_aid_specifics, status, audit_by, audit_time) VALUES
@@ -201,12 +203,14 @@ CREATE TABLE first_aid_guide (
   title       VARCHAR(200) NOT NULL,
   snake_type  VARCHAR(50)  DEFAULT NULL COMMENT '适用蛇种类型: default/neurotoxic/hemotoxic',
   status      INT          NOT NULL DEFAULT 2 COMMENT '0-草稿 1-待审 2-已发布 3-已下线',
+  audit_status INT         NOT NULL DEFAULT 1 COMMENT '0-草稿 1-待审 2-已发布 3-已驳回',
   audit_by    BIGINT       DEFAULT NULL,
   audit_time  DATETIME     DEFAULT NULL,
   create_time DATETIME     DEFAULT CURRENT_TIMESTAMP,
   is_deleted  INT          NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
-  KEY idx_snake_type (snake_type)
+  KEY idx_snake_type (snake_type),
+  KEY idx_audit_status (audit_status)
 ) ENGINE=InnoDB COMMENT='自救指南主表';
 
 INSERT INTO first_aid_guide (title, snake_type, status, audit_by, audit_time) VALUES
@@ -257,12 +261,14 @@ CREATE TABLE article (
   content     TEXT         NOT NULL,
   cover_image VARCHAR(500) DEFAULT NULL,
   status      INT          NOT NULL DEFAULT 2 COMMENT '0-草稿 1-待审 2-已发布 3-已下线',
+  audit_status INT         NOT NULL DEFAULT 1 COMMENT '0-草稿 1-待审 2-已发布 3-已驳回',
   audit_by    BIGINT       DEFAULT NULL,
   audit_time  DATETIME     DEFAULT NULL,
   create_time DATETIME     DEFAULT CURRENT_TIMESTAMP,
   is_deleted  INT          NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
-  KEY idx_status (status)
+  KEY idx_status (status),
+  KEY idx_audit_status (audit_status)
 ) ENGINE=InnoDB COMMENT='科普文章';
 
 INSERT INTO article (title, content, cover_image, status, audit_by, audit_time) VALUES
@@ -313,6 +319,8 @@ DROP TABLE IF EXISTS operation_log;
 CREATE TABLE operation_log (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   user_id     BIGINT       DEFAULT NULL,
+  username    VARCHAR(100) DEFAULT NULL COMMENT '操作人姓名',
+  category    VARCHAR(30)  DEFAULT 'CONTENT' COMMENT 'SYSTEM/CONTENT/AUDIT/LOGIN',
   operation   VARCHAR(200) DEFAULT NULL,
   method      VARCHAR(200) DEFAULT NULL,
   params      TEXT,
@@ -320,6 +328,7 @@ CREATE TABLE operation_log (
   create_time DATETIME     DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_user (user_id),
+  KEY idx_category (category),
   KEY idx_time (create_time)
 ) ENGINE=InnoDB COMMENT='后台操作日志';
 

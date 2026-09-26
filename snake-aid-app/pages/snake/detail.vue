@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="snake-detail">
 		<!-- 头图区 -->
 		<view class="banner">
@@ -94,7 +94,7 @@ export default {
 			})
 		},
 		goGuide() { uni.navigateTo({ url: '/pages/guide/steps' }) },
-		goHospital() { uni.switchTab({ url: '/pages/hospital/list' }) }
+		goHospital() { uni.navigateTo({ url: '/pages/hospital/nearby' }) }
 	}
 }
 </script>
