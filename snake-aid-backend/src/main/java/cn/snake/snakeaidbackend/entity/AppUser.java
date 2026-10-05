@@ -31,4 +31,10 @@ public class AppUser implements Serializable {
     private LocalDateTime lastLoginTime;
 
     private LocalDateTime createTime;
+
+    /** 总积分（累计不消耗） */
+    private Integer points;
+
+    /** 当前等级 1-10 */
+    private Integer level;
 }

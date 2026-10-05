@@ -1,4 +1,4 @@
-﻿<template>
+﻿﻿﻿﻿<template>
 	<view class="steps">
 		<!-- 顶部免责声明条（FR8，固定显示，不可关闭） -->
 		<view class="disclaimer-bar">

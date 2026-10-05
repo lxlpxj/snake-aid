@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="mine">
 		<!-- 用户信息卡片 -->
 		<view class="user-card" @click="goLogin">
@@ -114,11 +114,11 @@ export default {
 		},
 		toApiDoc() {
 			// #ifdef H5
-			window.open('http://localhost:8080/api/doc.html', '_blank')
+			window.open('http://127.0.0.1:8080/api/doc.html', '_blank')
 			// #endif
 			// #ifdef APP-PLUS
 			uni.setClipboardData({
-				data: 'http://localhost:8080/api/doc.html',
+				data: 'http://127.0.0.1:8080/api/doc.html',
 				success: () => uni.showToast({ title: '地址已复制', icon: 'none' })
 			})
 			// #endif

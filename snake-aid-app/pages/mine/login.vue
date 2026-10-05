@@ -44,7 +44,7 @@
 </template>
 
 <script>
-const API = 'http://localhost:8080/api'
+const API = 'http://127.0.0.1:8080/api'
 
 export default {
 	data() {
@@ -96,7 +96,12 @@ export default {
 				success: (res) => {
 					const d = res.data
 					if (d && d.code === 200) {
-						uni.setStorageSync('appUser', d.data)
+						// 同时存 token 和用户信息（兼容各页面不同的取法）
+						const userData = d.data
+						if (userData && userData.token) {
+							uni.setStorageSync('token', userData.token)
+						}
+						uni.setStorageSync('appUser', userData)
 						uni.showToast({ title: '登录成功', icon: 'success' })
 						setTimeout(() => { uni.switchTab({ url: '/pages/mine/mine' }) }, 600)
 					} else {

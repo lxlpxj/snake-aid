@@ -34,6 +34,7 @@
           <el-menu-item index="/articles"><el-icon><Reading /></el-icon><span>科普文章维护</span></el-menu-item>
           <el-menu-item index="/guides"><el-icon><Document /></el-icon><span>急救指南维护</span></el-menu-item>
           <el-menu-item index="/hospitals"><el-icon><OfficeBuilding /></el-icon><span>医院与血清</span></el-menu-item>
+          <el-menu-item index="/questions"><el-icon><Collection /></el-icon><span>题库管理</span></el-menu-item>
           <el-menu-item index="/my-audit"><el-icon><Tickets /></el-icon><span>我的待审</span></el-menu-item>
           <el-menu-item index="/logs"><el-icon><Tickets /></el-icon><span>业务操作日志</span></el-menu-item>
         </template>
@@ -42,9 +43,11 @@
         <template v-else-if="role === 'MEDICAL_ADVISOR'">
           <el-menu-item index="/dashboard"><el-icon><DataAnalysis /></el-icon><span>数据看板</span></el-menu-item>
           <el-menu-item index="/audit"><el-icon><CircleCheckFilled /></el-icon><span>审核工作台</span></el-menu-item>
+          <el-menu-item index="/consult"><el-icon><ChatLineSquare /></el-icon><span>咨询工单</span></el-menu-item>
           <el-menu-item index="/snakes"><el-icon><View /></el-icon><span>蛇种库（只读）</span></el-menu-item>
           <el-menu-item index="/articles"><el-icon><Reading /></el-icon><span>科普文章（只读）</span></el-menu-item>
           <el-menu-item index="/guides"><el-icon><Document /></el-icon><span>急救指南（编辑）</span></el-menu-item>
+          <el-menu-item index="/questions"><el-icon><Collection /></el-icon><span>题库管理（只读）</span></el-menu-item>
           <el-menu-item index="/logs"><el-icon><Tickets /></el-icon><span>审核操作日志</span></el-menu-item>
         </template>
       </el-menu>

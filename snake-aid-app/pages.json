@@ -1,4 +1,4 @@
-﻿{
+{
     "pages":  [
                   {
                       "path":  "pages/index/index",
@@ -21,6 +21,14 @@
                       "style":  {
                                     "navigationBarTitleText":  "蛇种图库",
                                     "navigationBarBackgroundColor":  "#2E7D32",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/snake/recognize",
+                      "style":  {
+                                    "navigationBarTitleText":  "AI 蛇种识别",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
                                     "navigationBarTextStyle":  "white"
                                 }
                   },
@@ -94,7 +102,59 @@
                                 },
                       "path":  "pages/mine/profile"
                   }
-              ],
+                  ,
+                  {
+                      "path":  "pages/quiz/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "急救知识自测",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  }
+                  ,
+                  {
+                      "path":  "pages/quiz/quiz",
+                      "style":  {
+                                    "navigationBarTitleText":  "答题中",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  }
+                  ,
+                  {
+                      "path":  "pages/quiz/result",
+                      "style":  {
+                                    "navigationBarTitleText":  "考试成绩",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/points-logs",
+                      "style":  {
+                                    "navigationBarTitleText":  "积分明细"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/leaderboard",
+                      "style":  {
+                                    "navigationBarTitleText":  "积分排行榜"
+                                }
+                  }
+              ,
+                  {
+                      "path":  "pages/mine/ai-chat",
+                      "style":  {
+                                    "navigationBarTitleText":  "AI 蛇伤助手"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/consult",
+                      "style":  {
+                                    "navigationBarTitleText":  "咨询医疗顾问"
+                                }
+                  }
+												],
     "globalStyle":  {
                         "navigationBarTextStyle":  "black",
                         "navigationBarTitleText":  "毒蛇自救",

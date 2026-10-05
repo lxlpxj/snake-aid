@@ -1,5 +1,17 @@
 <template>
 	<view class="snake-list">
+		<!-- AI 识别入口 -->
+		<view class="ai-banner" @click="goRecognize">
+			<view class="ai-banner-left">
+				<text class="ai-banner-emoji">📸</text>
+				<view class="ai-banner-text">
+					<view class="ai-banner-title">AI 蛇种识别</view>
+					<view class="ai-banner-sub">上传照片，一键识别</view>
+				</view>
+			</view>
+			<text class="ai-banner-arrow">→</text>
+		</view>
+
 		<!-- 搜索栏 -->
 		<view class="search-bar">
 			<input v-model="keyword" class="search-input" placeholder="搜索蛇种名称..." confirm-type="search" @confirm="onSearch" />
@@ -31,18 +43,36 @@
 
 		<!-- 省市区定位（FR9 按地区浏览，内置全国数据） -->
 		<view class="region-bar">
-			<picker mode="selector" :range="provinceNames" :value="provinceIndex" @change="onProvinceChange">
-				<view class="region-picker">
-					📍 {{ selectedProvince || '选择省份' }}
-					<text v-if="selectedProvince"> ▾</text>
-				</view>
-			</picker>
-			<picker mode="selector" :range="cityNames" :value="cityIndex" :disabled="!selectedProvince" @change="onCityChange">
-				<view class="region-picker small" :class="{disabled: !selectedProvince}">
-					{{ selectedCity || (selectedProvince ? '城市' : '—') }}▾
-				</view>
-			</picker>
+			<view class="region-picker" @click="openSelector('province')">
+				📍 {{ selectedProvince || '选择省份' }}
+				<text v-if="selectedProvince"> ▾</text>
+			</view>
+			<view v-if="cityNames.length > 0" class="region-picker small" @click="openSelector('city')">
+				{{ selectedCity || '城市' }}▾
+			</view>
+			<view v-if="districtNames.length > 0" class="region-picker small" @click="openSelector('district')">
+				{{ selectedDistrict || '区县' }}▾
+			</view>
 			<view v-if="selectedProvince" class="region-clear" @click="clearRegion">×</view>
+		</view>
+
+		<!-- 自定义选择弹窗（始终居中） -->
+		<view v-if="selectorOpen" class="selector-mask" @click="selectorOpen = false">
+			<view class="selector-modal" @click.stop>
+				<view class="selector-title">
+					{{ selectorTitle }}
+					<text class="selector-close" @click="selectorOpen = false">✕</text>
+				</view>
+				<scroll-view scroll-y class="selector-list">
+					<view
+						v-for="(item, idx) in selectorItems"
+						:key="idx"
+						class="selector-item"
+						:class="{ active: selectorSelectedIdx === idx }"
+						@click="onSelectorPick(idx)"
+					>{{ item }}</view>
+				</scroll-view>
+			</view>
 		</view>
 
 		<!-- 有毒/无毒 切换 -->
@@ -98,7 +128,7 @@
 
 <script>
 import { china } from '@/common/china.js'
-const API = 'http://localhost:8080/api'
+const API = 'http://127.0.0.1:8080/api'
 
 export default {
 	data() {
@@ -108,8 +138,15 @@ export default {
 			china,
 			provinceIndex: -1,
 			cityIndex: -1,
+			districtIndex: -1,
 			selectedProvince: '',
 			selectedCity: '',
+			selectedDistrict: '',
+			selectorOpen: false,
+			selectorType: '',
+			selectorTitle: '',
+			selectorItems: [],
+			selectorSelectedIdx: -1,
 			showFeatureFilter: false,
 			features: { headShape: '', pattern: '', color: '', tailShape: '' },
 			// 特征选项（从 init.sql 蛇种数据中提取的常见值）
@@ -127,16 +164,30 @@ export default {
 	},
 	computed: {
 		provinceNames() { return this.china.map(p => p.name) },
+		_currentProvince() {
+			return this.selectedProvince ? this.china.find(x => x.name === this.selectedProvince) : null
+		},
+		_currentCity() {
+			if (!this._currentProvince) return null
+			const city = this._currentProvince.cities[this.cityIndex]
+			return city || null
+		},
 		cityNames() {
-			if (!this.selectedProvince) return []
-			const p = this.china.find(x => x.name === this.selectedProvince)
-			return p ? p.cities.map(c => c.name) : []
+			if (!this._currentProvince) return []
+			return this._currentProvince.cities.map(c => c.name)
+		},
+		districtNames() {
+			if (!this._currentCity) return []
+			return this._currentCity.districts || []
 		}
 	},
 	onLoad() {
 		this.loadData()
 	},
 	methods: {
+		goRecognize() {
+			uni.navigateTo({ url: '/pages/snake/recognize' })
+		},
 		imageUrl(url) {
 			if (!url) return ''
 			if (url.startsWith('http')) return url
@@ -149,6 +200,8 @@ export default {
 			if (this.keyword) params.keyword = this.keyword
 			if (this.isPoisonous !== null && this.isPoisonous !== undefined) params.isPoisonous = this.isPoisonous
 			if (this.selectedProvince) params.province = this.selectedProvince
+			if (this.selectedCity) params.city = this.selectedCity
+			if (this.selectedDistrict) params.district = this.selectedDistrict
 
 			uni.request({
 				url: API + '/app/snake/page',
@@ -206,22 +259,49 @@ export default {
 				fail: () => { uni.showToast({ title: '筛选失败', icon: 'none' }) }
 			})
 		},
-		// 省市区联动
-		onProvinceChange(e) {
-			this.provinceIndex = Number(e.detail.value)
-			this.selectedProvince = this.provinceNames[this.provinceIndex]
-			this.selectedCity = ''; this.cityIndex = -1
-			this.page = 1; this.loadData()
+		// 省市区选择弹窗（始终居中）
+		openSelector(type) {
+			this.selectorType = type
+			if (type === 'province') {
+				this.selectorTitle = '选择省份'
+				this.selectorItems = this.provinceNames
+				this.selectorSelectedIdx = this.provinceIndex
+			} else if (type === 'city') {
+				this.selectorTitle = '选择城市'
+				this.selectorItems = this.cityNames
+				this.selectorSelectedIdx = this.cityIndex
+			} else if (type === 'district') {
+				this.selectorTitle = '选择区县'
+				this.selectorItems = this.districtNames
+				this.selectorSelectedIdx = this.districtIndex
+			}
+			this.selectorOpen = true
 		},
-		onCityChange(e) {
-			this.cityIndex = Number(e.detail.value)
-			this.selectedCity = this.cityNames[this.cityIndex]
+		onSelectorPick(idx) {
+			this.selectorOpen = false
+			if (this.selectorType === 'province') {
+				this.provinceIndex = idx
+				this.selectedProvince = this.provinceNames[idx]
+				this.selectedCity = ''; this.cityIndex = -1
+				this.selectedDistrict = ''; this.districtIndex = -1
+				if (this.cityNames.length === 1) {
+					this.cityIndex = 0; this.selectedCity = this.cityNames[0]
+				}
+			} else if (this.selectorType === 'city') {
+				this.cityIndex = idx
+				this.selectedCity = this.cityNames[idx]
+				this.selectedDistrict = ''; this.districtIndex = -1
+			} else if (this.selectorType === 'district') {
+				this.districtIndex = idx
+				this.selectedDistrict = this.districtNames[idx]
+			}
 			this.page = 1; this.loadData()
 		},
 		clearRegion() {
-			this.selectedProvince = ''; this.selectedCity = ''
-			this.provinceIndex = -1; this.cityIndex = -1
-			this.page = 1; this.loadData()
+			this.selectedProvince = ''; this.selectedCity = ''; this.selectedDistrict = ''
+			this.provinceIndex = -1; this.cityIndex = -1; this.districtIndex = -1
+			this.page = 1
+			this.loadData()
 		},
 		onSearch() { this.page = 1; this.loadData() },
 		filterPoisonous(v) { this.isPoisonous = v; this.page = 1; this.loadData() },
@@ -231,7 +311,20 @@ export default {
 </script>
 
 <style>
-.snake-list { padding-bottom: 60rpx; }
+.snake-list { padding-bottom: 60rpx; overflow-x: hidden; }
+
+/* AI 识别入口 */
+.ai-banner {
+	display: flex; align-items: center; justify-content: space-between;
+	margin: 20rpx 24rpx 8rpx; padding: 24rpx 28rpx;
+	background: linear-gradient(135deg, #6A1B9A, #AB47BC);
+	border-radius: 20rpx; box-shadow: 0 6rpx 20rpx rgba(106,27,154,0.3);
+}
+.ai-banner-left { display: flex; align-items: center; }
+.ai-banner-emoji { font-size: 56rpx; margin-right: 20rpx; }
+.ai-banner-title { color: white; font-size: 32rpx; font-weight: bold; }
+.ai-banner-sub { color: rgba(255,255,255,0.85); font-size: 24rpx; margin-top: 6rpx; }
+.ai-banner-arrow { color: white; font-size: 36rpx; }
 
 /* 搜索栏 */
 .search-bar {
@@ -265,12 +358,16 @@ export default {
 
 /* 地区 picker */
 .region-bar {
-	display: flex; gap: 16rpx; align-items: center;
-	padding: 16rpx 24rpx;
+	display: flex; flex-wrap: wrap; gap: 12rpx; row-gap: 8rpx;
+	align-items: center; justify-content: center;
+	padding: 16rpx 24rpx; overflow: visible; position: relative; z-index: 999;
 }
 .region-picker {
 	background: #FFF; padding: 10rpx 18rpx; border-radius: 30rpx;
 	font-size: 26rpx; color: #222; border: 1rpx solid #2E7D32;
+	position: relative; overflow: visible;
+	display: flex; align-items: center; justify-content: center;
+	text-align: center; line-height: 1;
 }
 .region-picker.small { font-size: 24rpx; color: #555; border-color: #CCC; }
 .region-picker.disabled { color: #BBB; border-color: #EEE; }
@@ -328,4 +425,34 @@ export default {
 }
 .safe-empty { font-size: 22rpx; color: #888; padding: 8rpx; }
 .safe-tip { font-size: 22rpx; color: #558B2F; line-height: 1.6; background: #FFF; padding: 12rpx; border-radius: 8rpx; }
+
+/* 自定义选择弹窗 — 始终居中于视口 */
+.selector-mask {
+	position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+	background: rgba(0,0,0,0.45);
+	display: flex; align-items: center; justify-content: center;
+	z-index: 9999;
+}
+.selector-modal {
+	width: 600rpx; max-height: 70vh;
+	background: #FFF; border-radius: 20rpx; overflow: hidden;
+	display: flex; flex-direction: column;
+	box-shadow: 0 8rpx 40rpx rgba(0,0,0,0.25);
+}
+.selector-title {
+	padding: 28rpx 32rpx; font-size: 30rpx; font-weight: bold; color: #2E7D32;
+	border-bottom: 1rpx solid #EEE; text-align: center; position: relative;
+}
+.selector-close {
+	position: absolute; right: 24rpx; top: 28rpx; color: #999; font-size: 32rpx;
+	padding: 4rpx 12rpx;
+}
+.selector-list { max-height: 55vh; }
+.selector-item {
+	padding: 24rpx 32rpx; font-size: 28rpx; color: #333;
+	border-bottom: 1rpx solid #F0F0F0; text-align: center;
+}
+.selector-item:last-child { border-bottom: none; }
+.selector-item.active { color: #2E7D32; font-weight: bold; background: #E8F5E9; }
+.selector-item:active { background: #F5F5F5; }
 </style>

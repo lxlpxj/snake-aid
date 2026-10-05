@@ -3,48 +3,50 @@ package cn.snake.snakeaidbackend.service.impl;
 import cn.snake.snakeaidbackend.common.PageResult;
 import cn.snake.snakeaidbackend.entity.AccessStatistics;
 import cn.snake.snakeaidbackend.mapper.AccessStatisticsMapper;
+import cn.snake.snakeaidbackend.service.AccessStatisticsIService;
 import cn.snake.snakeaidbackend.service.AccessStatisticsService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.RequiredArgsConstructor;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import jakarta.annotation.Resource;
 import java.time.LocalDate;
 
-/**
- * 访问统计实现
- */
 @Slf4j
 @Service
-@RequiredArgsConstructor
-public class AccessStatisticsServiceImpl implements AccessStatisticsService {
+public class AccessStatisticsServiceImpl
+        extends ServiceImpl<AccessStatisticsMapper, AccessStatistics>
+        implements AccessStatisticsService, AccessStatisticsIService {
 
-    private final StringRedisTemplate redis;
-    private final AccessStatisticsMapper accessStatisticsMapper;
+    @Resource
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public void increment(String eventType, String province, String city) {
-        // TODO: Redis 原子计数 + 定时落库
-        String date = LocalDate.now().toString();
-        String key = "access:" + date + ":" + eventType + ":"
-                + (province == null ? "-" : province) + ":"
-                + (city == null ? "-" : city);
-        redis.opsForValue().increment(key);
-        redis.expire(key, 7, java.util.concurrent.TimeUnit.DAYS);
-        log.debug("[ACCESS] key={}", key);
+        LocalDate today = LocalDate.now();
+        try {
+            jdbcTemplate.update(
+                "INSERT INTO access_statistics (event_type, province, city, stat_date, count) " +
+                "VALUES (?, ?, ?, ?, 1) " +
+                "ON DUPLICATE KEY UPDATE count = count + 1",
+                eventType, province, city, today
+            );
+        } catch (Exception e) {
+            log.warn("increment access stat failed: {}", e.getMessage());
+        }
     }
 
     @Override
     public PageResult<AccessStatistics> page(long current, long size, String eventType) {
-        Page<AccessStatistics> page = new Page<>(current, size);
         LambdaQueryWrapper<AccessStatistics> wrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.hasText(eventType)) wrapper.eq(AccessStatistics::getEventType, eventType);
+        if (eventType != null && !eventType.isEmpty()) {
+            wrapper.eq(AccessStatistics::getEventType, eventType);
+        }
         wrapper.orderByDesc(AccessStatistics::getStatDate);
-        IPage<AccessStatistics> result = accessStatisticsMapper.selectPage(page, wrapper);
-        return PageResult.of(result);
+        Page<AccessStatistics> p = this.page(new Page<>(current, size), wrapper);
+        return PageResult.of(p);
     }
 }

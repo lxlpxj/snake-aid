@@ -3,13 +3,17 @@ package cn.snake.snakeaidbackend.controller.app;
 import cn.snake.snakeaidbackend.common.PageResult;
 import cn.snake.snakeaidbackend.common.Result;
 import cn.snake.snakeaidbackend.entity.SnakeSpecies;
+import cn.snake.snakeaidbackend.service.AIVisionService;
 import cn.snake.snakeaidbackend.service.SnakeSpeciesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +25,29 @@ public class SnakeAppController {
 
     @Resource
     private SnakeSpeciesService snakeService;
+
+    @Resource
+    private AIVisionService aiVisionService;
+
+    @Operation(summary = "AI 图片识别蛇种")
+    @PostMapping("/recognize-image")
+    public Result<Map<String, Object>> recognizeImage(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return Result.fail("请上传图片");
+        }
+        if (file.getSize() > 5 * 1024 * 1024) {
+            return Result.fail("图片不能超过 5MB");
+        }
+        try {
+            String mime = file.getContentType() != null ? file.getContentType() : "image/jpeg";
+            String base64 = Base64.getEncoder().encodeToString(file.getBytes());
+            log.info("recognize-image: size={}KB mime={}", file.getSize() / 1024, mime);
+            return Result.success(aiVisionService.recognize(base64, mime));
+        } catch (IOException e) {
+            log.error("recognize-image error", e);
+            return Result.fail("图片处理失败: " + e.getMessage());
+        }
+    }
 
     @Operation(summary = "蛇种列表（已发布）")
     @GetMapping("/page")

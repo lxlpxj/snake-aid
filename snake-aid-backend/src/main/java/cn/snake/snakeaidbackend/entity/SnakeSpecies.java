@@ -1,6 +1,8 @@
 package cn.snake.snakeaidbackend.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -26,6 +28,8 @@ public class SnakeSpecies implements Serializable {
     private String scientificName;
 
     /** 是否有毒：0-无毒, 1-有毒 */
+    @TableField("is_poisonous")
+    @JsonProperty("isPoisonous")
     private Integer isVenomous;
 
     /** 毒性类型：神经毒/血液毒/混合毒/细胞毒 */
@@ -56,9 +60,11 @@ public class SnakeSpecies implements Serializable {
     private String firstAidSpecifics;
 
     /** 危险等级：1-轻微 2-中等 3-剧毒 4-极危 */
+    @TableField(exist = false)
     private Integer hazardLevel;
 
     /** 封面图 URL */
+    @TableField(exist = false)
     private String imageUrl;
 
     /** 上下架状态：0-下架, 1-启用 */
@@ -75,6 +81,7 @@ public class SnakeSpecies implements Serializable {
 
     private LocalDateTime createTime;
 
+    @TableField(exist = false)
     private LocalDateTime updateTime;
 
     @TableLogic

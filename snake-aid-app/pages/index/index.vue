@@ -51,6 +51,11 @@
 				<text class="entry-title">特征检索</text>
 				<text class="entry-sub">头型/花纹/颜色</text>
 			</view>
+			</view>
+			<view class="entry-card" @click="goQuiz">
+				<text class="entry-icon">📝</text>
+				<text class="entry-title">考试自测</text>
+				<text class="entry-sub">随机抽题 · 巩固知识</text>
 		</view>
 
 		<!-- 本地高发毒蛇（FR9：按地区浏览） -->
@@ -113,7 +118,7 @@
 
 <script>
 import { china } from '@/common/china.js'
-const API = 'http://localhost:8080/api'
+const API = 'http://127.0.0.1:8080/api'
 
 export default {
 	data() {
@@ -150,6 +155,9 @@ export default {
 		},
 		goArticles() {
 			uni.navigateTo({ url: '/pages/snake/gallery' })
+		},
+		goQuiz() {
+			uni.navigateTo({ url: '/pages/quiz/index' })
 		},
 		goSnakeDetail(id) {
 			uni.navigateTo({ url: '/pages/snake/detail?id=' + id })

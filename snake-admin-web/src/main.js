@@ -17,6 +17,8 @@ import HospitalPage from './views/HospitalPage.vue'
 import AuditWorkbench from './views/AuditWorkbench.vue'
 import MyAuditList from './views/MyAuditList.vue'
 import LogPage from './views/LogPage.vue'
+import QuestionPage from './views/QuestionPage.vue'
+import ConsultWorkbench from './views/ConsultWorkbench.vue'
 
 const routes = [
   { path: '/login', component: LoginPage },
@@ -39,8 +41,11 @@ const routes = [
       { path: 'articles', component: ArticlePage, meta: { title: '科普文章', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } },
       // 医院与血清 —— 仅内容管理员
       { path: 'hospitals', component: HospitalPage, meta: { title: '医院与血清', roles: ['CONTENT_ADMIN'] } },
+      // 题库管理 —— 内容管理员维护 + 医疗顾问只读查看
+      { path: 'questions', component: QuestionPage, meta: { title: '题库管理', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } },
       // 审核工作台 —— 仅医疗顾问
       { path: 'audit', component: AuditWorkbench, meta: { title: '审核工作台', roles: ['MEDICAL_ADVISOR'] } },
+      { path: 'consult', component: ConsultWorkbench, meta: { title: '咨询工单', roles: ['MEDICAL_ADVISOR'] } },
       // 我的待审 —— 仅内容管理员（只读看自己提交的内容状态）
       { path: 'my-audit', component: MyAuditList, meta: { title: '我的待审', roles: ['CONTENT_ADMIN'] } }
     ]

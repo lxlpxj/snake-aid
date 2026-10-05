@@ -3,8 +3,10 @@ package cn.snake.snakeaidbackend.service.impl;
 import cn.snake.snakeaidbackend.common.AuditStatus;
 import cn.snake.snakeaidbackend.common.PageResult;
 import cn.snake.snakeaidbackend.common.ResultCode;
+import cn.snake.snakeaidbackend.entity.SnakeImage;
 import cn.snake.snakeaidbackend.entity.SnakeSpecies;
 import cn.snake.snakeaidbackend.exception.BusinessException;
+import cn.snake.snakeaidbackend.mapper.SnakeImageMapper;
 import cn.snake.snakeaidbackend.mapper.SnakeSpeciesMapper;
 import cn.snake.snakeaidbackend.service.SnakeSpeciesService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -17,9 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 蛇种图库实现（Entity 已对齐前端 SnakePage.vue）
@@ -33,6 +34,29 @@ import java.util.Map;
 public class SnakeSpeciesServiceImpl implements SnakeSpeciesService {
 
     private final SnakeSpeciesMapper snakeSpeciesMapper;
+    private final SnakeImageMapper snakeImageMapper;
+
+    /** 批量给蛇种组装封面图（从 snake_image 表取 isCover=1 的，否则取第一张） */
+    private void fillImageUrls(List<SnakeSpecies> snakes) {
+        if (snakes == null || snakes.isEmpty()) return;
+        List<Long> ids = snakes.stream().map(SnakeSpecies::getId).collect(Collectors.toList());
+        List<SnakeImage> images = snakeImageMapper.selectList(
+                new LambdaQueryWrapper<SnakeImage>().in(SnakeImage::getSnakeId, ids)
+        );
+        Map<Long, String> coverMap = new HashMap<>();
+        Map<Long, String> firstMap = new HashMap<>();
+        for (SnakeImage img : images) {
+            if (img.getImageUrl() == null) continue;
+            firstMap.putIfAbsent(img.getSnakeId(), img.getImageUrl());
+            if (img.getIsCover() != null && img.getIsCover() == 1) {
+                coverMap.put(img.getSnakeId(), img.getImageUrl());
+            }
+        }
+        for (SnakeSpecies s : snakes) {
+            String url = coverMap.getOrDefault(s.getId(), firstMap.get(s.getId()));
+            if (url != null) s.setImageUrl(url);
+        }
+    }
 
     @Override
     public PageResult<SnakeSpecies> pageForApp(long current, long size, String province, String keyword, Integer isVenomous) {
@@ -43,7 +67,18 @@ public class SnakeSpeciesServiceImpl implements SnakeSpeciesService {
         wrapper.eq(SnakeSpecies::getStatus, 1);
 
         if (StringUtils.hasText(province)) {
-            wrapper.like(SnakeSpecies::getDistribution, province);
+            // 智能匹配：省/直辖市名 → 大区关键词（DB distribution 存的是"华南/西南/长江以南"这种描述）
+            java.util.List<String> keywords = resolveDistributionKeywords(province);
+            if (keywords.size() == 1) {
+                wrapper.like(SnakeSpecies::getDistribution, keywords.get(0));
+            } else if (keywords.size() > 1) {
+                wrapper.and(w -> {
+                    for (int i = 0; i < keywords.size(); i++) {
+                        if (i == 0) w.like(SnakeSpecies::getDistribution, keywords.get(i));
+                        else w.or().like(SnakeSpecies::getDistribution, keywords.get(i));
+                    }
+                });
+            }
         }
         if (StringUtils.hasText(keyword)) {
             wrapper.and(w -> w.like(SnakeSpecies::getName, keyword)
@@ -53,7 +88,9 @@ public class SnakeSpeciesServiceImpl implements SnakeSpeciesService {
             wrapper.eq(SnakeSpecies::getIsVenomous, isVenomous);
         }
         wrapper.orderByDesc(SnakeSpecies::getCreateTime);
-        return PageResult.of(snakeSpeciesMapper.selectPage(page, wrapper));
+        IPage<SnakeSpecies> p = snakeSpeciesMapper.selectPage(page, wrapper);
+        fillImageUrls(p.getRecords());
+        return PageResult.of(p);
     }
 
     @Override
@@ -63,6 +100,7 @@ public class SnakeSpeciesServiceImpl implements SnakeSpeciesService {
                 || entity.getStatus() == null || entity.getStatus() != 1) {
             throw new BusinessException(ResultCode.CONTENT_NOT_AUDITED);
         }
+        fillImageUrls(Collections.singletonList(entity));
         return entity;
     }
 
@@ -153,7 +191,9 @@ public class SnakeSpeciesServiceImpl implements SnakeSpeciesService {
         if (StringUtils.hasText(pattern))   wrapper.like(SnakeSpecies::getPattern, pattern);
         if (StringUtils.hasText(color))     wrapper.like(SnakeSpecies::getColor, color);
         if (StringUtils.hasText(tailShape)) wrapper.like(SnakeSpecies::getTailShape, tailShape);
-        return snakeSpeciesMapper.selectList(wrapper);
+        List<SnakeSpecies> list = snakeSpeciesMapper.selectList(wrapper);
+        fillImageUrls(list);
+        return list;
     }
 
     @Override
@@ -179,11 +219,48 @@ public class SnakeSpeciesServiceImpl implements SnakeSpeciesService {
         dangerWrapper.orderByDesc(SnakeSpecies::getHazardLevel);
         dangerWrapper.last("LIMIT 3");
         List<SnakeSpecies> topDanger = snakeSpeciesMapper.selectList(dangerWrapper);
+        fillImageUrls(topDanger);
 
         result.put("matched", false);
         result.put("message", "⚠ 无法准确识别蛇种，建议按最危险蛇种情况处理，立即拨打 120 并前往医院！");
         result.put("snakes", topDanger);
         result.put("fallback", true);
         return result;
+    }
+
+    /**
+     * 省/直辖市名 → 分布关键词列表（DB distribution 存的是大区描述如"华南/西南/长江以南"）
+     * 返回的关键词会用 OR LIKE 匹配，命中任意一个即可。
+     */
+    private java.util.List<String> resolveDistributionKeywords(String province) {
+        String p = province == null ? "" : province.trim();
+        // 去掉行政后缀
+        String core = p.replaceAll("(省|市|自治区|特别行政区|壮族|回族|维吾尔)$", "");
+        java.util.List<String> list = new java.util.ArrayList<>();
+        list.add(core); // 先尝试裸名（如"广东"）
+        switch (core) {
+            case "北京": case "天津": case "河北": case "山西": case "内蒙古":
+                list.add("华北"); break;
+            case "上海": case "江苏": case "浙江": case "安徽": case "福建": case "江西": case "山东": case "台湾":
+                list.add("华东"); break;
+            case "广东": case "广西": case "海南": case "香港": case "澳门":
+                list.add("华南"); list.add("南方"); break;
+            case "河南": case "湖北": case "湖南":
+                list.add("华中"); break;
+            case "重庆": case "四川": case "贵州": case "云南": case "西藏":
+                list.add("西南"); list.add("长江以南"); break;
+            case "陕西": case "甘肃": case "青海": case "宁夏": case "新疆":
+                list.add("西北"); break;
+            case "辽宁": case "吉林": case "黑龙江":
+                list.add("东北"); break;
+        }
+        // 南方省份都可能命中"长江以南/南方/长江中下游"
+        switch (core) {
+            case "广东": case "广西": case "福建": case "海南":
+            case "湖南": case "湖北": case "江西": case "浙江": case "江苏": case "上海":
+            case "重庆": case "四川": case "贵州": case "云南": case "安徽":
+                list.add("长江以南"); list.add("南方"); list.add("长江中下游"); break;
+        }
+        return list;
     }
 }

@@ -1,4 +1,4 @@
-﻿<template>
+﻿﻿﻿﻿<template>
 	<view class="emergency-page">
 		<!-- 顶部免责声明条（固定显示，不可关闭） -->
 		<view class="disclaimer-bar">
