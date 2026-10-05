@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="result-page">
 		<!-- 成绩头部 -->
 		<view class="result-hero" :class="scoreClass">
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-	const API = 'http://127.0.0.1:8080/api'
+	const API = 'http://192.168.2.15:8080/api'
 	export default {
 		data() {
 			return {

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="quiz-home">
 		<!-- 顶部标题 -->
 		<view class="banner">
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-	const API = 'http://127.0.0.1:8080/api'
+	const API = 'http://192.168.2.15:8080/api'
 	export default {
 		data() {
 			return {

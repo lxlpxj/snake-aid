@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="home">
 		<!-- 顶部紧急大按钮：2 步内到达自救 -->
 		<view class="hero">
@@ -118,7 +118,7 @@
 
 <script>
 import { china } from '@/common/china.js'
-const API = 'http://127.0.0.1:8080/api'
+const API = 'http://192.168.2.15:8080/api'
 
 export default {
 	data() {

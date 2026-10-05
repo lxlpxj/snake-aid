@@ -1,4 +1,4 @@
-<template>
+﻿<template>
         <view class="leaderboard">
                 <view class="lb-header">
                         <text class="lb-title">🏆 蛇伤急救达人榜</text>
@@ -44,7 +44,7 @@
 
 <script>
 const TOKEN_KEY = 'snake_token'
-const API = 'http://127.0.0.1:8080/api'
+const API = 'http://192.168.2.15:8080/api'
 
 export default {
         data() { return { list: [] } },

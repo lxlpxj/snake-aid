@@ -1,4 +1,4 @@
-<template>
+﻿<template>
         <view class="mine">
                 <!-- 用户信息卡片 -->
                 <view class="user-card" @click="goLogin">
@@ -99,7 +99,7 @@
 <script>
 const TOKEN_KEY = 'token'
 const USER_KEY = 'appUser'
-const API = 'http://127.0.0.1:8080/api'
+const API = 'http://192.168.2.15:8080/api'
 
 export default {
         data() {
@@ -181,11 +181,11 @@ export default {
                 },
                 toApiDoc() {
                         // #ifdef H5
-                        window.open('http://127.0.0.1:8080/api/doc.html', '_blank')
+                        window.open('/api/doc.html', '_blank')
                         // #endif
                         // #ifdef APP-PLUS
                         uni.setClipboardData({
-                                data: 'http://127.0.0.1:8080/api/doc.html',
+                                data: '/api/doc.html',
                                 success: () => uni.showToast({ title: '地址已复制', icon: 'none' })
                         })
                         // #endif

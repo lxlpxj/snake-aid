@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="page">
     <!-- 顶部提示 -->
     <view class="hero">
@@ -90,7 +90,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const baseUrl = 'http://127.0.0.1:8080/api';
+const baseUrl = 'http://192.168.2.15:8080/api';
 const imagePath = ref('');
 const loading = ref(false);
 const result = ref(null);

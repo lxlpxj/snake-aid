@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="consult-page">
 		<!-- ========== 创建新咨询 ========== -->
 		<view class="create-card" v-if="!activeTicket">
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-const API = 'http://127.0.0.1:8080/api'
+const API = 'http://192.168.2.15:8080/api'
 
 export default {
 	data() {

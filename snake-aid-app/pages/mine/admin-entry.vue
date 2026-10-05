@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="admin-entry">
 		<view class="header">
 			<view class="logo">🔐</view>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-const API = 'http://127.0.0.1:8080/api'
+const API = 'http://192.168.2.15:8080/api'
 const ADMIN_TOKEN = 'snake_admin_token'
 const ADMIN_INFO = 'snake_admin_info'
 
@@ -71,11 +71,11 @@ export default {
 						uni.showToast({ title: `登录成功：${this.roleName(data.roleType)}`, icon: 'success' })
 						setTimeout(() => {
 							// #ifdef H5
-							window.open('http://127.0.0.1:8080/api/doc.html', '_blank')
+							window.open('/api/doc.html', '_blank')
 							// #endif
 							// #ifndef H5
 							uni.setClipboardData({
-								data: 'http://127.0.0.1:8080/api/doc.html',
+								data: '/api/doc.html',
 								success: () => uni.showToast({ title: '文档地址已复制', icon: 'none' })
 							})
 							// #endif
