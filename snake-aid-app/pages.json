@@ -153,6 +153,14 @@
                       "style":  {
                                     "navigationBarTitleText":  "咨询医疗顾问"
                                 }
+                  },
+                  {
+                      "path":  "pages/guide/game",
+                      "style":  {
+                                    "navigationBarTitleText":  "急救闯关",
+                                    "navigationBarBackgroundColor":  "#E53935",
+                                    "navigationBarTextStyle":  "white"
+                                }
                   }
 												],
     "globalStyle":  {

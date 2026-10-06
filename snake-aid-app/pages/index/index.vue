@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="home">
 		<!-- 顶部紧急大按钮：2 步内到达自救 -->
 		<view class="hero">
@@ -51,6 +51,11 @@
 				<text class="entry-title">特征检索</text>
 				<text class="entry-sub">头型/花纹/颜色</text>
 			</view>
+			</view>
+			<view class="entry-card highlight" @click="goGame">
+				<text class="entry-icon">🎮</text>
+				<text class="entry-title">急救闯关</text>
+				<text class="entry-sub">9步游戏化 · 练急救</text>
 			</view>
 			<view class="entry-card" @click="goQuiz">
 				<text class="entry-icon">📝</text>
@@ -159,6 +164,9 @@ export default {
 		goQuiz() {
 			uni.navigateTo({ url: '/pages/quiz/index' })
 		},
+		goGame() {
+			uni.navigateTo({ url: '/pages/guide/game' })
+		},
 		goSnakeDetail(id) {
 			uni.navigateTo({ url: '/pages/snake/detail?id=' + id })
 		},
@@ -256,6 +264,18 @@ export default {
 .entry-icon { font-size: 48rpx; }
 .entry-title { display: block; font-size: 30rpx; font-weight: bold; color: #222; margin-top: 12rpx; }
 .entry-sub { display: block; font-size: 22rpx; color: #888; margin-top: 4rpx; }
+.entry-card.highlight {
+	background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+	border: 2rpx solid #E53935;
+	position: relative;
+}
+.entry-card.highlight::before {
+	content: '新';
+	position: absolute; top: 12rpx; right: 16rpx;
+	background: #E53935; color: #fff;
+	font-size: 18rpx; padding: 2rpx 10rpx; border-radius: 20rpx;
+}
+.entry-card.highlight .entry-title { color: #C62828; }
 
 /* 区块 */
 .section { margin-top: 36rpx; padding: 0 24rpx; }
