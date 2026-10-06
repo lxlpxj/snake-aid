@@ -46,3 +46,7 @@ snake-redis-data/
 snake-aid-backend/src/main/resources/application.yml
 snake-aid-backend/src/main/resources/application.properties
 snake-aid-backend/src/main/resources/application-dev.yml
+
+# === 蛇伤急救项目临时文件 ===
+tools/                          # ngrok 等隧道工具二进制
+*.log                           # 日志
