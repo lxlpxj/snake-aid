@@ -121,7 +121,15 @@ export default {
         onShow() {
                 this.token = uni.getStorageSync(TOKEN_KEY) || ''
                 this.user = uni.getStorageSync(USER_KEY) || null
-                if (this.isLogin) this.loadProfile()
+                if (this.isLogin) {
+                        // 1️⃣ 先读本地缓存（立刻显示，不白屏）
+                        const cached = uni.getStorageSync('appProfile')
+                        if (cached && cached.points !== undefined) {
+                                this.profile = cached
+                        }
+                        // 2️⃣ 再异步拉后端最新（拉到了就覆盖）
+                        this.loadProfile()
+                }
         },
         methods: {
                 async loadProfile() {
@@ -131,14 +139,20 @@ export default {
                                                 url: API + '/app/points/profile',
                                                 method: 'GET',
                                                 header: { 'Authorization': 'Bearer ' + this.token },
+                                                timeout: 5000,
                                                 success: resolve,
                                                 fail: reject
                                         })
                                 })
-                                if (res.data && res.data.code === 200) {
-                                        this.profile = res.data.data || {}
+                                if (res.data && res.data.code === 200 && res.data.data) {
+                                        this.profile = res.data.data
+                                        // ✅ 缓存到本地（关键！刷新不丢）
+                                        uni.setStorageSync('appProfile', res.data.data)
                                 }
-                        } catch (e) { /* 静默失败 */ }
+                        } catch (e) {
+                                // 请求失败就用本地缓存兜底，不显示 0
+                                console.warn('loadProfile failed, using cache', e)
+                        }
                 },
                 goLogin() {
                         if (this.isLogin) return
@@ -150,13 +164,14 @@ export default {
                                 content: '确定退出登录？',
                                 success: (res) => {
                                         if (res.confirm) {
-                                                uni.removeStorageSync(TOKEN_KEY)
-                                                uni.removeStorageSync(USER_KEY)
-                                                this.token = ''
-                                                this.user = null
-                                                this.profile = {}
-                                                uni.showToast({ title: '已退出', icon: 'success' })
-                                        }
+                                                        uni.removeStorageSync(TOKEN_KEY)
+                                                        uni.removeStorageSync(USER_KEY)
+                                                        uni.removeStorageSync('appProfile')
+                                                        this.token = ''
+                                                        this.user = null
+                                                        this.profile = {}
+                                                        uni.showToast({ title: '已退出', icon: 'success' })
+                                                }
                                 }
                         })
                 },
