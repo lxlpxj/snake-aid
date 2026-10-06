@@ -36,6 +36,11 @@
 				<text class="entry-title">蛇种图库</text>
 				<text class="entry-sub">识别 · 特征比对</text>
 			</view>
+			<view class="entry-card highlight-orange" @click="goLearn">
+				<text class="entry-icon">🎯</text>
+				<text class="entry-title">四步学习</text>
+				<text class="entry-sub">玩-认-练-测 认知闭环</text>
+			</view>
 			<view class="entry-card" @click="goHospital">
 				<text class="entry-icon">🏥</text>
 				<text class="entry-title">就近医院</text>
@@ -167,6 +172,9 @@ export default {
 		goGame() {
 			uni.navigateTo({ url: '/pages/guide/game' })
 		},
+		goLearn() {
+			uni.navigateTo({ url: '/pages/snake/learn' })
+		},
 		goSnakeDetail(id) {
 			uni.navigateTo({ url: '/pages/snake/detail?id=' + id })
 		},
@@ -276,6 +284,18 @@ export default {
 	font-size: 18rpx; padding: 2rpx 10rpx; border-radius: 20rpx;
 }
 .entry-card.highlight .entry-title { color: #C62828; }
+.entry-card.highlight-orange {
+	background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+	border: 2rpx solid #E65100;
+	position: relative;
+}
+.entry-card.highlight-orange::before {
+	content: '学';
+	position: absolute; top: 12rpx; right: 16rpx;
+	background: #E65100; color: #fff;
+	font-size: 18rpx; padding: 2rpx 10rpx; border-radius: 20rpx;
+}
+.entry-card.highlight-orange .entry-title { color: #E65100; }
 
 /* 区块 */
 .section { margin-top: 36rpx; padding: 0 24rpx; }
