@@ -1501,7 +1501,7 @@ function goBack() {
 .ring3 { animation: ringExpand 3s ease-out infinite 2s; }
 .anim-breath-text { position: absolute; bottom: 30rpx; font-size: 22rpx; color: #388E3C; }
 @keyframes calmBreath { 0%,100% { transform: scale(1) } 50% { transform: scale(1.1) } }
-@keyframes ringExpand { 0% { transform: scale(0.5); opacity: 0.8 } 100% { transform: scale(2.5); opacity: 0 } }
+@keyframes ringExpand { 0% { transform: scale(0.4); opacity: 0.8 } 100% { transform: scale(1.2); opacity: 0 } }
 
 /* 第4关 手机震动 */
 .anim-phone-call { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
@@ -1595,7 +1595,7 @@ function goBack() {
 .anim-ring2 { animation: ringExpand 3s ease-out infinite 1s; transform-origin: 30px 25px; }
 .anim-ring3 { animation: ringExpand 3s ease-out infinite 2s; transform-origin: 30px 25px; }
 .anim-breathe-text { animation: breatheText 3s ease-in-out infinite; }
-@keyframes ringExpand { 0% { r: 40; opacity: 0.8 } 100% { r: 90; opacity: 0 } }
+@keyframes ringExpand { 0% { transform: scale(0.4); opacity: 0.8 } 100% { transform: scale(1.2); opacity: 0 } }
 @keyframes breatheText { 0%,100% { transform: scale(1); letter-spacing: 2px } 50% { transform: scale(1.1); letter-spacing: 6px } }
 
 /* 第4关动画 */
