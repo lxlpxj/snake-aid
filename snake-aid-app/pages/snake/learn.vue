@@ -186,11 +186,11 @@
         <view class="test-q-title">第 {{ testIdx + 1 }} 题：{{ testQuestions[testIdx].question }}</view>
         <view class="test-options">
           <view class="t-option"
-                :class="{ right: testAnswered && opt.correct, wrong: testAnswered && selectedOpt === i && !opt.correct }"
+                :class="{ right: testAnswered && i === testQuestions[testIdx].correctIdx, wrong: testAnswered && selectedOpt === i && i !== testQuestions[testIdx].correctIdx }"
                 v-for="(opt, i) in testQuestions[testIdx].options"
                 :key="i"
                 @click="answerTest(i)">
-            <text>{{ opt.text }}</text>
+            <text>{{ opt }}</text>
           </view>
         </view>
         <view class="test-feedback" v-if="testFeedback">
@@ -441,14 +441,14 @@ function nextPractice() {
 
 // ===== Phase 4: 测 =====
 const testQuestions = reactive([
-  { question: '毒蛇最典型的头部形状是？', options: ['圆形','三角形','正方形','扁形'] },
-  { question: '银环蛇和金环蛇属于什么毒？', options: ['血液毒','神经毒','混合毒','无毒'] },
-  { question: '被毒蛇咬伤后应该？', options: ['立刻跑回家','保持冷静制动伤肢','用嘴吸毒','敷草药'] },
-  { question: '哪个是无毒蛇？', options: ['五步蛇','竹叶青','乌梢蛇','圆斑蝰'] },
-  { question: '蛇伤急救三大禁忌不包括？', options: ['不切伤口','不吸毒','不敷草药','不吃鸡蛋'] },
-  { question: '竹叶青蛇的典型颜色是？', options: ['黑色','绿色','红色','白色'] },
-  { question: '海蛇的尾巴有什么特征？', options: ['尖细','侧扁像桨','分叉','短粗'] },
-  { question: '下面哪种不是毒蛇？', options: ['眼镜蛇','王锦蛇','烙铁头','莽山烙铁头'] }
+  { question: '毒蛇最典型的头部形状是？', options: ['圆形','三角形','正方形','扁形'], correctIdx: 1 },
+  { question: '银环蛇和金环蛇属于什么毒？', options: ['血液毒','神经毒','混合毒','无毒'], correctIdx: 1 },
+  { question: '被毒蛇咬伤后应该？', options: ['立刻跑回家','保持冷静制动伤肢','用嘴吸毒','敷草药'], correctIdx: 1 },
+  { question: '哪个是无毒蛇？', options: ['五步蛇','竹叶青','乌梢蛇','圆斑蝰'], correctIdx: 2 },
+  { question: '蛇伤急救三大禁忌不包括？', options: ['不切伤口','不吸毒','不敷草药','不吃鸡蛋'], correctIdx: 3 },
+  { question: '竹叶青蛇的典型颜色是？', options: ['黑色','绿色','红色','白色'], correctIdx: 1 },
+  { question: '海蛇的尾巴有什么特征？', options: ['尖细','侧扁像桨','分叉','短粗'], correctIdx: 1 },
+  { question: '下面哪种不是毒蛇？', options: ['眼镜蛇','王锦蛇','烙铁头','莽山烙铁头'], correctIdx: 1 }
 ])
 
 const testIdx = ref(0)
@@ -687,7 +687,7 @@ const testDesc = computed(() => {
 .tp-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #2E7D32); transition: width 0.4s; }
 .test-q-title { font-size: 30rpx; font-weight: bold; color: #222; margin-bottom: 20rpx; }
 .test-options { display: flex; flex-direction: column; gap: 12rpx; }
-.t-option { padding: 20rpx; background: #F5F5F5; border-radius: 12rpx; font-size: 28rpx; }
+.t-option { padding: 24rpx; background: #FFE0B2; border-radius: 12rpx; font-size: 28rpx; color: #BF360C; font-weight: bold; border: 3rpx solid #FF6F00; display: flex; align-items: center; }
 .t-option.right { background: #E8F5E9; color: #2E7D32; }
 .t-option.wrong { background: #FFEBEE; color: #C62828; }
 .test-feedback { padding: 20rpx; background: #E3F2FD; border-radius: 12rpx; margin-top: 20rpx; font-size: 26rpx; }
