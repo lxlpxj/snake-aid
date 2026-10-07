@@ -140,8 +140,55 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
+
+const API = 'http://127.0.0.1:8080/api'
+
+// 从后端拉关卡数据，失败用下面的硬编码 fallback
+onMounted(async () => {
+  try {
+    const res = await new Promise((resolve, reject) => {
+      uni.request({
+        url: API + '/app/first-aid/steps',
+        timeout: 3000,
+        success: r => resolve(r.data),
+        fail: reject
+      })
+    })
+    if (res.code === 200 && res.data?.length) {
+      steps.length = 0
+      res.data.forEach(s => {
+        // choice 类型需要 options
+        let stepData = {
+          emoji: s.emoji || '❓',
+          title: s.title,
+          hint: s.hint,
+          feedbackRight: s.feedbackRight,
+          feedbackWrong: s.feedbackWrong,
+          score: s.score || 10,
+          isInteractive: s.interactionType !== 'choice'
+        }
+        if (s.interactionType === 'phone') stepData.isInteractive = true
+        if (s.interactionType === 'limb') { stepData.isInteractive = true; stepData.correctAnswer = 'flat' }
+        if (s.interactionType === 'drag') stepData.isInteractive = true
+        if (s.interactionType === 'choice') {
+          // 从 correctAnswer 构造 options：正确选项 + 3 个常见错误
+          const wrongs = (s.wrongAnswer || '').split('/').map(w => w.trim()).filter(w => w)
+          const opts = [
+            { text: s.correctAnswer, correct: true },
+            ...wrongs.slice(0, 3).map(w => ({ text: w, correct: false }))
+          ]
+          stepData.options = opts
+        }
+        steps.push(stepData)
+      })
+      console.log('✅ 从后端拉了 ' + steps.length + ' 步急救关卡')
+    }
+  } catch(e) {
+    console.log('⚠️ 后端拉关卡失败，用硬编码 fallback')
+  }
+})
 
 function playSFX(type) {
   try {

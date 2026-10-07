@@ -7,28 +7,23 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 自救步骤详情
- */
 @Data
 @TableName("first_aid_step")
 public class FirstAidStep implements Serializable {
-
     @TableId(type = IdType.AUTO)
     private Long id;
-
-    /** 关联指南ID */
-    private Long guideId;
-
-    /** 步骤顺序 */
     private Integer stepOrder;
-
-    /** 步骤标题 */
     private String title;
-
-    /** 步骤详细说明 */
-    private String content;
-
-    /** 禁止动作警示 */
-    private String warning;
+    private String emoji;
+    private String hint;
+    private String decisionPoint;
+    private String interactionType;
+    private String correctAnswer;
+    private String wrongAnswer;
+    private String feedbackRight;
+    private String feedbackWrong;
+    private String passCondition;
+    private Integer score;
+    private Integer sort;
+    private Integer enabled;
 }
