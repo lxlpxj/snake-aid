@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="game-container">
     <!-- 顶部进度条 -->
     <view class="progress-bar">
@@ -141,6 +141,17 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
+
+function playSFX(type) {
+  try {
+    const map = {
+      click: sfxClick, correct: sfxCorrect, wrong: sfxWrong,
+      win: sfxWin, emergency: sfxEmergency, done: sfxDone
+    }
+    if (map[type]) map[type]()
+  } catch(e) {}
+}
 
 // 9步急救流程（合同要求：脱离—认蛇—镇定—呼救—解压—制动—包扎—止痛—禁忌）
 const steps = reactive([
@@ -644,3 +655,5 @@ function goBack() {
   font-size: 32rpx;
 }
 </style>
+
+

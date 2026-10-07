@@ -99,7 +99,8 @@
             <view class="card-badge" :class="{ danger: s.isPoisonous }">
               {{ s.isPoisonous === 1 ? '⚠️ 毒蛇' : '✅ 无毒' }}
             </view>
-            <view class="card-emoji">{{ getSnakeEmoji(s.name) }}</view>
+            <!-- 象形动画组件（合同要求：象形动画认知） -->
+            <SnakeAnim :snake="s" size="large" :animated="true" :dangerous="s.isPoisonous === 1" />
             <text class="card-name">{{ s.name }}</text>
             <view class="card-features">
               <view class="feature-row">
