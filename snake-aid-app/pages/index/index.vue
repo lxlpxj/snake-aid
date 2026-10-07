@@ -128,7 +128,7 @@
 
 <script>
 import { china } from '@/common/china.js'
-const API = '/api'
+const API = 'http://127.0.0.1:8080/api'
 
 export default {
 	data() {
@@ -330,4 +330,5 @@ export default {
 .tip-title { display: block; font-size: 28rpx; color: #222; font-weight: 500; }
 .tip-desc { display: block; font-size: 22rpx; color: #888; margin-top: 6rpx; }
 </style>
+
 

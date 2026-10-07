@@ -109,7 +109,7 @@
 </template>
 
 <script>
-	const API = '/api'
+	const API = 'http://127.0.0.1:8080/api'
 	export default {
 		data() {
 			return {
@@ -369,4 +369,5 @@
 	.fb-home { background: #f0f0f0; color: #555; }
 	.fb-retry { background: linear-gradient(135deg, #1565C0, #42A5F5); color: #fff; }
 </style>
+
 

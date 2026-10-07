@@ -99,7 +99,7 @@
 <script>
 const TOKEN_KEY = 'token'
 const USER_KEY = 'appUser'
-const API = '/api'
+const API = 'http://127.0.0.1:8080/api'
 
 export default {
         data() {
@@ -267,4 +267,5 @@ export default {
 .disclaimer-text { font-size: 24rpx; color: #999; line-height: 1.6; }
 .version { text-align: center; color: #CCC; font-size: 22rpx; margin-top: 40rpx; }
 </style>
+
 

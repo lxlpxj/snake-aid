@@ -56,7 +56,7 @@
 </template>
 
 <script>
-	const API = '/api'
+	const API = 'http://127.0.0.1:8080/api'
 	export default {
 		data() {
 			return {
@@ -269,4 +269,5 @@
 	.jump-item.current { background: #1565C0; color: #fff; font-weight: bold; }
 	.jump-item.answered { background: #E8F5E9; color: #2E7D32; }
 </style>
+
 

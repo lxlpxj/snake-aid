@@ -67,7 +67,7 @@
 </template>
 
 <script>
-	const API = '/api'
+	const API = 'http://127.0.0.1:8080/api'
 	export default {
 		data() {
 			return {
@@ -168,4 +168,5 @@
 	.hist-date { font-size: 22rpx; color: #bbb; }
 	.hist-grade { font-size: 24rpx; color: #666; margin-top: 6rpx; }
 </style>
+
 

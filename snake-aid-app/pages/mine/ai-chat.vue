@@ -54,7 +54,7 @@
 </template>
 
 <script>
-const API = '/api'
+const API = 'http://127.0.0.1:8080/api'
 
 export default {
 	data() {
@@ -212,4 +212,5 @@ export default {
 .send-btn { padding: 16rpx 32rpx; background: #4CAF50; color: #FFF; border-radius: 32rpx; font-size: 28rpx; font-weight: bold; }
 .send-btn.disabled { background: #CCC; }
 </style>
+
 
