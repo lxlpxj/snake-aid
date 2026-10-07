@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <view class="game-container">
     <!-- 顶部进度条 -->
     <view class="progress-bar">
@@ -37,7 +37,7 @@
         </view>
 
         <!-- 第4关：模拟拨120 -->
-        <view v-if="currentStep === 3" class="dial-120">
+        <view v-if="steps[currentStep]?.isInteractive && steps[currentStep]?.interactionType === 'phone'" class="dial-120">
           <view class="phone-screen">
             <text class="dialing-text" v-if="!phoneCalled">请点击下方按键拨打 120</text>
             <text class="connected-text" v-else>📞 已接通！请说："蛇咬伤！需要急救！"</text>
@@ -49,7 +49,7 @@
         </view>
 
         <!-- 第6关：伤肢摆放 -->
-        <view v-if="currentStep === 5" class="limb-placement">
+        <view v-if="steps[currentStep]?.isInteractive && steps[currentStep]?.interactionType === 'limb'" class="limb-placement">
           <text class="limb-q">蛇咬伤后，伤肢应该放在哪个位置？</text>
           <view class="limb-options">
             <view class="limb-opt" @click="answerLimb('up')">
@@ -68,7 +68,7 @@
         </view>
 
         <!-- 第7关：拖拽包扎带 -->
-        <view v-if="currentStep === 6" class="bandage-area">
+        <view v-if="steps[currentStep]?.isInteractive && steps[currentStep]?.interactionType === 'drag'" class="bandage-area">
           <view class="bandage-scene">
             <view class="arm-svg">
               <text class="arm-emoji">🦾</text>
@@ -86,7 +86,7 @@
         </view>
 
         <!-- 通用选择题 -->
-        <view v-if="!isInteractiveStep(currentStep)" class="choice-area">
+        <view v-if="!steps[currentStep]?.isInteractive && steps[currentStep]?.options?.length" class="choice-area">
           <view class="choice-option" 
                 :class="{ wrong: wrongChoice, right: rightChoice && option.correct }"
                 v-for="(option, idx) in steps[currentStep].options" 
@@ -144,9 +144,13 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
 
 const API = 'http://127.0.0.1:8080/api'
+const hardcodedStepsBackup = []
 
-// 从后端拉关卡数据，失败用下面的硬编码 fallback
+// 从后端拉关卡数据，失败用硬编码 fallback
 onMounted(async () => {
+  // 先备份硬编码 steps（push 进去有 isInteractive + interactionType）
+  steps.forEach(s => hardcodedStepsBackup.push({ ...s }))
+
   try {
     const res = await new Promise((resolve, reject) => {
       uni.request({
@@ -159,7 +163,6 @@ onMounted(async () => {
     if (res.code === 200 && res.data?.length) {
       steps.length = 0
       res.data.forEach(s => {
-        // choice 类型需要 options
         let stepData = {
           emoji: s.emoji || '❓',
           title: s.title,
@@ -167,19 +170,17 @@ onMounted(async () => {
           feedbackRight: s.feedbackRight,
           feedbackWrong: s.feedbackWrong,
           score: s.score || 10,
-          isInteractive: s.interactionType !== 'choice'
+          // 关键！模板依赖这两个字段
+          isInteractive: s.interactionType !== 'choice',
+          interactionType: s.interactionType || 'choice'
         }
-        if (s.interactionType === 'phone') stepData.isInteractive = true
-        if (s.interactionType === 'limb') { stepData.isInteractive = true; stepData.correctAnswer = 'flat' }
-        if (s.interactionType === 'drag') stepData.isInteractive = true
+        if (s.interactionType === 'limb') stepData.correctAnswer = 'flat'
         if (s.interactionType === 'choice') {
-          // 从 correctAnswer 构造 options：正确选项 + 3 个常见错误
           const wrongs = (s.wrongAnswer || '').split('/').map(w => w.trim()).filter(w => w)
-          const opts = [
+          stepData.options = [
             { text: s.correctAnswer, correct: true },
             ...wrongs.slice(0, 3).map(w => ({ text: w, correct: false }))
           ]
-          stepData.options = opts
         }
         steps.push(stepData)
       })
@@ -187,6 +188,9 @@ onMounted(async () => {
     }
   } catch(e) {
     console.log('⚠️ 后端拉关卡失败，用硬编码 fallback')
+    // 恢复备份
+    steps.length = 0
+    hardcodedStepsBackup.forEach(s => steps.push(s))
   }
 })
 
@@ -247,6 +251,7 @@ const steps = reactive([
     title: '紧急呼救',
     hint: '现在立刻拨打 120！',
     isInteractive: true,
+    interactionType: 'phone',
     feedbackRight: '✓ 好样的！打通后说清楚："蛇咬伤！在XX路XX地方！人还清醒/不清醒！" 让急救室准备抗蛇毒血清！',
     feedbackWrong: ''
   },
@@ -269,6 +274,7 @@ const steps = reactive([
     title: '伤肢制动',
     hint: '咬伤的手/腿应该怎么放？',
     isInteractive: true,
+    interactionType: 'limb',
     correctAnswer: 'flat',
     feedbackRight: '✓ 对！伤肢要放平放低，与心脏同高！抬高会加速毒扩散，放低也会！',
     feedbackWrong: ''
@@ -279,6 +285,7 @@ const steps = reactive([
     title: '加压包扎',
     hint: '用绷带在伤口上方（靠近心脏一侧）8-10cm处绑紧',
     isInteractive: true,
+    interactionType: 'drag',
     feedbackRight: '✓ 完美！包扎位置正确！松紧合适能减缓淋巴回流但不影响动脉供血。记住：每绑1小时要松15分钟！',
     feedbackWrong: ''
   },
