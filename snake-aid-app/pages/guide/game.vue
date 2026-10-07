@@ -263,7 +263,7 @@
 </template>
 
 <script setup>
-import voice from '@/utils/voice'\nimport { ref, reactive, computed, onMounted } from 'vue'
+import voice from '../../utils/voice'\nimport { ref, reactive, computed, onMounted } from 'vue'
 import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
 
 const API = 'http://127.0.0.1:8080/api'

@@ -227,7 +227,7 @@
 </template>
 
 <script setup>
-import voice from '@/utils/voice'; import { ref, computed, onMounted } from 'vue'
+import voice from '../../utils/voice'; import { ref, computed, onMounted } from 'vue'
 
 const API = 'http://127.0.0.1:8080/api'
 const steps = ['玩一玩','认一认','练一练','测一测']
