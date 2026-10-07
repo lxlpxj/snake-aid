@@ -227,7 +227,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import voice from '@/utils/voice'; import { ref, computed, onMounted } from 'vue'
 
 const API = 'http://127.0.0.1:8080/api'
 const steps = ['玩一玩','认一认','练一练','测一测']
@@ -257,7 +257,7 @@ const filteredSnakes = computed(()=>{
   return snakes.value.filter(s=>s.isVenomous===0)
 })
 
-onMounted(async ()=>{
+onMounted(async ()=>{ voice.preloadVoices(); voice.speak('欢迎来到蛇类学习！玩一玩，认一认，练一练，测一测！', { force:true })
   try {
     const res = await new Promise((resolve,reject)=>{
       uni.request({ url:API+'/app/snake/page?current=1&size=20', timeout:3000,
@@ -278,7 +278,7 @@ onMounted(async ()=>{
   initQuiz()
 })
 
-const gotoStep = (i)=>currentStep.value = i
+const gotoStep = (i)=>{ currentStep.value = i; const names=['🎮 玩一玩','🔍 认一认','🧠 练一练','🏆 测一测']; voice.speak('现在进入'+names[i], { force:true }); }
 const defaultPath = 'M5 35 Q20 15 40 28 Q60 42 80 20 Q95 8 100 28'
 const defaultPathBig = 'M10 100 Q60 40 110 80 Q160 120 210 70 Q260 20 290 80'
 
@@ -290,7 +290,7 @@ const playOptions = ref([
   { icon:'🚶', text:'大跨步快速跑过', ok:false, fb:'跑太快会惊动蛇，而且可能踩到！' }
 ])
 const picked = ref(-1)
-const pickPlay = (i)=>picked.value = i
+const pickPlay = (i)=>{ picked.value = i; voice.speak(playOptions[i].text); if(playOptions[i].ok) voice.sayRight('好样的！'); else voice.sayWrong('危险！'); }
 
 // ========== 练一练 ==========
 const trainPool = ref([])
@@ -314,7 +314,7 @@ function regenerateOpts(){
   const wrongs = snakes.value.filter(s=>s.name!==correct).sort(()=>Math.random()-0.5).slice(0,3).map(s=>s.name)
   trainOpts.value = [...wrongs, correct].sort(()=>Math.random()-0.5)
 }
-function pickTrain(i){ trainPicked.value = i }
+function pickTrain(i){ trainPicked.value = i; const correct = trainOpts.value[i]===trainQ.value.name; if(correct) voice.sayRight('答对了！是'+trainQ.value.name); else voice.sayWrong('不对，正确是'+trainQ.value.name); }
 function nextTrain(){
   trainIdx.value++
   trainPicked.value = -1
@@ -344,11 +344,11 @@ function initQuiz(){
   ]
   quizList.value = bank.sort(()=>Math.random()-0.5)
 }
-function startQuiz(){
+function startQuiz(){ voice.sayTestStart('蛇类知识');{
   quizIdx.value=0; score.value=0; quizState.value='playing'
   quizPicked.value=-1; quizAnswers.value=[]
 }
-function pickQuiz(i){
+function pickQuiz(i){ voice.speak('选 '+String.fromCharCode(65+i)); if(i===quizList.value[quizIdx.value].correctAnswer) voice.sayRight('+10分！'); else voice.sayWrong('答错了'); }
   quizPicked.value = i
   quizAnswers.value[quizIdx.value] = i
   if (i===quizList.value[quizIdx.value].correctAnswer) score.value += 10
@@ -361,13 +361,13 @@ function nextQuiz(){
     quizState.value = 'done'
   }
 }
-function restartQuiz(){
+function restartQuiz(){ voice.sayClick('重新测试！');{
   initQuiz(); startQuiz()
 }
 
 // 详情弹层
 const detailSnake = ref(null)
-function openDetail(s){ detailSnake.value = s }
+function openDetail(s){ detailSnake.value = s; voice.speak((s.isVenomous===1?'⚠️ 剧毒！':'✅ 无毒！') + s.name + '，头型：'+s.headShape+'，花纹：'+s.pattern); }
 </script>
 
 <style>

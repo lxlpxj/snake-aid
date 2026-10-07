@@ -263,7 +263,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import voice from '@/utils/voice'\nimport { ref, reactive, computed, onMounted } from 'vue'
 import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
 
 const API = 'http://127.0.0.1:8080/api'
@@ -271,6 +271,7 @@ const hardcodedStepsBackup = []
 
 // 从后端拉关卡数据，失败用硬编码 fallback
 onMounted(async () => {
+  voice.preloadVoices()
   // 先备份硬编码 steps（push 进去有 isInteractive + interactionType）
   steps.forEach(s => hardcodedStepsBackup.push({ ...s }))
 
@@ -460,7 +461,7 @@ function isInteractiveStep(idx) {
   return [3, 5, 6].includes(idx) // 拨号、伤肢摆放、包扎
 }
 
-function startGame() {
+function startGame(){ voice.sayClick('开始闯关！') {
   gameState.value = 'playing'
   currentStep.value = 0
   score.value = 0
@@ -477,30 +478,30 @@ function showHint() {
   canNext.value = false
 }
 
-function selectOption(option) {
+function selectOption(option){ voice.speak(option.text?.substring?.(0,10) || '选项') {
   if (feedbackText.value) return // 已选过
   if (option.correct) {
     rightChoice.value = true
     feedbackText.value = steps[currentStep.value].feedbackRight
-    feedbackType.value = 'right'
+    feedbackType.value = 'right'; voice.sayRight(feedbackText.value?.substring?.(0,15) || '答对了')
     score.value += 10
     canNext.value = true
   } else {
     wrongChoice.value = true
     wrongCount.value++
     feedbackText.value = steps[currentStep.value].feedbackWrong
-    feedbackType.value = 'wrong'
+    feedbackType.value = 'wrong'; voice.sayWrong(feedbackText.value?.substring?.(0,15) || '答错了')
     canNext.value = false
   }
 }
 
 // 第4关：拨120
-function call120() {
+function call120(){ voice.sayClick('拨打120！蛇咬伤需要急救！') {
   if (phoneCalled.value) return
   phoneCalled.value = true
   score.value += 10
   feedbackText.value = steps[3].feedbackRight
-  feedbackType.value = 'right'
+  feedbackType.value = 'right'; voice.sayRight(feedbackText.value?.substring?.(0,15) || '答对了')
   canNext.value = true
 }
 
@@ -511,23 +512,23 @@ function answerLimb(ans) {
   if (ans === correct) {
     score.value += 10
     feedbackText.value = steps[5].feedbackRight
-    feedbackType.value = 'right'
+    feedbackType.value = 'right'; voice.sayRight(feedbackText.value?.substring?.(0,15) || '答对了')
     canNext.value = true
   } else {
     wrongCount.value++
     feedbackText.value = '❌ 这个位置不对！' + steps[5].feedbackRight
-    feedbackType.value = 'wrong'
+    feedbackType.value = 'wrong'; voice.sayWrong(feedbackText.value?.substring?.(0,15) || '答错了')
     canNext.value = false
   }
 }
 
 // 第7关：包扎
-function dragBandage() {
+function dragBandage(){ voice.sayClick('包扎伤口！') {
   if (bandageDone.value) return
   bandageDone.value = true
   score.value += 10
   feedbackText.value = steps[6].feedbackRight
-  feedbackType.value = 'right'
+  feedbackType.value = 'right'; voice.sayRight(feedbackText.value?.substring?.(0,15) || '答对了')
   canNext.value = true
 }
 
@@ -543,7 +544,7 @@ function retryStep() {
   limbAnswer.value = ''
 }
 
-function nextStep() {
+function nextStep(){ voice.sayStep(currentStep.value+1, steps[currentStep.value]?.title || '') {
   if (currentStep.value < steps.length - 1) {
     currentStep.value++
     feedbackText.value = ''
@@ -555,7 +556,7 @@ function nextStep() {
     bandageDone.value = false
     limbAnswer.value = ''
   } else {
-    gameState.value = 'done'
+    gameState.value = 'done'; voice.sayCongrats(score.value)
   }
 }
 
