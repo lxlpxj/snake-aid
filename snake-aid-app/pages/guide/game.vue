@@ -27,7 +27,7 @@
     <!-- 闯关界面 -->
     <view v-else-if="gameState === 'playing'" class="play-screen">
       <!-- 当前关卡 -->
-      <view class="level-card">
+      <view class="level-card" :class="feedbackType ? ('card-' + feedbackType) : ''">
         <view class="level-header">
           <text class="level-emoji">{{ steps[currentStep].emoji }}</text>
           <view class="level-info">
@@ -213,10 +213,10 @@
         <!-- 通用选择题 -->
         <view v-if="!steps[currentStep]?.isInteractive && steps[currentStep]?.options?.length" class="choice-area">
           <view class="choice-option" 
-                :class="{ wrong: wrongChoice, right: rightChoice && option.correct }"
+                :class="{ wrong: wrongChoice, right: rightChoice && option.correct, tapped: selectedOpt === option.correct }"
                 v-for="(option, idx) in steps[currentStep].options" 
                 :key="idx"
-                @click="selectOption(option)">
+                @click="selectOption(option); selectedOpt = option.correct">
             <text class="option-letter">{{ String.fromCharCode(65 + idx) }}</text>
             <text class="option-text">{{ option.text }}</text>
             <text class="option-mark" v-if="rightChoice && option.correct">✓</text>
@@ -240,6 +240,15 @@
           再试一次
         </button>
         <button v-else class="btn-hint" @click="showHint">💡 提示</button>
+      </view>
+
+      <!-- 🎆 交互反馈特效层 -->
+      <view class="fx-overlay right-fx" v-if="feedbackType === 'right'">
+        <view class="fx-star" v-for="n in 10" :key="'s'+n">⭐</view>
+        <view class="fx-plus">+10</view>
+      </view>
+      <view class="fx-overlay wrong-fx" v-if="feedbackType === 'wrong'">
+        <view class="fx-boo">❌ 答错了！</view>
       </view>
     </view>
 
@@ -449,6 +458,7 @@ const score = ref(0)
 const wrongCount = ref(0)
 
 const feedbackText = ref('')
+const selectedOpt = ref(null)
 const feedbackType = ref('')
 const rightChoice = ref(false)
 const wrongChoice = ref(false)
@@ -889,4 +899,58 @@ function goBack() {
 .scene-wrap svg rect[stroke="#E53935"] { animation: cardFloat 3s ease-in-out infinite; }
 .scene-wrap svg rect[stroke="#43A047"] { animation: cardFloat 3s ease-in-out infinite 1s; }
 @keyframes cardFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* ===== ✅ 交互反馈特效 ===== */
+
+/* level-card 答对/答错 整体联动 */
+.level-card.card-right { animation: cardPulse .6s ease-out; box-shadow: 0 0 30px #4CAF50; }
+.level-card.card-wrong { animation: cardShake .5s ease-in-out; box-shadow: 0 0 30px #E53935; }
+@keyframes cardPulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+@keyframes cardShake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-8px); } 40%,80% { transform: translateX(8px); } }
+
+/* 选项按钮点击反馈 */
+.choice-option { transition: transform .15s, box-shadow .15s; }
+.choice-option:active { transform: scale(.96); box-shadow: 0 2rpx 8rpx rgba(0,0,0,.15); }
+.choice-option.right { animation: optionRight .5s ease-out; }
+.choice-option.wrong { animation: optionWrong .5s ease-out; }
+.choice-option.tapped { transform: scale(.97); }
+@keyframes optionRight { 0% { background: #E8F5E9; } 50% { background: #66BB6A; transform: scale(1.05); } 100% { background: #C8E6C9; } }
+@keyframes optionWrong { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } 100% { transform: translateX(0); } }
+
+/* feedback 弹出动画 */
+.feedback { animation: feedbackPop .4s ease-out; }
+@keyframes feedbackPop { 0% { opacity: 0; transform: translateY(20px) scale(.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+
+/* 特效遮罩层 */
+.fx-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 50; }
+.right-fx { animation: rightFlash .3s ease-out; }
+.wrong-fx { animation: wrongFlash .4s ease-out; }
+@keyframes rightFlash { 0% { background: rgba(76,175,80,0); } 30% { background: rgba(76,175,80,.15); } 100% { background: transparent; } }
+@keyframes wrongFlash { 0% { background: rgba(229,57,53,0); } 30% { background: rgba(229,57,53,.2); } 100% { background: transparent; } }
+
+/* 星星撒花 */
+.fx-star { position: absolute; font-size: 40rpx; animation: starFall 1.5s ease-out forwards; }
+.fx-star:nth-child(1) { left: 10%; animation-delay: .0s; }
+.fx-star:nth-child(2) { left: 25%; animation-delay: .1s; }
+.fx-star:nth-child(3) { left: 40%; animation-delay: .2s; }
+.fx-star:nth-child(4) { left: 55%; animation-delay: .3s; }
+.fx-star:nth-child(5) { left: 70%; animation-delay: .15s; }
+.fx-star:nth-child(6) { left: 85%; animation-delay: .25s; }
+.fx-star:nth-child(7) { left: 15%; animation-delay: .35s; }
+.fx-star:nth-child(8) { left: 60%; animation-delay: .05s; }
+.fx-star:nth-child(9) { left: 35%; animation-delay: .4s; }
+.fx-star:nth-child(10){ left: 78%; animation-delay: .18s; }
+@keyframes starFall {
+  0% { top: 20%; opacity: 1; transform: scale(.5) rotate(0deg); }
+  60% { opacity: 1; }
+  100% { top: 90%; opacity: 0; transform: scale(1.5) rotate(360deg); }
+}
+
+/* +10 飘分 */
+.fx-plus { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); font-size: 80rpx; font-weight: bold; color: #4CAF50; text-shadow: 0 4rpx 8rpx rgba(0,0,0,.2); animation: plusFloat 1.2s ease-out forwards; }
+@keyframes plusFloat { 0% { top: 35%; opacity: 0; transform: translateX(-50%) scale(.5); } 30% { opacity: 1; transform: translateX(-50%) scale(1.2); } 100% { top: 10%; opacity: 0; transform: translateX(-50%) scale(1); } }
+
+/* ❌ 答错大字 */
+.fx-boo { position: absolute; top: 40%; left: 50%; transform: translateX(-50%); font-size: 72rpx; font-weight: bold; color: #E53935; animation: booPop .6s ease-out; }
+@keyframes booPop { 0% { opacity: 0; transform: translateX(-50%) scale(.3); } 50% { opacity: 1; transform: translateX(-50%) scale(1.2); } 100% { opacity: 0; transform: translateX(-50%) scale(1); } }
 </style>
