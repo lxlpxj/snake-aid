@@ -39,128 +39,309 @@
           </view>
         </view>
 
-        <!-- 🎬 每关专属动画舞台 -->
-        <view class="anim-stage" v-if="true">
-          <!-- 第1关: 脱离险境 - 人跑开 + 蛇追 -->
-          <view v-if="currentStep === 0" class="anim-escape">
-            <text class="anim-person anim-run">🏃‍♂️</text>
-            <text class="anim-snake anim-snake-warn">🐍</text>
-            <text class="anim-arrows anim-arrow1">💨</text>
-            <text class="anim-arrows anim-arrow2">💨</text>
-            <text class="anim-arrows anim-arrow3">💨</text>
-            <view class="anim-ground"></view>
+                <!-- 🎬 每关专属 SVG 场景插图 -->
+        <view class="scene-stage">
+          <!-- 第1关: 田间小路遇蛇 - 人后退 + 蛇抬头 -->
+          <view v-if="currentStep === 0" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <!-- 天空 -->
+              <rect width="400" height="140" fill="#E8F5E9"/>
+              <!-- 草地 -->
+              <rect y="140" width="400" height="120" fill="#81C784"/>
+              <!-- 小路 -->
+              <path d="M160 260 L200 140 L240 140 L280 260 Z" fill="#D7CCC8"/>
+              <!-- 小草 -->
+              <g stroke="#558B2F" stroke-width="2">
+                <line x1="30" y1="200" x2="30" y2="185"/>
+                <line x1="50" y1="220" x2="50" y2="205"/>
+                <line x1="360" y1="195" x2="360" y2="180"/>
+                <line x1="380" y1="215" x2="380" y2="200"/>
+              </g>
+              <!-- 人物（后退姿势） -->
+              <g class="anim-person-run" transform="translate(60,140)">
+                <circle cx="15" cy="15" r="12" fill="#FFCCBC"/>
+                <rect x="10" y="26" width="10" height="25" rx="3" fill="#1565C0"/>
+                <rect x="8" y="51" width="6" height="18" rx="2" fill="#1976D2"/>
+                <rect x="16" y="51" width="6" height="18" rx="2" fill="#1976D2"/>
+                <circle cx="15" cy="5" r="8" fill="#5D4037"/>
+              </g>
+              <!-- 蛇（S形抬头警告） -->
+              <g class="anim-snake-warn" transform="translate(250,170)">
+                <path d="M0 40 Q20 10 40 30 Q60 50 80 20 Q100 -5 110 15" 
+                      fill="none" stroke="#558B2F" stroke-width="10" stroke-linecap="round"/>
+                <circle cx="105" cy="12" r="3" fill="#FFEB3B"/>
+                <path d="M110 15 L118 12 M110 15 L118 18" stroke="#FF5722" stroke-width="2"/>
+                <!-- 警告气泡 -->
+                <g transform="translate(50,-30)" class="anim-warn-bubble">
+                  <circle r="15" fill="#FFEB3B" stroke="#F57F17" stroke-width="2"/>
+                  <text text-anchor="middle" y="5" font-size="18" fill="#D84315">⚠</text>
+                </g>
+              </g>
+              <!-- 后退箭头 -->
+              <g class="anim-back-arrow" transform="translate(130,100)">
+                <path d="M30 10 L10 25 L30 40" stroke="#D32F2F" stroke-width="4" fill="none"/>
+                <text x="35" y="30" font-size="14" fill="#D32F2F">后退</text>
+              </g>
+            </svg>
           </view>
 
-          <!-- 第2关: 辨认蛇种 - 三角头 vs 椭圆头 SVG -->
-          <view v-if="currentStep === 1" class="anim-identify">
-            <view class="anim-bad-snake">
-              <svg viewBox="0 0 60 40" class="anim-svg">
-                <polygon points="50,20 30,8 30,32" fill="#D32F2F" class="anim-tri-head"/>
-                <rect x="10" y="16" width="25" height="8" rx="4" fill="#1A1A1A"/>
-                <polygon points="50,16 55,12 55,20" fill="#D32F2F" class="anim-tooth"/>
-                <polygon points="50,24 55,20 55,28" fill="#D32F2F" class="anim-tooth"/>
-              </svg>
-              <text class="anim-label bad">⚠️ 三角头=毒蛇</text>
-            </view>
-            <view class="anim-good-snake">
-              <svg viewBox="0 0 60 40" class="anim-svg">
-                <ellipse cx="50" cy="20" rx="15" ry="10" fill="#4CAF50" class="anim-round-head"/>
-                <rect x="10" y="16" width="25" height="8" rx="4" fill="#33691E"/>
-                <text x="45" y="23" font-size="8">●</text>
-              </svg>
-              <text class="anim-label good">✅ 椭圆头=无毒</text>
-            </view>
+          <!-- 第2关: 辨认蛇 - 三角头 vs 椭圆头 对比图 -->
+          <view v-if="currentStep === 1" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <!-- 背景 -->
+              <rect width="400" height="260" fill="#FFF8E1"/>
+              <!-- 毒蛇卡片 -->
+              <g transform="translate(20,30)">
+                <rect width="160" height="200" rx="12" fill="#FFEBEE" stroke="#EF5350" stroke-width="3"/>
+                <text x="80" y="30" text-anchor="middle" font-size="16" fill="#C62828" font-weight="bold">⚠️ 毒蛇</text>
+                <!-- 三角头蛇 SVG -->
+                <g transform="translate(30,50)">
+                  <path d="M0 60 Q20 40 40 50 L70 30 L100 50 L70 70 L40 60 Z" 
+                        fill="#37474F" stroke="#263238" stroke-width="2"/>
+                  <!-- 三角头 -->
+                  <polygon points="100,50 130,30 130,70" fill="#B71C1C" class="anim-tri-warn"/>
+                  <rect x="125" y="45" width="12" height="4" fill="#1A1A1A"/>
+                  <!-- 毒牙 -->
+                  <polygon points="125,50 122,62 128,60" fill="#FFEB3B" class="anim-tooth1"/>
+                  <polygon points="135,50 138,62 132,60" fill="#FFEB3B" class="anim-tooth2"/>
+                </g>
+                <text x="80" y="170" text-anchor="middle" font-size="12" fill="#555">三角头 + 毒牙</text>
+                <text x="80" y="190" text-anchor="middle" font-size="11" fill="#C62828">→ 危险！远离！</text>
+              </g>
+              <!-- 无毒蛇卡片 -->
+              <g transform="translate(220,30)">
+                <rect width="160" height="200" rx="12" fill="#E8F5E9" stroke="#66BB6A" stroke-width="3"/>
+                <text x="80" y="30" text-anchor="middle" font-size="16" fill="#2E7D32" font-weight="bold">✅ 无毒</text>
+                <!-- 椭圆头蛇 SVG -->
+                <g transform="translate(30,50)">
+                  <path d="M0 60 Q20 40 40 50 Q55 55 55 50" 
+                        fill="none" stroke="#2E7D32" stroke-width="12" stroke-linecap="round"/>
+                  <!-- 椭圆头 -->
+                  <ellipse cx="80" cy="50" rx="25" ry="18" fill="#4CAF50" class="anim-round-float"/>
+                  <circle cx="88" cy="45" r="4" fill="#1A1A1A"/>
+                  <path d="M100 50 L110 48 M100 50 L110 52" stroke="#FF5722" stroke-width="2"/>
+                </g>
+                <text x="80" y="170" text-anchor="middle" font-size="12" fill="#555">椭圆头 + 无牙</text>
+                <text x="80" y="190" text-anchor="middle" font-size="11" fill="#2E7D32">→ 一般安全</text>
+              </g>
+            </svg>
           </view>
 
-          <!-- 第3关: 保持镇定 - 深呼吸光圈 -->
-          <view v-if="currentStep === 2" class="anim-calm">
-            <text class="anim-face">😌</text>
-            <view class="anim-breath-ring ring1"></view>
-            <view class="anim-breath-ring ring2"></view>
-            <view class="anim-breath-ring ring3"></view>
-            <text class="anim-breath-text">深呼吸...</text>
+          <!-- 第3关: 保持镇定 - 深呼吸场景 -->
+          <view v-if="currentStep === 2" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <defs>
+                <radialGradient id="calmBg" cx="50%" cy="50%">
+                  <stop offset="0%" stop-color="#C8E6C9"/>
+                  <stop offset="100%" stop-color="#A5D6A7"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="260" fill="url(#calmBg)"/>
+              <!-- 人物打坐 -->
+              <g transform="translate(170,60)">
+                <circle cx="30" cy="25" r="22" fill="#FFCCBC"/>
+                <path d="M15 22 Q30 15 45 22" fill="none" stroke="#5D4037" stroke-width="2"/>
+                <path d="M18 28 Q30 32 42 28" fill="none" stroke="#5D4037" stroke-width="2"/>
+                <rect x="20" y="45" width="20" height="5" fill="#5D4037"/>
+                <path d="M5 55 Q30 50 55 55 L60 75 Q30 80 0 75 Z" fill="#388E3C"/>
+                <!-- 呼吸光圈 -->
+                <circle cx="30" cy="25" r="50" fill="none" stroke="#81C784" stroke-width="2" class="anim-ring1"/>
+                <circle cx="30" cy="25" r="70" fill="none" stroke="#A5D6A7" stroke-width="2" class="anim-ring2"/>
+                <circle cx="30" cy="25" r="90" fill="none" stroke="#C8E6C9" stroke-width="2" class="anim-ring3"/>
+              </g>
+              <!-- 提示 -->
+              <g transform="translate(200,200)">
+                <text text-anchor="middle" font-size="18" fill="#1B5E20" class="anim-breathe-text">深 呼 吸 ...</text>
+              </g>
+            </svg>
           </view>
 
-          <!-- 第4关: 紧急呼救 - 手机震动 -->
-          <view v-if="currentStep === 3" class="anim-phone-call">
-            <text class="anim-phone anim-vibrate">📱</text>
-            <text class="anim-waves wave1">〰️</text>
-            <text class="anim-waves wave2">〰️</text>
-            <text class="anim-waves wave3">〰️</text>
+          <!-- 第4关: 紧急呼救 - 拨号场景 SVG -->
+          <view v-if="currentStep === 3" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <rect width="400" height="260" fill="#E3F2FD"/>
+              <!-- 紧急红标 -->
+              <g transform="translate(200,30)">
+                <rect x="-60" y="0" width="120" height="30" rx="15" fill="#D32F2F" class="anim-emergency-pulse"/>
+                <text text-anchor="middle" y="20" font-size="16" fill="white" font-weight="bold">🚨 紧急呼救</text>
+              </g>
+              <!-- 手机 -->
+              <g transform="translate(140,70)" class="anim-phone-vibrate">
+                <rect width="120" height="180" rx="15" fill="#263238" stroke="#455A64" stroke-width="2"/>
+                <rect x="8" y="20" width="104" height="100" rx="5" fill="#1A237E"/>
+                <text x="60" y="55" text-anchor="middle" font-size="28" fill="#00E676" font-family="monospace" class="anim-digits">120</text>
+                <!-- 按键 -->
+                <g fill="#37474F">
+                  <circle cx="30" cy="140" r="10"/>
+                  <circle cx="60" cy="140" r="10"/>
+                  <circle cx="90" cy="140" r="10"/>
+                  <circle cx="60" cy="170" r="12" fill="#4CAF50"/>
+                </g>
+                <text x="60" y="175" text-anchor="middle" font-size="14" fill="white">📞</text>
+              </g>
+              <!-- 信号波 -->
+              <g class="anim-signal-wave" transform="translate(290,160)">
+                <circle r="20" fill="none" stroke="#1976D2" stroke-width="2"/>
+                <circle r="35" fill="none" stroke="#1976D2" stroke-width="1.5" opacity="0.6"/>
+                <circle r="50" fill="none" stroke="#1976D2" stroke-width="1" opacity="0.3"/>
+              </g>
+            </svg>
           </view>
 
-          <!-- 第5关: 伤口解压 - 水滴落下 -->
-          <view v-if="currentStep === 4" class="anim-wash">
-            <text class="anim-drop anim-drop1">💧</text>
-            <text class="anim-drop anim-drop2">💧</text>
-            <text class="anim-drop anim-drop3">💧</text>
-            <view class="anim-wound">
-              <text class="anim-wound-mark">🔴</text>
-              <text class="anim-wound-label">伤口冲洗中</text>
-            </view>
+          <!-- 第5关: 伤口解压 - 冲洗 SVG -->
+          <view v-if="currentStep === 4" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <rect width="400" height="260" fill="#E0F7FA"/>
+              <!-- 水龙头 -->
+              <g transform="translate(50,30)">
+                <rect x="20" y="0" width="10" height="50" fill="#78909C"/>
+                <rect x="15" y="50" width="40" height="15" fill="#90A4AE"/>
+                <rect x="50" y="55" width="10" height="20" fill="#78909C"/>
+              </g>
+              <!-- 水滴 -->
+              <g class="anim-water-drop1" transform="translate(55,80)">
+                <path d="M0 0 Q10 20 0 35 Q-10 20 0 0" fill="#42A5F5"/>
+              </g>
+              <g class="anim-water-drop2" transform="translate(65,80)">
+                <path d="M0 0 Q10 20 0 35 Q-10 20 0 0" fill="#42A5F5"/>
+              </g>
+              <g class="anim-water-drop3" transform="translate(75,80)">
+                <path d="M0 0 Q10 20 0 35 Q-10 20 0 0" fill="#42A5F5"/>
+              </g>
+              <!-- 手臂 + 伤口 -->
+              <g transform="translate(150,140)">
+                <rect width="200" height="40" rx="20" fill="#FFCCBC" stroke="#E57373" stroke-width="2"/>
+                <circle cx="100" cy="20" r="25" fill="#FFCDD2" stroke="#E57373" stroke-width="3" class="anim-wound-pulse"/>
+                <text x="100" y="28" text-anchor="middle" font-size="24">🔴</text>
+              </g>
+              <!-- 水流 -->
+              <path d="M75 100 Q100 130 180 160" stroke="#2196F3" stroke-width="4" fill="none" class="anim-water-flow"/>
+              <text x="200" y="220" text-anchor="middle" font-size="14" fill="#1565C0">用流动清水冲洗伤口 15-20 分钟</text>
+            </svg>
           </view>
 
-          <!-- 第6关: 伤肢制动 - 平放/抬高/放低 三选一 -->
-          <view v-if="currentStep === 5" class="anim-limb">
-            <view class="anim-limb-wrap limb-flat">
-              <text class="anim-arm">🦿</text>
-              <text class="anim-arrow right">➡️</text>
-            </view>
-            <text class="anim-limb-label">与心脏同高 ✓</text>
+          <!-- 第6关: 伤肢制动 - 平放姿势 SVG -->
+          <view v-if="currentStep === 5" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <rect width="400" height="260" fill="#FFF3E0"/>
+              <!-- 床 -->
+              <rect x="30" y="180" width="340" height="50" rx="8" fill="#FFFFFF" stroke="#BCAAA4" stroke-width="2"/>
+              <rect x="30" y="170" width="80" height="15" rx="4" fill="#EFEBE9"/>
+              <!-- 人物躺下 -->
+              <g transform="translate(50,100)">
+                <!-- 头 -->
+                <circle cx="30" cy="30" r="25" fill="#FFCCBC"/>
+                <circle cx="22" cy="28" r="3" fill="#5D4037"/>
+                <circle cx="38" cy="28" r="3" fill="#5D4037"/>
+                <!-- 身体 -->
+                <ellipse cx="120" cy="50" rx="90" ry="25" fill="#1976D2"/>
+                <!-- 平放的手臂（重点！） -->
+                <rect x="130" y="48" width="100" height="15" rx="7" fill="#FFCCBC" class="anim-limb-flat"/>
+                <text x="170" y="45" font-size="20">⚠️</text>
+                <!-- 箭头指向 -->
+                <path d="M230 55 L260 55" stroke="#2E7D32" stroke-width="4" marker-end="url(#arrowGreen)"/>
+              </g>
+              <defs>
+                <marker id="arrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M0 0 L10 5 L0 10" fill="#2E7D32"/>
+                </marker>
+              </defs>
+              <text x="200" y="245" text-anchor="middle" font-size="14" fill="#2E7D32" font-weight="bold">✓ 伤肢与心脏同高，平放！</text>
+            </svg>
           </view>
 
-          <!-- 第7关: 加压包扎 - 绷带缠绕动画 -->
-          <view v-if="currentStep === 6" class="anim-bandage-scene">
-            <view class="anim-bandage-target">
-              <text class="anim-bandage-arm">🦾</text>
-              <view class="anim-bandage-wrap wrap1"></view>
-              <view class="anim-bandage-wrap wrap2"></view>
-              <view class="anim-bandage-wrap wrap3"></view>
-              <text class="anim-wound-mark-small">⚠️</text>
-            </view>
+          <!-- 第7关: 加压包扎 - 绷带缠绕 SVG -->
+          <view v-if="currentStep === 6" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <rect width="400" height="260" fill="#FBE9E7"/>
+              <!-- 手臂 -->
+              <g transform="translate(50,100)">
+                <rect x="0" y="40" width="300" height="50" rx="25" fill="#FFCCBC" stroke="#E57373" stroke-width="2"/>
+                <!-- 伤口标记 -->
+                <circle cx="180" cy="65" r="18" fill="#FFCDD2" stroke="#D32F2F" stroke-width="2" stroke-dasharray="4 2"/>
+                <text x="180" y="72" text-anchor="middle" font-size="16">⚠️</text>
+                <!-- 绷带缠绕（动态） -->
+                <g class="anim-bandage-group">
+                  <rect x="140" y="55" width="100" height="25" rx="3" fill="#E57373" opacity="0.85" class="anim-bandage1"/>
+                  <rect x="140" y="70" width="100" height="12" rx="2" fill="#C62828" opacity="0.6" class="anim-bandage2"/>
+                  <!-- 螺旋纹 -->
+                  <path d="M140 55 Q160 68 180 55 Q200 68 220 55 Q240 68 240 55" 
+                        fill="none" stroke="#FFCDD2" stroke-width="3" class="anim-bandage-spiral"/>
+                </g>
+              </g>
+              <!-- 绷带卷 -->
+              <g transform="translate(300,40)">
+                <ellipse cx="0" cy="0" rx="25" ry="35" fill="#FFCDD2" stroke="#E57373" stroke-width="2"/>
+                <ellipse cx="-5" cy="0" rx="20" ry="30" fill="#FFCCBC"/>
+                <text x="0" y="5" text-anchor="middle" font-size="20">🩹</text>
+              </g>
+              <text x="200" y="240" text-anchor="middle" font-size="13" fill="#C62828">从伤口远心端向近心端缠绕</text>
+            </svg>
           </view>
 
-          <!-- 第8关: 止痛处理 - 红叉禁止 -->
-          <view v-if="currentStep === 7" class="anim-pain">
-            <view class="anim-ban">
-              <text class="anim-ban-item anim-shake">💊</text>
-              <text class="anim-ban-x">❌</text>
-              <text class="anim-ban-label">止痛药禁！</text>
-            </view>
-            <view class="anim-ban">
-              <text class="anim-ban-item anim-shake">🍺</text>
-              <text class="anim-ban-x">❌</text>
-              <text class="anim-ban-label">酒精禁！</text>
-            </view>
-            <view class="anim-ban">
-              <text class="anim-ban-item anim-shake">🧊</text>
-              <text class="anim-ban-x">❌</text>
-              <text class="anim-ban-label">冰敷禁！</text>
-            </view>
+          <!-- 第8关: 止痛处理 - 三个禁止 SVG -->
+          <view v-if="currentStep === 7" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <rect width="400" height="260" fill="#FFEBEE"/>
+              <text x="200" y="35" text-anchor="middle" font-size="16" fill="#C62828" font-weight="bold">🚫 蛇咬伤后，这些绝对不能做！</text>
+              <!-- 三个禁止卡片 -->
+              <g transform="translate(30,60)">
+                <rect width="100" height="160" rx="10" fill="white" stroke="#EF5350" stroke-width="2"/>
+                <circle cx="50" cy="50" r="25" fill="#FFECB3"/>
+                <text x="50" y="60" text-anchor="middle" font-size="28">💊</text>
+                <!-- 红叉 -->
+                <path d="M30 30 L70 70 M70 30 L30 70" stroke="#D32F2F" stroke-width="5" stroke-linecap="round" class="anim-ban-x1"/>
+                <text x="50" y="110" text-anchor="middle" font-size="11" fill="#C62828">❌ 止痛药</text>
+                <text x="50" y="130" text-anchor="middle" font-size="9" fill="#888">抑制神经中枢</text>
+              </g>
+              <g transform="translate(150,60)">
+                <rect width="100" height="160" rx="10" fill="white" stroke="#EF5350" stroke-width="2"/>
+                <circle cx="50" cy="50" r="25" fill="#FFECB3"/>
+                <text x="50" y="60" text-anchor="middle" font-size="28">🍺</text>
+                <path d="M30 30 L70 70 M70 30 L30 70" stroke="#D32F2F" stroke-width="5" stroke-linecap="round" class="anim-ban-x2"/>
+                <text x="50" y="110" text-anchor="middle" font-size="11" fill="#C62828">❌ 酒精</text>
+                <text x="50" y="130" text-anchor="middle" font-size="9" fill="#888">加速毒吸收</text>
+              </g>
+              <g transform="translate(270,60)">
+                <rect width="100" height="160" rx="10" fill="white" stroke="#EF5350" stroke-width="2"/>
+                <circle cx="50" cy="50" r="25" fill="#FFECB3"/>
+                <text x="50" y="60" text-anchor="middle" font-size="28">🧊</text>
+                <path d="M30 30 L70 70 M70 30 L30 70" stroke="#D32F2F" stroke-width="5" stroke-linecap="round" class="anim-ban-x3"/>
+                <text x="50" y="110" text-anchor="middle" font-size="11" fill="#C62828">❌ 冰敷</text>
+                <text x="50" y="130" text-anchor="middle" font-size="9" fill="#888">组织坏死风险</text>
+              </g>
+            </svg>
           </view>
 
-          <!-- 第9关: 禁忌清单 - 红叉对比 -->
-          <view v-if="currentStep === 8" class="anim-taboo">
-            <view class="anim-taboo-item bad">
-              <text class="anim-taboo-icon">🚫</text>
-              <text class="anim-taboo-text">不切！</text>
-            </view>
-            <view class="anim-taboo-item bad">
-              <text class="anim-taboo-icon">🚫</text>
-              <text class="anim-taboo-text">不吸！</text>
-            </view>
-            <view class="anim-taboo-item bad">
-              <text class="anim-taboo-icon">🚫</text>
-              <text class="anim-taboo-text">不敷！</text>
-            </view>
-            <view class="anim-taboo-item good">
-              <text class="anim-taboo-icon">✅</text>
-              <text class="anim-taboo-text">多喝水！</text>
-            </view>
+          <!-- 第9关: 禁忌清单 - 红黑对比 SVG -->
+          <view v-if="currentStep === 8" class="scene-wrap">
+            <svg viewBox="0 0 400 260" class="scene-svg">
+              <rect width="400" height="260" fill="#F3E5F5"/>
+              <!-- 禁忌列表（红） -->
+              <g transform="translate(20,20)">
+                <rect width="170" height="220" rx="10" fill="#FFEBEE" stroke="#E57373" stroke-width="2"/>
+                <text x="85" y="30" text-anchor="middle" font-size="14" fill="#C62828" font-weight="bold">🚫 千万不要！</text>
+                <text x="15" y="60" font-size="12" fill="#B71C1C">❌ 不切开伤口</text>
+                <text x="15" y="85" font-size="12" fill="#B71C1C">❌ 不要用嘴吸</text>
+                <text x="15" y="110" font-size="12" fill="#B71C1C">❌ 不敷草药</text>
+                <text x="15" y="135" font-size="12" fill="#B71C1C">❌ 不抬高伤肢</text>
+                <text x="15" y="160" font-size="12" fill="#B71C1C">❌ 不剧烈运动</text>
+                <text x="15" y="190" font-size="10" fill="#888">这些都会加速毒液扩散！</text>
+              </g>
+              <!-- 正确做法（绿） -->
+              <g transform="translate(210,20)">
+                <rect width="170" height="220" rx="10" fill="#E8F5E9" stroke="#81C784" stroke-width="2"/>
+                <text x="85" y="30" text-anchor="middle" font-size="14" fill="#2E7D32" font-weight="bold">✅ 正确做法</text>
+                <text x="15" y="60" font-size="12" fill="#1B5E20">✓ 冷静慢行</text>
+                <text x="15" y="85" font-size="12" fill="#1B5E20">✓ 伤肢平放制动</text>
+                <text x="15" y="110" font-size="12" fill="#1B5E20">✓ 多喝水</text>
+                <text x="15" y="135" font-size="12" fill="#1B5E20">✓ 记住蛇的样子</text>
+                <text x="15" y="160" font-size="12" fill="#1B5E20">✓ 尽快送医打血清</text>
+                <text x="15" y="190" font-size="10" fill="#888">生命第一，不要逞强！</text>
+              </g>
+            </svg>
           </view>
-        </view>
-
-        <!-- 第4关：模拟拨120 -->
+        </view>  <!-- 第4关：模拟拨120 -->
         <view v-if="steps[currentStep]?.isInteractive && steps[currentStep]?.interactionType === 'phone'" class="dial-120">
           <view class="phone-screen">
             <text class="dialing-text" v-if="!phoneCalled">请点击下方按键拨打 120</text>
@@ -943,4 +1124,73 @@ function goBack() {
 .anim-taboo-item.bad .anim-taboo-text { color: #C62828; }
 .anim-taboo-item.good .anim-taboo-text { color: #2E7D32; }
 @keyframes tabooFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6rpx) } }
+
+/* ===== 🎨 SVG 场景插图专用样式 ===== */
+.scene-stage { width: 100%; margin: 16rpx 0; border-radius: 16rpx; overflow: hidden; background: #FFF; box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08); }
+.scene-wrap { width: 100%; }
+.scene-svg { width: 100%; height: auto; display: block; }
+
+/* 第1关动画 */
+.anim-person-run { animation: personRun 1s ease-in-out infinite; transform-origin: center; }
+.anim-snake-warn { animation: snakeWarn 1.2s ease-in-out infinite; transform-origin: 20px 30px; }
+.anim-warn-bubble { animation: bubblePop 1.5s ease-in-out infinite; }
+.anim-back-arrow { animation: backArrowPulse 0.8s ease-in-out infinite; }
+@keyframes personRun { 0%,100% { transform: translateY(0) translateX(0) } 50% { transform: translateY(-4px) translateX(-3px) } }
+@keyframes snakeWarn { 0%,100% { transform: rotate(-3deg) translateX(0) } 50% { transform: rotate(3deg) translateX(2px) } }
+@keyframes bubblePop { 0%,100% { transform: scale(1) translateY(0) } 50% { transform: scale(1.15) translateY(-3px) } }
+@keyframes backArrowPulse { 0%,100% { opacity: 1 } 50% { opacity: 0.5 } }
+
+/* 第2关动画 */
+.anim-tri-warn { animation: triWarn 0.8s ease-in-out infinite; }
+.anim-tooth1 { animation: toothPulse 0.6s ease-in-out infinite; transform-origin: 125px 50px; }
+.anim-tooth2 { animation: toothPulse 0.6s ease-in-out infinite 0.3s; transform-origin: 135px 50px; }
+.anim-round-float { animation: roundFloat 2s ease-in-out infinite; }
+@keyframes triWarn { 0%,100% { fill: #B71C1C } 50% { fill: #FF5252 } }
+@keyframes toothPulse { 0%,100% { transform: scaleY(1) } 50% { transform: scaleY(1.4) } }
+@keyframes roundFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-2px) } }
+
+/* 第3关动画 */
+.anim-ring1 { animation: ringExpand 3s ease-out infinite; transform-origin: 30px 25px; }
+.anim-ring2 { animation: ringExpand 3s ease-out infinite 1s; transform-origin: 30px 25px; }
+.anim-ring3 { animation: ringExpand 3s ease-out infinite 2s; transform-origin: 30px 25px; }
+.anim-breathe-text { animation: breatheText 3s ease-in-out infinite; }
+@keyframes ringExpand { 0% { r: 40; opacity: 0.8 } 100% { r: 90; opacity: 0 } }
+@keyframes breatheText { 0%,100% { transform: scale(1); letter-spacing: 2px } 50% { transform: scale(1.1); letter-spacing: 6px } }
+
+/* 第4关动画 */
+.anim-emergency-pulse { animation: emergencyPulse 1s ease-in-out infinite; transform-origin: center; }
+.anim-phone-vibrate { animation: phoneVibrate 0.12s linear infinite; transform-origin: center; }
+.anim-digits { animation: digitsGlow 1s ease-in-out infinite; }
+.anim-signal-wave { animation: signalExpand 2s ease-out infinite; transform-origin: center; }
+@keyframes emergencyPulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.08) } }
+@keyframes phoneVibrate { 0%,100% { transform: translateX(0) translateY(0) } 25% { transform: translateX(-2px) translateY(1px) } 75% { transform: translateX(2px) translateY(-1px) } }
+@keyframes digitsGlow { 0%,100% { fill: #00E676 } 50% { fill: #69F0AE } }
+@keyframes signalExpand { 0% { opacity: 1; transform: scale(0.8) } 100% { opacity: 0; transform: scale(1.3) } }
+
+/* 第5关动画 */
+.anim-water-drop1 { animation: dropFall 1.2s ease-in infinite; transform-origin: center; }
+.anim-water-drop2 { animation: dropFall 1.2s ease-in infinite 0.4s; transform-origin: center; }
+.anim-water-drop3 { animation: dropFall 1.2s ease-in infinite 0.8s; transform-origin: center; }
+.anim-wound-pulse { animation: woundPulse 1.2s ease-in-out infinite; transform-origin: center; }
+.anim-water-flow { animation: waterFlow 1.5s linear infinite; stroke-dasharray: 200; stroke-dashoffset: 200; }
+@keyframes dropFall { 0% { transform: translateY(0); opacity: 1 } 70% { transform: translateY(60px); opacity: 1 } 100% { transform: translateY(60px); opacity: 0 } }
+@keyframes woundPulse { 0%,100% { transform: scale(1); fill: #FFCDD2 } 50% { transform: scale(1.1); fill: #FF8A80 } }
+@keyframes waterFlow { 0% { stroke-dashoffset: 200 } 100% { stroke-dashoffset: 0 } }
+
+/* 第6关动画 */
+.anim-limb-flat { animation: limbFloat 2s ease-in-out infinite; transform-origin: center; }
+@keyframes limbFloat { 0%,100% { transform: translateX(0) } 50% { transform: translateX(3px) } }
+
+/* 第7关动画 */
+.anim-bandage1 { animation: bandageWrap 1.5s ease-out infinite; transform-origin: center; }
+.anim-bandage2 { animation: bandageWrap 1.5s ease-out infinite 0.5s; transform-origin: center; }
+.anim-bandage-spiral { animation: spiralMove 2s linear infinite; stroke-dasharray: 80; stroke-dashoffset: 80; }
+@keyframes bandageWrap { 0% { transform: scaleX(0); opacity: 0 } 60% { opacity: 1 } 100% { transform: scaleX(1); opacity: 0.85 } }
+@keyframes spiralMove { 0% { stroke-dashoffset: 80 } 100% { stroke-dashoffset: 0 } }
+
+/* 第8关动画 */
+.anim-ban-x1 { animation: banShake 1.5s ease-in-out infinite; transform-origin: center; }
+.anim-ban-x2 { animation: banShake 1.5s ease-in-out infinite 0.3s; transform-origin: center; }
+.anim-ban-x3 { animation: banShake 1.5s ease-in-out infinite 0.6s; transform-origin: center; }
+@keyframes banShake { 0%,100% { transform: scale(1) rotate(0) } 25% { transform: scale(1.1) rotate(5deg) } 75% { transform: scale(1.1) rotate(-5deg) } }
 </style>
