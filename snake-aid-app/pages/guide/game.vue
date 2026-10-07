@@ -69,31 +69,56 @@
 <path d="M350 162 Q355 152 360 162 Q365 150 370 162" class="anim-grass"/>
 </g>
 
-<!-- ====== 人物（6个部件独立动画）====== -->
+<!-- ====== 人物（嵌套 g 锚定关节！）====== -->
 <g transform="translate(280,120)">
-<!-- 左腿（后） -->
-<rect x="9" y="50" width="5" height="18" rx="2" fill="#795548" class="anim-leg-back"/>
-<!-- 右腿（前） -->
-<rect x="15" y="50" width="5" height="18" rx="2" fill="#5D4037" class="anim-leg-front"/>
-<!-- 身体（前后摆） -->
-<rect x="8" y="25" width="14" height="25" rx="3" fill="#1565C0" class="anim-body"/>
-<!-- 右手（前后摆） -->
-<rect x="22" y="28" width="4" height="14" rx="2" fill="#1565C0" class="anim-arm-right"/>
-<!-- 左手（前后摆） -->
-<rect x="4" y="28" width="4" height="14" rx="2" fill="#1565C0" class="anim-arm-left"/>
-<!-- 头 -->
-<g class="anim-head">
+<!-- 身体（整体 bob） -->
+<g class="anim-body">
+<rect x="8" y="25" width="14" height="25" rx="3" fill="#1565C0"/>
+</g>
+
+<!-- 左腿：关节在(11.5, 50) → 外层 g 锚定，内层 g 旋转 -->
+<g transform="translate(11.5, 50)">
+<g class="anim-leg-back" style="transform-box: fill-box; transform-origin: top center;">
+<rect x="-2.5" y="0" width="5" height="18" rx="2" fill="#795548"/>
+</g>
+</g>
+
+<!-- 右腿：关节在(17.5, 50) -->
+<g transform="translate(17.5, 50)">
+<g class="anim-leg-front" style="transform-box: fill-box; transform-origin: top center;">
+<rect x="-2.5" y="0" width="5" height="18" rx="2" fill="#5D4037"/>
+</g>
+</g>
+
+<!-- 右臂：关节在(24, 28) 肩 -->
+<g transform="translate(24, 28)">
+<g class="anim-arm-right" style="transform-box: fill-box; transform-origin: top center;">
+<rect x="-2" y="0" width="4" height="14" rx="2" fill="#1565C0"/>
+</g>
+</g>
+
+<!-- 左臂：关节在(6, 28) 肩 -->
+<g transform="translate(6, 28)">
+<g class="anim-arm-left" style="transform-box: fill-box; transform-origin: top center;">
+<rect x="-2" y="0" width="4" height="14" rx="2" fill="#1565C0"/>
+</g>
+</g>
+
+<!-- 头：关节在(15, 25) 脖子底部 -->
+<g transform="translate(15, 25)">
+<g class="anim-head" style="transform-box: fill-box; transform-origin: bottom center;">
 <!-- 头发 -->
-<path d="M5 8 Q15 -2 25 8 Q25 14 5 14 Z" fill="#3E2723"/>
+<path d="M-10 -17 Q0 -27 10 -17 Q10 -11 -10 -11 Z" fill="#3E2723"/>
 <!-- 脸 -->
-<circle cx="15" cy="12" r="10" fill="#FFCCBC"/>
+<circle cx="0" cy="-13" r="10" fill="#FFCCBC"/>
 <!-- 眼睛（紧张睁圆） -->
-<circle cx="11" cy="12" r="1.5" fill="#333"/>
-<circle cx="19" cy="12" r="1.5" fill="#333"/>
+<circle cx="-4" cy="-13" r="1.5" fill="#333"/>
+<circle cx="4" cy="-13" r="1.5" fill="#333"/>
 <!-- 嘴巴（O型害怕） -->
-<ellipse cx="15" cy="17" rx="2" ry="2.5" fill="#B71C1C"/>
+<ellipse cx="0" cy="-8" rx="2" ry="2.5" fill="#B71C1C"/>
 <!-- 汗珠 -->
-<circle cx="28" cy="8" r="2" fill="#4FC3F7" class="anim-sweat"/>
+<circle cx="12" cy="-17" r="2" fill="#4FC3F7" class="anim-sweat"/>
+</g>
 </g>
 </g>
 
