@@ -23,7 +23,7 @@
 
 <script>
 const TOKEN_KEY = 'snake_token'
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 
 export default {
         data() { return { token: '', logs: [], loading: true } },
@@ -85,3 +85,4 @@ export default {
 .log-time { font-size: 22rpx; color: #999; margin-top: 6rpx; }
 .log-pts { font-size: 32rpx; font-weight: bold; color: #FF6F00; }
 </style>
+

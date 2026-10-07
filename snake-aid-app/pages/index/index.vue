@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="home">
 		<!-- 顶部紧急大按钮：2 步内到达自救 -->
 		<view class="hero">
@@ -128,7 +128,7 @@
 
 <script>
 import { china } from '@/common/china.js'
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 
 export default {
 	data() {
@@ -330,3 +330,4 @@ export default {
 .tip-title { display: block; font-size: 28rpx; color: #222; font-weight: 500; }
 .tip-desc { display: block; font-size: 22rpx; color: #888; margin-top: 6rpx; }
 </style>
+

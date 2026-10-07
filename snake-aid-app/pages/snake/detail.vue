@@ -60,7 +60,7 @@
 </template>
 
 <script>
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 
 export default {
 	data() {
@@ -147,3 +147,4 @@ export default {
 	font-size: 28rpx; border: 2rpx solid #E53935;
 }
 </style>
+

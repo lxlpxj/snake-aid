@@ -128,7 +128,7 @@
 
 <script>
 import { china } from '@/common/china.js'
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 
 export default {
 	data() {
@@ -457,3 +457,4 @@ export default {
 .selector-item.active { color: #2E7D32; font-weight: bold; background: #E8F5E9; }
 .selector-item:active { background: #F5F5F5; }
 </style>
+

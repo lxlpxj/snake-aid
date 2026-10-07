@@ -90,7 +90,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const baseUrl = 'http://192.168.2.15:8080/api';
+const baseUrl = '/api';
 const imagePath = ref('');
 const loading = ref(false);
 const result = ref(null);
@@ -283,3 +283,4 @@ function goFeaturePage() {
   line-height: 1.6;
 }
 </style>
+

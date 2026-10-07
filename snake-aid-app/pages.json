@@ -160,7 +160,15 @@
                                     "navigationBarTitleText":  "急救闯关",
                                     "navigationBarBackgroundColor":  "#E53935",
                                     "navigationBarTextStyle":  "white"
+                                },
+                  {
+                      "path":  "pages/snake/learn",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇伤四步学习",
+                                    "navigationBarBackgroundColor":  "#FF6F00",
+                                    "navigationBarTextStyle":  "white"
                                 }
+                  }
                   }
 												],
     "globalStyle":  {
@@ -203,4 +211,5 @@
 
                     }
 }
+
 

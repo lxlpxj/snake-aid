@@ -44,7 +44,7 @@
 </template>
 
 <script>
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 
 export default {
 	data() {
@@ -171,3 +171,4 @@ export default {
 	text-align: center; font-size: 22rpx; color: #999; line-height: 1.6;
 }
 </style>
+

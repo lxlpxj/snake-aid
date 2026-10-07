@@ -44,7 +44,7 @@
 
 <script>
 const TOKEN_KEY = 'snake_token'
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 
 export default {
         data() { return { list: [] } },
@@ -96,3 +96,4 @@ export default {
 .lb-pts { font-size: 28rpx; font-weight: bold; color: #FF6F00; }
 .empty { padding: 80rpx; text-align: center; color: #999; font-size: 28rpx; }
 </style>
+

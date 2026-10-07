@@ -29,7 +29,7 @@
 </template>
 
 <script>
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 const ADMIN_TOKEN = 'snake_admin_token'
 const ADMIN_INFO = 'snake_admin_info'
 
@@ -126,3 +126,4 @@ export default {
 .submit-btn { background: #455A64; color: #FFF; border-radius: 12rpx; font-size: 30rpx; margin-top: 20rpx; }
 .tip { text-align: center; font-size: 22rpx; color: #AAA; margin-top: 16rpx; }
 </style>
+

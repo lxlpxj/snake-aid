@@ -51,7 +51,7 @@
 
 <script>
 import { china } from '@/common/china.js'
-const API = 'http://192.168.2.15:8080/api'
+const API = '/api'
 
 export default {
 	data() {
@@ -187,3 +187,4 @@ export default {
 .act-btn.primary { background: #1565C0; color: #FFF; }
 .empty { text-align: center; padding: 80rpx; color: #999; font-size: 26rpx; }
 </style>
+
