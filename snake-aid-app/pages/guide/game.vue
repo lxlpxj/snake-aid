@@ -39,7 +39,7 @@
 <!-- 🎬 每关专属 SVG 场景插图（仅选择题关显示） -->
 <view v-if="!steps[currentStep]?.isInteractive" class="scene-stage">
 <!-- 第1关：田间遇蛇 -->
-<view v-if="currentStep === 0" class="scene-wrap">
+<view v-if="currentStep === 0" class="scene-wrap" :class="feedbackType ? ('scene-' + feedbackType) : ''">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <!-- 天空渐变 -->
 <defs>
@@ -119,7 +119,7 @@
 </svg>
 </view>
 <!-- 第2关：辨认蛇种 -->
-<view v-if="currentStep === 1" class="scene-wrap">
+<view v-if="currentStep === 1" class="scene-wrap" :class="feedbackType ? ('scene-' + feedbackType) : ''">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#ECEFF1"/>
 <rect x="40" y="30" width="140" height="150" rx="12" fill="#FFEBEE" stroke="#E53935" stroke-width="3"/>
@@ -137,7 +137,7 @@
 </svg>
 </view>
 <!-- 第3关：保持镇定 -->
-<view v-if="currentStep === 2" class="scene-wrap">
+<view v-if="currentStep === 2" class="scene-wrap" :class="feedbackType ? ('scene-' + feedbackType) : ''">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#E0F2F1"/>
 <rect y="160" width="400" height="40" fill="#8D6E63"/>
@@ -157,7 +157,7 @@
 </svg>
 </view>
 <!-- 第5关：伤口解压（冲洗） -->
-<view v-if="currentStep === 4" class="scene-wrap">
+<view v-if="currentStep === 4" class="scene-wrap" :class="feedbackType ? ('scene-' + feedbackType) : ''">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#E3F2FD"/>
 <rect y="170" width="400" height="30" fill="#90A4AE"/>
@@ -171,7 +171,7 @@
 </svg>
 </view>
 <!-- 第8关：止痛处理 -->
-<view v-if="currentStep === 7" class="scene-wrap">
+<view v-if="currentStep === 7" class="scene-wrap" :class="feedbackType ? ('scene-' + feedbackType) : ''">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#FFF3E0"/>
 <g transform="translate(60,60)" class="anim-card">
@@ -195,7 +195,7 @@
 </svg>
 </view>
 <!-- 第9关：禁忌清单 -->
-<view v-if="currentStep === 8" class="scene-wrap">
+<view v-if="currentStep === 8" class="scene-wrap" :class="feedbackType ? ('scene-' + feedbackType) : ''">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#FFF8E1"/>
 <rect x="30" y="30" width="160" height="140" rx="12" fill="#FFEBEE" stroke="#E53935" stroke-width="2"/>
@@ -1040,4 +1040,72 @@ function goBack() {
 /* ❌ 答错大字 */
 .fx-boo { position: absolute; top: 40%; left: 50%; transform: translateX(-50%); font-size: 72rpx; font-weight: bold; color: #E53935; animation: booPop .6s ease-out; }
 @keyframes booPop { 0% { opacity: 0; transform: translateX(-50%) scale(.3); } 50% { opacity: 1; transform: translateX(-50%) scale(1.2); } 100% { opacity: 0; transform: translateX(-50%) scale(1); } }
+
+/* ========================================================
+   ✨ 场景联动反馈：选对/选错 SVG 跟着变！
+   ======================================================== */
+
+/* ===== 第1关：脱离险境 ===== */
+.scene-right .anim-body { animation: personEscape 1s ease-out forwards; }
+.scene-right .anim-head { animation: personEscapeHead 1s ease-out forwards; }
+.scene-right .anim-leg-back, .scene-right .anim-leg-front { animation: personRun 0.4s linear infinite; }
+@keyframes personEscape { 0% { transform: translateX(0); } 100% { transform: translateX(-80px); opacity: .6; } }
+@keyframes personEscapeHead { 0% { transform: translateX(0); } 100% { transform: translateX(-80px) translateY(-5px); opacity: .6; } }
+@keyframes personRun { 0%,100% { transform: rotate(-35deg); } 50% { transform: rotate(35deg); } }
+.scene-right .anim-snake-body, .scene-right .anim-snake-head { animation: snakeFade 1s ease-out forwards; }
+.scene-right .anim-warn-bubble { animation: warnDisappear .8s ease-out forwards; }
+@keyframes snakeFade { 0% { opacity: 1; } 100% { opacity: 0; transform: scale(.3) translateX(-30px); } }
+@keyframes warnDisappear { 0% { opacity: 1; } 100% { opacity: 0; transform: scale(.3); } }
+.scene-wrong .anim-snake-body { animation: snakeChase 1.5s ease-in forwards; }
+.scene-wrong .anim-snake-head { animation: snakeBite 1.5s ease-in forwards; }
+.scene-wrong .anim-body rect, .scene-wrong .anim-body { fill: #E53935 !important; }
+.scene-wrong .anim-head circle { fill: #FFCDD2 !important; }
+.scene-wrong .anim-sweat { animation-duration: 0.6s; }
+@keyframes snakeChase { 0% { transform: translateX(0); } 100% { transform: translateX(220px); } }
+@keyframes snakeBite { 0% { transform: translateX(0) rotate(0); } 100% { transform: translateX(220px) rotate(45deg); } }
+
+/* ===== 第2关：辨认蛇种 ===== */
+.scene-right .anim-tri { animation: triGood 1s ease-out forwards; filter: none; }
+@keyframes triGood { 0% { filter: brightness(1); } 100% { filter: drop-shadow(0 0 15px #4CAF50); } }
+.scene-right .anim-oval { animation: ovalFade 1s ease-out forwards; }
+@keyframes ovalFade { to { opacity: .4; transform: scale(.9); } }
+.scene-wrong .anim-tri { animation: triBad 0.3s ease-in-out infinite; }
+@keyframes triBad { 0%,100% { filter: drop-shadow(0 0 5px #E53935); } 50% { filter: brightness(1.6) drop-shadow(0 0 20px #FF0000); } }
+.scene-wrong .anim-oval { animation: ovalJump 0.5s ease-out; }
+@keyframes ovalJump { 0% { transform: translateY(0); } 50% { transform: translateY(-15px) scale(1.1); } 100% { transform: translateY(0); } }
+
+/* ===== 第3关：保持镇定 ===== */
+.scene-right .anim-ring, .scene-right .anim-ring2, .scene-right .anim-ring3 { animation: ringCalm 2s ease-out forwards; }
+@keyframes ringCalm { 0% { opacity: .9; } 100% { opacity: 0; stroke-width: 5; } }
+.scene-right .anim-calm { animation: calmSuccess 1s ease-out forwards; }
+@keyframes calmSuccess { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.scene-wrong .anim-ring, .scene-wrong .anim-ring2, .scene-wrong .anim-ring3 { animation: ringPanic 0.4s ease-in-out infinite; }
+@keyframes ringPanic { 0%,100% { opacity: .9; transform: scale(1); } 50% { opacity: .3; transform: scale(.7); } }
+
+/* ===== 第5关：伤口冲洗 ===== */
+.scene-right .anim-water { stroke: #2196F3 !important; animation-duration: 0.8s; }
+.scene-right .anim-wound { animation: woundHeal 1.5s ease-out forwards; }
+@keyframes woundHeal { 0% { fill: #D32F2F; transform: scale(1); } 60% { fill: #FFCDD2; } 100% { fill: #81C784; transform: scale(.6); opacity: .3; } }
+.scene-wrong .anim-water { stroke: #B71C1C !important; animation-duration: 2s; }
+.scene-wrong .anim-wound { animation: woundWorsen 1s ease-in-out infinite; }
+@keyframes woundWorsen { 0%,100% { fill: #D32F2F; transform: scale(1); } 50% { fill: #7F0000; transform: scale(1.4); } }
+
+/* ===== 第7关：止痛处理 ===== */
+.scene-right .anim-card, .scene-right .anim-card2, .scene-right .anim-card3 { animation: cardAccept 1s ease-out forwards; }
+@keyframes cardAccept { to { filter: grayscale(1) opacity(.5); transform: scale(.9); } }
+.scene-right .anim-cross { animation: crossFade .8s ease-out forwards; }
+@keyframes crossFade { to { opacity: .2; transform: scale(.5); } }
+.scene-wrong .anim-card, .scene-wrong .anim-card2, .scene-wrong .anim-card3 { animation: cardWarn .5s ease-in-out infinite; }
+@keyframes cardWarn { 0%,100% { filter: brightness(1); } 50% { filter: drop-shadow(0 0 15px #FF0000); } }
+.scene-wrong .anim-cross { animation: crossScare 0.3s ease-in-out infinite; }
+@keyframes crossScare { 0%,100% { transform: scale(1); } 50% { transform: scale(1.6); } }
+
+/* ===== 第8关：禁忌清单 ===== */
+.scene-right svg rect[stroke="#E53935"] { animation: redDim 1.5s ease-out forwards; }
+@keyframes redDim { to { opacity: .3; filter: grayscale(1); } }
+.scene-right svg rect[stroke="#43A047"] { animation: greenGlow 1.5s ease-out forwards; }
+@keyframes greenGlow { to { filter: drop-shadow(0 0 15px #4CAF50); transform: translateY(-5px) scale(1.02); } }
+.scene-wrong svg rect[stroke="#E53935"] { animation: redBlink 0.4s ease-in-out infinite; }
+@keyframes redBlink { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.5) drop-shadow(0 0 15px #FF0000); } }
+.scene-wrong svg rect[stroke="#43A047"] { opacity: .4; }
 </style>
