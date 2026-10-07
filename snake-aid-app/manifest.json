@@ -1,4 +1,4 @@
-﻿{
+{
     "name" : "snake-aid-app",
     "appid" : "",
     "description" : "",
@@ -64,6 +64,29 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
+    },
+    /* H5特有相关 */
+    "h5" : {
+        "title" : "蛇伤急救",
+        "router" : {
+            "mode" : "hash",
+            "base" : "./"
+        },
+        "devServer" : {
+            "host" : "0.0.0.0",
+            "port" : 5173,
+            "https" : false,
+            "proxy" : {
+                "/api" : {
+                    "target" : "http://localhost:8080",
+                    "changeOrigin" : true
+                },
+                "/uploads" : {
+                    "target" : "http://localhost:8080",
+                    "changeOrigin" : true
+                }
+            }
+        }
     },
     "vueVersion" : "3",
     "uniStatistics" : { "enable" : false }
