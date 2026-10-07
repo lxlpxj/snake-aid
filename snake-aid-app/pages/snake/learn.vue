@@ -226,6 +226,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import SnakeAnim from '@/components/SnakeAnim.vue'
 
 // ===== 状态 =====
 const phase = ref('play') // play / learn / practice / test
