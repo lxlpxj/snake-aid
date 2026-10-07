@@ -42,20 +42,22 @@
 <view v-if="currentStep === 0" class="scene-wrap">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#87CEEB"/>
-<circle cx="340" cy="40" r="25" fill="#FFD54F"/>
+<circle cx="340" cy="40" r="25" fill="#FFD54F" class="anim-sun"/>
 <rect y="140" width="400" height="60" fill="#8BC34A"/>
 <path d="M30 150 Q45 120 60 150 Q75 180 90 150" fill="#F5DEB3" stroke="#A1887F" stroke-width="2"/>
 <g transform="translate(280,120)">
+<g class="anim-person">
 <circle cx="15" cy="15" r="10" fill="#FFCCBC"/>
 <rect x="8" y="25" width="14" height="25" rx="3" fill="#1565C0"/>
 <rect x="9" y="50" width="5" height="15" rx="2" fill="#795548"/>
 <rect x="15" y="50" width="5" height="15" rx="2" fill="#795548"/>
-<g transform="translate(40,-10)">
+</g>
+<g transform="translate(40,-10)" class="anim-snake">
 <path d="M0 40 Q20 10 40 30 Q60 50 80 20" fill="none" stroke="#558B2F" stroke-width="10" stroke-linecap="round"/>
 <circle cx="75" cy="12" r="3" fill="#FFEB3B"/>
-<path d="M82 16 L90 14 M82 16 L90 18" stroke="#D32F2F" stroke-width="2"/>
+<path d="M82 16 L90 14 M82 16 L90 18" stroke="#D32F2F" stroke-width="2" class="anim-tongue"/>
 </g>
-<ellipse cx="30" cy="-20" rx="35" ry="20" fill="#FFEB3B" stroke="#F57F17" stroke-width="2"/>
+<ellipse cx="30" cy="-20" rx="35" ry="20" fill="#FFEB3B" stroke="#F57F17" stroke-width="2" class="anim-warn"/>
 <text x="30" y="5" text-anchor="middle" font-size="14" fill="#D84315">⚠ 有蛇！</text>
 </g>
 </svg>
@@ -67,12 +69,12 @@
 <rect x="40" y="30" width="140" height="150" rx="12" fill="#FFEBEE" stroke="#E53935" stroke-width="3"/>
 <rect x="220" y="30" width="140" height="150" rx="12" fill="#E8F5E9" stroke="#43A047" stroke-width="3"/>
 <g transform="translate(70,60)">
-<polygon points="30,5 55,30 30,55" fill="#B71C1C"/>
-<circle cx="50" cy="25" r="4" fill="#FFEB3B"/>
+<polygon points="30,5 55,30 30,55" fill="#B71C1C" class="anim-tri"/>
+<circle cx="50" cy="25" r="4" fill="#FFEB3B" class="anim-pulse"/>
 <text y="90" font-size="14" fill="#C62828" text-anchor="middle">⚠️ 毒蛇 · 三角头</text>
 </g>
 <g transform="translate(250,60)">
-<ellipse cx="35" cy="30" rx="25" ry="20" fill="#388E3C"/>
+<ellipse cx="35" cy="30" rx="25" ry="20" fill="#388E3C" class="anim-oval"/>
 <circle cx="50" cy="28" r="4" fill="#FFF"/>
 <text y="90" font-size="14" fill="#2E7D32" text-anchor="middle">✅ 无毒 · 椭圆头</text>
 </g>
@@ -83,7 +85,7 @@
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#E0F2F1"/>
 <rect y="160" width="400" height="40" fill="#8D6E63"/>
-<g transform="translate(170,80)">
+<g transform="translate(170,80)" class="anim-calm">
 <circle cx="30" cy="10" r="15" fill="#FFCCBC"/>
 <path d="M20 35 L40 35 L45 70 L15 70 Z" fill="#5C6BC0"/>
 <path d="M20 50 Q30 55 40 50" fill="none" stroke="#3949AB" stroke-width="2"/>
@@ -104,11 +106,11 @@
 <rect width="400" height="200" fill="#E3F2FD"/>
 <rect y="170" width="400" height="30" fill="#90A4AE"/>
 <rect x="100" y="40" width="30" height="80" fill="#78909C"/>
-<circle cx="115" cy="125" r="8" fill="#455A64"/>
-<path d="M115 130 L115 170" stroke="#4FC3F7" stroke-width="4" class="anim-water"/>
+<circle cx="115" cy="125" r="8" fill="#455A64" class="anim-handle"/>
+<path d="M115 130 L115 170" stroke="#4FC3F7" stroke-width="4" stroke-dasharray="8 4" class="anim-water"/>
 <g transform="translate(200,110)">
 <rect x="0" y="0" width="80" height="25" rx="6" fill="#FFCCBC"/>
-<circle cx="40" cy="12" r="6" fill="#D32F2F"/>
+<circle cx="40" cy="12" r="6" fill="#D32F2F" class="anim-wound"/>
 </g>
 </svg>
 </view>
@@ -116,23 +118,23 @@
 <view v-if="currentStep === 7" class="scene-wrap">
 <svg viewBox="0 0 400 200" class="scene-svg">
 <rect width="400" height="200" fill="#FFF3E0"/>
-<g transform="translate(60,60)">
+<g transform="translate(60,60)" class="anim-card">
 <rect width="80" height="100" rx="12" fill="#FFEBEE" stroke="#E53935" stroke-width="3"/>
 <text x="40" y="60" text-anchor="middle" font-size="40">💊</text>
 <text x="40" y="85" text-anchor="middle" font-size="14" fill="#C62828">别吃药</text>
-<text x="40" y="115" text-anchor="middle" font-size="30" fill="#D32F2F">✗</text>
+<text x="40" y="115" text-anchor="middle" font-size="30" fill="#D32F2F" class="anim-cross">✗</text>
 </g>
-<g transform="translate(160,60)">
+<g transform="translate(160,60)" class="anim-card2">
 <rect width="80" height="100" rx="12" fill="#FFEBEE" stroke="#E53935" stroke-width="3"/>
 <text x="40" y="60" text-anchor="middle" font-size="40">🍺</text>
 <text x="40" y="85" text-anchor="middle" font-size="14" fill="#C62828">别喝酒</text>
-<text x="40" y="115" text-anchor="middle" font-size="30" fill="#D32F2F">✗</text>
+<text x="40" y="115" text-anchor="middle" font-size="30" fill="#D32F2F" class="anim-cross">✗</text>
 </g>
-<g transform="translate(260,60)">
+<g transform="translate(260,60)" class="anim-card3">
 <rect width="80" height="100" rx="12" fill="#FFEBEE" stroke="#E53935" stroke-width="3"/>
 <text x="40" y="60" text-anchor="middle" font-size="40">🧊</text>
 <text x="40" y="85" text-anchor="middle" font-size="14" fill="#C62828">别冰敷</text>
-<text x="40" y="115" text-anchor="middle" font-size="30" fill="#D32F2F">✗</text>
+<text x="40" y="115" text-anchor="middle" font-size="30" fill="#D32F2F" class="anim-cross">✗</text>
 </g>
 </svg>
 </view>
@@ -833,22 +835,58 @@ function goBack() {
   font-size: 32rpx;
 }
 
-/* ===== SVG 场景区 ===== */
+/* ===== SVG 场景区动画 ===== */
 .scene-stage { margin: 12rpx 0; border-radius: 16rpx; overflow: hidden; background: #FFF; box-shadow: 0 4rpx 16rpx rgba(0,0,0,.06); }
 .scene-svg { width: 100%; height: auto; display: block; }
 .scene-wrap { background: #F5F5F5; }
-
-/* 深呼吸光环动画（第3关）*/
-.anim-ring { animation: ringExpand 3s ease-out infinite; transform-origin: center; transform-box: fill-box; }
-.anim-ring2 { animation: ringExpand 3s ease-out infinite 1s; transform-origin: center; transform-box: fill-box; }
-.anim-ring3 { animation: ringExpand 3s ease-out infinite 2s; transform-origin: center; transform-box: fill-box; }
-@keyframes ringExpand { 0% { opacity: 0.9; } 50% { opacity: 0.3; } 100% { opacity: 0; } }
-
-/* 水流动画（第5关）*/
-.anim-water { animation: waterDrop 1.2s linear infinite; }
-@keyframes waterDrop { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 20; } }
-
-/* 毒蛇警告动画（第1关）*/
-.scene-wrap svg g { transform-box: fill-box; }
 .scene-stage .scene-svg * { transform-box: fill-box; }
+
+/* 第1关：田间遇蛇 */
+.anim-sun { animation: sunGlow 2s ease-in-out infinite; transform-origin: center; }
+@keyframes sunGlow { 0%,100% { opacity: .9; } 50% { opacity: 1; transform: scale(1.1); } }
+.anim-person { animation: personBob 1.2s ease-in-out infinite; transform-origin: bottom center; }
+@keyframes personBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.anim-snake { animation: snakeWiggle 1.5s ease-in-out infinite; transform-origin: left center; }
+@keyframes snakeWiggle { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.anim-tongue { animation: tongueFlick 0.6s ease-in-out infinite; }
+@keyframes tongueFlick { 0%,100% { opacity: 1; transform: scaleX(1); } 50% { opacity: .3; transform: scaleX(.5); } }
+.anim-warn { animation: warnPop 1s ease-in-out infinite; transform-origin: center; }
+@keyframes warnPop { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+/* 第2关：辨认蛇种 */
+.anim-tri { animation: triWarn 1s ease-in-out infinite; transform-origin: bottom center; }
+@keyframes triWarn { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.4); transform: scale(1.05); } }
+.anim-pulse { animation: eyePulse 1.5s ease-in-out infinite; transform-origin: center; }
+@keyframes eyePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+.anim-oval { animation: ovalFloat 2.5s ease-in-out infinite; transform-origin: center; }
+@keyframes ovalFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* 第3关：保持镇定 */
+.anim-calm { animation: calmBreathe 4s ease-in-out infinite; transform-origin: center; }
+@keyframes calmBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+.anim-ring { animation: ringExpand 3s ease-out infinite; transform-origin: center; }
+.anim-ring2 { animation: ringExpand 3s ease-out infinite 1s; transform-origin: center; }
+.anim-ring3 { animation: ringExpand 3s ease-out infinite 2s; transform-origin: center; }
+@keyframes ringExpand { 0% { opacity: .9; } 50% { opacity: .3; } 100% { opacity: 0; } }
+
+/* 第5关：伤口冲洗 */
+.anim-handle { animation: handleTurn 3s ease-in-out infinite; transform-origin: center; }
+@keyframes handleTurn { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(15deg); } }
+.anim-water { animation: waterFlow 1.2s linear infinite; }
+@keyframes waterFlow { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 24; } }
+.anim-wound { animation: woundPulse 1.2s ease-in-out infinite; transform-origin: center; }
+@keyframes woundPulse { 0%,100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.2); opacity: 1; } }
+
+/* 第8关：止痛处理 */
+.anim-card { animation: cardSway 2.5s ease-in-out infinite; transform-origin: center; }
+.anim-card2 { animation: cardSway 2.5s ease-in-out infinite .3s; transform-origin: center; }
+.anim-card3 { animation: cardSway 2.5s ease-in-out infinite .6s; transform-origin: center; }
+@keyframes cardSway { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+.anim-cross { animation: crossShake 0.5s ease-in-out infinite; transform-origin: center; }
+@keyframes crossShake { 0%,100% { transform: scale(1); } 25% { transform: scale(1.2); } 75% { transform: scale(.9); } }
+
+/* 第9关：禁忌清单 */
+.scene-wrap svg rect[stroke="#E53935"] { animation: cardFloat 3s ease-in-out infinite; }
+.scene-wrap svg rect[stroke="#43A047"] { animation: cardFloat 3s ease-in-out infinite 1s; }
+@keyframes cardFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 </style>
