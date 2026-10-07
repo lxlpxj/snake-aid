@@ -1720,4 +1720,39 @@ function goBack() {
 .anim-leg1 { animation: legSwing 0.5s ease-in-out infinite; transform-origin: top center; }
 .anim-leg2 { animation: legSwing 0.5s ease-in-out infinite 0.25s; transform-origin: top center; }
 @keyframes legSwing { 0%,100% { transform: rotate(0) } 50% { transform: rotate(-15deg) } }
+
+/* ===== SVG 动画核心修复：让 transform 在 SVG 元素上工作 ===== */
+.scene-svg circle, .scene-svg g, .scene-svg path, .scene-svg rect, 
+.scene-svg ellipse, .scene-svg polygon, .scene-svg line, .scene-svg text {
+  transform-box: fill-box;
+}
+
+/* 强制所有动画类都有 transform-box */
+.anim-ring1, .anim-ring2, .anim-ring3, .anim-ring4,
+.anim-signal-wave circle,
+.anim-water-drop1, .anim-water-drop2, .anim-water-drop3,
+.anim-flower1, .anim-flower2,
+.anim-leaf1, .anim-leaf2, .anim-leaf3,
+.anim-person-run, .anim-snake-warn, .anim-warn-bubble,
+.anim-tongue, .anim-venom-drop,
+.anim-tri-warn, .anim-tooth1, .anim-tooth2, .anim-round-float,
+.anim-emergency-pulse, .anim-phone-vibrate,
+.anim-ambulance, .anim-siren,
+.anim-wound-pulse, .anim-splash, .anim-limb-flat,
+.anim-bandage1, .anim-bandage2, .anim-bandage3, .anim-bandage-spiral,
+.anim-ban-x1, .anim-ban-x2, .anim-ban-x3,
+.anim-card-shake, .anim-card-shake2, .anim-card-shake3,
+.anim-handle, .anim-bird, .anim-bird2,
+.anim-check, .anim-heartbeat, .anim-sun,
+.anim-leg1, .anim-leg2, .anim-flash, .anim-digits,
+.anim-back-arrow, .anim-arrow-text, .anim-pulse-line,
+.anim-direction-arrow path, .anim-ban-shake-item {
+  transform-box: fill-box !important;
+}
+
+/* ringExpand 的 transform-origin 改为 center */
+@keyframes ringExpand { 
+  0% { transform: scale(0.3); opacity: 0.9 } 
+  100% { transform: scale(2.0); opacity: 0 } 
+}
 </style>
