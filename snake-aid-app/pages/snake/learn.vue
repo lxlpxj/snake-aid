@@ -225,7 +225,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import SnakeAnim from '@/components/SnakeAnim.vue'
 
 // ===== 状态 =====
@@ -233,6 +233,107 @@ const phase = ref('play') // play / learn / practice / test
 const bigFont = ref(false)
 const voiceOn = ref(false)
 const totalScore = ref(0)
+const API = 'http://127.0.0.1:8080/api'
+const dataLoaded = ref(false)
+
+// ===== 从后端拉数据 =====
+onMounted(async () => {
+  try {
+    // 1. 拉蛇种
+    const snakeRes = await new Promise((resolve, reject) => {
+      uni.request({
+        url: API + '/app/snake/page',
+        data: { current: 1, size: 50 },
+        timeout: 3000,
+        success: r => resolve(r.data),
+        fail: reject
+      })
+    })
+    if (snakeRes.code === 200 && snakeRes.data?.records?.length) {
+      snakes.length = 0
+      snakeRes.data.records.forEach(s => {
+        snakes.push({
+          id: s.id,
+          name: s.name,
+          isPoisonous: s.isPoisonous,
+          headShape: s.headShape || '',
+          pattern: s.pattern || '',
+          color: s.color || '',
+          venomType: s.venomType || '',
+          memoryTip: s.memoryTip || '',
+          tailShape: s.tailShape || ''
+        })
+      })
+      console.log('✅ 从后端拉了 ' + snakes.length + ' 条蛇')
+    }
+
+    // 2. 拉 LEARN 类题目（测试用）
+    const learnRes = await new Promise((resolve, reject) => {
+      uni.request({
+        url: API + '/app/quiz/pick',
+        data: { count: 15 },
+        timeout: 3000,
+        success: r => resolve(r.data),
+        fail: reject
+      })
+    })
+    if (learnRes.code === 200 && learnRes.data?.length) {
+      const learnList = learnRes.data.filter(q => q.category === 'LEARN').slice(0, 10)
+      if (learnList.length >= 8) {
+        testQuestions.length = 0
+        learnList.forEach(q => {
+          const opts = [q.optionA, q.optionB, q.optionC, q.optionD]
+          const correctIdx = ['A','B','C','D'].indexOf(q.correctAnswer)
+          testQuestions.push({
+            question: q.question,
+            options: opts,
+            correctIdx: correctIdx >= 0 ? correctIdx : 1
+          })
+        })
+        console.log('✅ 从后端拉了 ' + testQuestions.length + ' 道 LEARN 题')
+      }
+    }
+
+    // 3. 拉 PRACTICE 类题目（场景练习用）
+    const pracRes = await new Promise((resolve, reject) => {
+      uni.request({
+        url: API + '/app/quiz/pick',
+        data: { count: 15 },
+        timeout: 3000,
+        success: r => resolve(r.data),
+        fail: reject
+      })
+    })
+    if (pracRes.code === 200 && pracRes.data?.length) {
+      const pracList = pracRes.data.filter(q => q.category === 'PRACTICE').slice(0, 5)
+      if (pracList.length >= 5) {
+        practiceQuestions.length = 0
+        pracList.forEach(q => {
+          const opts = [
+            { text: 'A. ' + q.optionA, correct: q.correctAnswer === 'A' },
+            { text: 'B. ' + q.optionB, correct: q.correctAnswer === 'B' },
+            { text: 'C. ' + q.optionC, correct: q.correctAnswer === 'C' },
+            { text: 'D. ' + q.optionD, correct: q.correctAnswer === 'D' }
+          ]
+          const correctOpt = opts.find(o => o.correct)
+          practiceQuestions.push({
+            scene: q.question,
+            snakeName: q.optionB || q.optionC,
+            snakeEmoji: '🐍',
+            options: opts,
+            answer: q.correctAnswer,
+            explain: q.analysis || (correctOpt ? correctOpt.text.replace(/^[A-D]\.\s*/, '') : '')
+          })
+        })
+        console.log('✅ 从后端拉了 ' + practiceQuestions.length + ' 道 PRACTICE 题')
+      }
+    }
+
+    dataLoaded.value = true
+  } catch(e) {
+    console.log('⚠️ 后端数据拉取失败，用硬编码 fallback:', e?.message || e)
+  }
+})
 
 // ===== 语音反馈 =====
 function speak(text) {
@@ -460,33 +561,13 @@ const selectedOpt = ref(-1)
 function answerTest(i) {
   if (testAnswered.value) return
   selectedOpt.value = i
-  const correct = testQuestions[testIdx.value].options[1]
-  if (testQuestions[testIdx.value].question.includes('毒蛇最典型')) {
-    if (i === 1) { // 三角形
-      testScore.value++
-      testFeedback.value = '✅ 正确！三角头是毒蛇标志！'
-    } else { testFeedback.value = '❌ 不对！正确答案是三角形！' }
-  } else if (testQuestions[testIdx.value].question.includes('什么毒')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！神经毒！'; speak('神经毒！') }
-    else { testFeedback.value = '❌ 不对！神经毒！' }
-  } else if (testQuestions[testIdx.value].question.includes('咬伤后')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！保持制动！'; speak('制动！') }
-    else { testFeedback.value = '❌ 不对！保持冷静制动伤肢！' }
-  } else if (testQuestions[testIdx.value].question.includes('哪个是无毒')) {
-    if (i === 2) { testScore.value++; testFeedback.value = '✅ 正确！乌梢蛇是无毒蛇！' }
-    else { testFeedback.value = '❌ 不对！乌梢蛇是无毒的！' }
-  } else if (testQuestions[testIdx.value].question.includes('不包括')) {
-    if (i === 3) { testScore.value++; testFeedback.value = '✅ 正确！鸡蛋不禁！' }
-    else { testFeedback.value = '❌ 不对！不吃鸡蛋不是禁忌！' }
-  } else if (testQuestions[testIdx.value].question.includes('竹叶青')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！翠绿色！' }
-    else { testFeedback.value = '❌ 不对！竹叶青是翠绿色！' }
-  } else if (testQuestions[testIdx.value].question.includes('尾巴')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！侧扁像桨！' }
-    else { testFeedback.value = '❌ 不对！海蛇尾巴侧扁像桨！' }
-  } else if (testQuestions[testIdx.value].question.includes('哪种不是')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！王锦蛇(菜花蛇)无毒！' }
-    else { testFeedback.value = '❌ 不对！王锦蛇是无毒菜花蛇！' }
+  const correctIdx = testQuestions[testIdx.value].correctIdx ?? 1
+  const correctOpt = testQuestions[testIdx.value].options[correctIdx]
+  if (i === correctIdx) {
+    testScore.value++
+    testFeedback.value = '✅ 正确！答案是"' + correctOpt + '"'
+  } else {
+    testFeedback.value = '❌ 不对！正确答案是"' + correctOpt + '"'
   }
   testAnswered.value = true
   speak(testFeedback.value.startsWith('✅') ? '答对了！' : '答错了！')
