@@ -905,7 +905,16 @@ function goBack() {
 .scene-stage { margin: 12rpx 0; border-radius: 16rpx; overflow: hidden; background: #FFF; box-shadow: 0 4rpx 16rpx rgba(0,0,0,.06); }
 .scene-svg { width: 100%; height: auto; display: block; }
 .scene-wrap { background: #F5F5F5; }
-.scene-wrap .scene-svg * { transform-box: fill-box; transform-origin: center; }
+.scene-wrap .scene-svg * { transform-box: fill-box; }
+/* transform-origin 各 .anim-* 类自己定义，避免全局 center 覆盖腿/臂/草等的 top/bottom/left center */
+.scene-wrap .scene-svg .anim-leg-back, .scene-wrap .scene-svg .anim-leg-front,
+.scene-wrap .scene-svg .anim-body, .scene-wrap .scene-svg .anim-arm-right, .scene-wrap .scene-svg .anim-arm-left
+  { transform-origin: top center; }
+.scene-wrap .scene-svg .anim-head { transform-origin: bottom center; }
+.scene-wrap .scene-svg .anim-grass, .scene-wrap .scene-svg .anim-grass2,
+.scene-wrap .scene-svg .anim-tri { transform-origin: bottom center; }
+.scene-wrap .scene-svg .anim-snake-body, .scene-wrap .scene-svg .anim-snake-head,
+.scene-wrap .scene-svg .anim-warn-bubble { transform-origin: left center; }
 
 /* 第1关：田间遇蛇 — 多部件动画 */
 .anim-sun { animation: sunGlow 2s ease-in-out infinite; transform-origin: center; }
