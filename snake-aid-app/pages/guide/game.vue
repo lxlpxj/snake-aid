@@ -41,24 +41,80 @@
 <!-- 第1关：田间遇蛇 -->
 <view v-if="currentStep === 0" class="scene-wrap">
 <svg viewBox="0 0 400 200" class="scene-svg">
-<rect width="400" height="200" fill="#87CEEB"/>
+<!-- 天空渐变 -->
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#87CEEB"/><stop offset="1" stop-color="#B3E5FC"/>
+</linearGradient>
+</defs>
+<rect width="400" height="200" fill="url(#sky)"/>
+<!-- 云 3朵 -->
+<g class="anim-cloud1"><ellipse cx="80" cy="30" rx="25" ry="10" fill="#FFF"/><ellipse cx="100" cy="25" rx="20" ry="12" fill="#FFF"/></g>
+<g class="anim-cloud2"><ellipse cx="220" cy="50" rx="22" ry="9" fill="#FFF"/><ellipse cx="235" cy="46" rx="18" ry="11" fill="#FFF"/></g>
+<!-- 太阳 -->
 <circle cx="340" cy="40" r="25" fill="#FFD54F" class="anim-sun"/>
+<!-- 草地 -->
 <rect y="140" width="400" height="60" fill="#8BC34A"/>
+<!-- 小路 -->
 <path d="M30 150 Q45 120 60 150 Q75 180 90 150" fill="#F5DEB3" stroke="#A1887F" stroke-width="2"/>
+<!-- 草丛 3丛 -->
+<g stroke="#2E7D32" stroke-width="2" fill="#4CAF50">
+<path d="M20 160 Q25 150 30 160 Q35 148 40 160" class="anim-grass"/>
+<path d="M160 160 Q165 150 170 160 Q175 148 180 160" class="anim-grass2"/>
+<path d="M350 162 Q355 152 360 162 Q365 150 370 162" class="anim-grass"/>
+</g>
+
+<!-- ====== 人物（6个部件独立动画）====== -->
 <g transform="translate(280,120)">
-<g class="anim-person">
-<circle cx="15" cy="15" r="10" fill="#FFCCBC"/>
-<rect x="8" y="25" width="14" height="25" rx="3" fill="#1565C0"/>
-<rect x="9" y="50" width="5" height="15" rx="2" fill="#795548"/>
-<rect x="15" y="50" width="5" height="15" rx="2" fill="#795548"/>
+<!-- 左腿（后） -->
+<rect x="9" y="50" width="5" height="18" rx="2" fill="#795548" class="anim-leg-back"/>
+<!-- 右腿（前） -->
+<rect x="15" y="50" width="5" height="18" rx="2" fill="#5D4037" class="anim-leg-front"/>
+<!-- 身体（前后摆） -->
+<rect x="8" y="25" width="14" height="25" rx="3" fill="#1565C0" class="anim-body"/>
+<!-- 右手（前后摆） -->
+<rect x="22" y="28" width="4" height="14" rx="2" fill="#1565C0" class="anim-arm-right"/>
+<!-- 左手（前后摆） -->
+<rect x="4" y="28" width="4" height="14" rx="2" fill="#1565C0" class="anim-arm-left"/>
+<!-- 头 -->
+<g class="anim-head">
+<!-- 头发 -->
+<path d="M5 8 Q15 -2 25 8 Q25 14 5 14 Z" fill="#3E2723"/>
+<!-- 脸 -->
+<circle cx="15" cy="12" r="10" fill="#FFCCBC"/>
+<!-- 眼睛（紧张睁圆） -->
+<circle cx="11" cy="12" r="1.5" fill="#333"/>
+<circle cx="19" cy="12" r="1.5" fill="#333"/>
+<!-- 嘴巴（O型害怕） -->
+<ellipse cx="15" cy="17" rx="2" ry="2.5" fill="#B71C1C"/>
+<!-- 汗珠 -->
+<circle cx="28" cy="8" r="2" fill="#4FC3F7" class="anim-sweat"/>
 </g>
-<g transform="translate(40,-10)" class="anim-snake">
-<path d="M0 40 Q20 10 40 30 Q60 50 80 20" fill="none" stroke="#558B2F" stroke-width="10" stroke-linecap="round"/>
-<circle cx="75" cy="12" r="3" fill="#FFEB3B"/>
-<path d="M82 16 L90 14 M82 16 L90 18" stroke="#D32F2F" stroke-width="2" class="anim-tongue"/>
 </g>
-<ellipse cx="30" cy="-20" rx="35" ry="20" fill="#FFEB3B" stroke="#F57F17" stroke-width="2" class="anim-warn"/>
-<text x="30" y="5" text-anchor="middle" font-size="14" fill="#D84315">⚠ 有蛇！</text>
+
+<!-- ====== 蛇 ====== -->
+<g transform="translate(40,-10)">
+<!-- 蛇身 S形 -->
+<path d="M0 40 Q20 10 40 30 Q60 50 80 20" fill="none" stroke="#558B2F" stroke-width="10" stroke-linecap="round" class="anim-snake-body"/>
+<!-- 蛇头 -->
+<ellipse cx="80" cy="20" rx="10" ry="7" fill="#33691E" class="anim-snake-head"/>
+<!-- 眼睛 -->
+<circle cx="84" cy="18" r="2" fill="#FFEB3B" class="anim-snake-eye"/>
+<!-- 毒牙 -->
+<path d="M86 22 L88 28 M82 22 L80 28" stroke="#FFF" stroke-width="1.5"/>
+<!-- 吐信 -->
+<path d="M88 20 L96 18 M88 20 L96 22" stroke="#D32F2F" stroke-width="2" class="anim-tongue"/>
+<!-- 花纹 -->
+<circle cx="20" cy="25" r="2" fill="#1B5E20"/>
+<circle cx="45" cy="30" r="2" fill="#1B5E20"/>
+<circle cx="65" cy="22" r="2" fill="#1B5E20"/>
+</g>
+
+<!-- ⚠ 警告气泡弹出 -->
+<g transform="translate(310,95)" class="anim-warn-bubble">
+<ellipse cx="25" cy="0" rx="30" ry="18" fill="#FFEB3B" stroke="#F57F17" stroke-width="2"/>
+<text x="25" y="5" text-anchor="middle" font-size="14" fill="#D84315" font-weight="bold">⚠ 有蛇！</text>
+<path d="M0 5 L-8 10 L0 12 Z" fill="#F57F17"/>
 </g>
 </svg>
 </view>
@@ -851,17 +907,48 @@ function goBack() {
 .scene-wrap { background: #F5F5F5; }
 .scene-stage .scene-svg * { transform-box: fill-box; }
 
-/* 第1关：田间遇蛇 */
+/* 第1关：田间遇蛇 — 多部件动画 */
 .anim-sun { animation: sunGlow 2s ease-in-out infinite; transform-origin: center; }
 @keyframes sunGlow { 0%,100% { opacity: .9; } 50% { opacity: 1; transform: scale(1.1); } }
-.anim-person { animation: personBob 1.2s ease-in-out infinite; transform-origin: bottom center; }
-@keyframes personBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-.anim-snake { animation: snakeWiggle 1.5s ease-in-out infinite; transform-origin: left center; }
-@keyframes snakeWiggle { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
-.anim-tongue { animation: tongueFlick 0.6s ease-in-out infinite; }
-@keyframes tongueFlick { 0%,100% { opacity: 1; transform: scaleX(1); } 50% { opacity: .3; transform: scaleX(.5); } }
-.anim-warn { animation: warnPop 1s ease-in-out infinite; transform-origin: center; }
-@keyframes warnPop { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+/* 云飘 */
+.anim-cloud1 { animation: cloudMove 20s linear infinite; }
+.anim-cloud2 { animation: cloudMove 30s linear infinite reverse; }
+@keyframes cloudMove { 0% { transform: translateX(-50px); } 100% { transform: translateX(450px); } }
+
+/* 草晃 */
+.anim-grass { animation: grassSway 2.5s ease-in-out infinite; transform-origin: bottom center; }
+.anim-grass2 { animation: grassSway 2.5s ease-in-out infinite .5s; transform-origin: bottom center; }
+@keyframes grassSway { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+
+/* ===== 人走路动画（6部件联动）===== */
+.anim-leg-back { animation: legBack 0.6s ease-in-out infinite; transform-origin: top center; }
+@keyframes legBack { 0%,100% { transform: rotate(-20deg); } 50% { transform: rotate(20deg); } }
+.anim-leg-front { animation: legFront 0.6s ease-in-out infinite; transform-origin: top center; }
+@keyframes legFront { 0%,100% { transform: rotate(20deg); } 50% { transform: rotate(-20deg); } }
+.anim-body { animation: bodyBob 0.6s ease-in-out infinite; transform-origin: top center; }
+@keyframes bodyBob { 0%,100% { transform: translateY(0) rotate(0deg); } 25% { transform: translateY(-1px) rotate(-2deg); } 75% { transform: translateY(-1px) rotate(2deg); } }
+.anim-arm-right { animation: armSwing 0.6s ease-in-out infinite; transform-origin: top center; }
+@keyframes armSwing { 0%,100% { transform: rotate(25deg); } 50% { transform: rotate(-25deg); } }
+.anim-arm-left { animation: armSwing 0.6s ease-in-out infinite reverse; transform-origin: top center; }
+.anim-head { animation: headBob 0.6s ease-in-out infinite; transform-origin: bottom center; }
+@keyframes headBob { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-2px) rotate(1deg); } }
+.anim-sweat { animation: sweatFall 1.2s ease-in infinite; }
+@keyframes sweatFall { 0% { cy: 8; opacity: 1; } 100% { cy: 20; opacity: 0; } }
+
+/* ===== 蛇动画 ===== */
+.anim-snake-body { animation: snakeWiggle 1.2s ease-in-out infinite; transform-origin: left center; }
+@keyframes snakeWiggle { 0%,100% { transform: rotate(-4deg) scaleX(1); } 50% { transform: rotate(4deg) scaleX(1.02); } }
+.anim-snake-head { animation: snakeHead 1.2s ease-in-out infinite; transform-origin: left center; }
+@keyframes snakeHead { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+.anim-snake-eye { animation: eyePulse 1s ease-in-out infinite; transform-origin: center; }
+@keyframes eyePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.4); } }
+.anim-tongue { animation: tongueFlick 0.5s ease-in-out infinite; }
+@keyframes tongueFlick { 0%,100% { opacity: 1; transform: scaleX(1); } 50% { opacity: 0.3; transform: scaleX(.3); } }
+
+/* 警告气泡弹出 */
+.anim-warn-bubble { animation: warnPop 1.2s ease-in-out infinite; transform-origin: left center; }
+@keyframes warnPop { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
 /* 第2关：辨认蛇种 */
 .anim-tri { animation: triWarn 1s ease-in-out infinite; transform-origin: bottom center; }
