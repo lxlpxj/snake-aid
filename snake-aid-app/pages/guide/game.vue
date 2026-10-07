@@ -637,7 +637,7 @@ function goBack() {
 }
 </script>
 
-<style scoped>
+<style>
 .game-container {
   min-height: 100vh;
   background: linear-gradient(180deg, #FFEBEE 0%, #FFF 100%);
@@ -905,7 +905,7 @@ function goBack() {
 .scene-stage { margin: 12rpx 0; border-radius: 16rpx; overflow: hidden; background: #FFF; box-shadow: 0 4rpx 16rpx rgba(0,0,0,.06); }
 .scene-svg { width: 100%; height: auto; display: block; }
 .scene-wrap { background: #F5F5F5; }
-.scene-stage .scene-svg * { transform-box: fill-box; }
+.scene-wrap .scene-svg * { transform-box: fill-box; transform-origin: center; }
 
 /* 第1关：田间遇蛇 — 多部件动画 */
 .anim-sun { animation: sunGlow 2s ease-in-out infinite; transform-origin: center; }
