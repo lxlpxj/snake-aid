@@ -29,10 +29,134 @@
       <!-- 当前关卡 -->
       <view class="level-card">
         <view class="level-header">
-          <text class="level-emoji">{{ steps[currentStep].emoji }}</text>
+          <view class="level-emoji-wrap">
+            <text class="level-emoji level-emoji-anim">{{ steps[currentStep].emoji }}</text>
+            <view class="level-emoji-ring"></view>
+          </view>
           <view class="level-info">
             <view class="level-title">{{ steps[currentStep].title }}</view>
             <view class="level-hint">{{ steps[currentStep].hint }}</view>
+          </view>
+        </view>
+
+        <!-- 🎬 每关专属动画舞台 -->
+        <view class="anim-stage" v-if="true">
+          <!-- 第1关: 脱离险境 - 人跑开 + 蛇追 -->
+          <view v-if="currentStep === 0" class="anim-escape">
+            <text class="anim-person anim-run">🏃‍♂️</text>
+            <text class="anim-snake anim-snake-warn">🐍</text>
+            <text class="anim-arrows anim-arrow1">💨</text>
+            <text class="anim-arrows anim-arrow2">💨</text>
+            <text class="anim-arrows anim-arrow3">💨</text>
+            <view class="anim-ground"></view>
+          </view>
+
+          <!-- 第2关: 辨认蛇种 - 三角头 vs 椭圆头 SVG -->
+          <view v-if="currentStep === 1" class="anim-identify">
+            <view class="anim-bad-snake">
+              <svg viewBox="0 0 60 40" class="anim-svg">
+                <polygon points="50,20 30,8 30,32" fill="#D32F2F" class="anim-tri-head"/>
+                <rect x="10" y="16" width="25" height="8" rx="4" fill="#1A1A1A"/>
+                <polygon points="50,16 55,12 55,20" fill="#D32F2F" class="anim-tooth"/>
+                <polygon points="50,24 55,20 55,28" fill="#D32F2F" class="anim-tooth"/>
+              </svg>
+              <text class="anim-label bad">⚠️ 三角头=毒蛇</text>
+            </view>
+            <view class="anim-good-snake">
+              <svg viewBox="0 0 60 40" class="anim-svg">
+                <ellipse cx="50" cy="20" rx="15" ry="10" fill="#4CAF50" class="anim-round-head"/>
+                <rect x="10" y="16" width="25" height="8" rx="4" fill="#33691E"/>
+                <text x="45" y="23" font-size="8">●</text>
+              </svg>
+              <text class="anim-label good">✅ 椭圆头=无毒</text>
+            </view>
+          </view>
+
+          <!-- 第3关: 保持镇定 - 深呼吸光圈 -->
+          <view v-if="currentStep === 2" class="anim-calm">
+            <text class="anim-face">😌</text>
+            <view class="anim-breath-ring ring1"></view>
+            <view class="anim-breath-ring ring2"></view>
+            <view class="anim-breath-ring ring3"></view>
+            <text class="anim-breath-text">深呼吸...</text>
+          </view>
+
+          <!-- 第4关: 紧急呼救 - 手机震动 -->
+          <view v-if="currentStep === 3" class="anim-phone-call">
+            <text class="anim-phone anim-vibrate">📱</text>
+            <text class="anim-waves wave1">〰️</text>
+            <text class="anim-waves wave2">〰️</text>
+            <text class="anim-waves wave3">〰️</text>
+          </view>
+
+          <!-- 第5关: 伤口解压 - 水滴落下 -->
+          <view v-if="currentStep === 4" class="anim-wash">
+            <text class="anim-drop anim-drop1">💧</text>
+            <text class="anim-drop anim-drop2">💧</text>
+            <text class="anim-drop anim-drop3">💧</text>
+            <view class="anim-wound">
+              <text class="anim-wound-mark">🔴</text>
+              <text class="anim-wound-label">伤口冲洗中</text>
+            </view>
+          </view>
+
+          <!-- 第6关: 伤肢制动 - 平放/抬高/放低 三选一 -->
+          <view v-if="currentStep === 5" class="anim-limb">
+            <view class="anim-limb-wrap limb-flat">
+              <text class="anim-arm">🦿</text>
+              <text class="anim-arrow right">➡️</text>
+            </view>
+            <text class="anim-limb-label">与心脏同高 ✓</text>
+          </view>
+
+          <!-- 第7关: 加压包扎 - 绷带缠绕动画 -->
+          <view v-if="currentStep === 6" class="anim-bandage-scene">
+            <view class="anim-bandage-target">
+              <text class="anim-bandage-arm">🦾</text>
+              <view class="anim-bandage-wrap wrap1"></view>
+              <view class="anim-bandage-wrap wrap2"></view>
+              <view class="anim-bandage-wrap wrap3"></view>
+              <text class="anim-wound-mark-small">⚠️</text>
+            </view>
+          </view>
+
+          <!-- 第8关: 止痛处理 - 红叉禁止 -->
+          <view v-if="currentStep === 7" class="anim-pain">
+            <view class="anim-ban">
+              <text class="anim-ban-item anim-shake">💊</text>
+              <text class="anim-ban-x">❌</text>
+              <text class="anim-ban-label">止痛药禁！</text>
+            </view>
+            <view class="anim-ban">
+              <text class="anim-ban-item anim-shake">🍺</text>
+              <text class="anim-ban-x">❌</text>
+              <text class="anim-ban-label">酒精禁！</text>
+            </view>
+            <view class="anim-ban">
+              <text class="anim-ban-item anim-shake">🧊</text>
+              <text class="anim-ban-x">❌</text>
+              <text class="anim-ban-label">冰敷禁！</text>
+            </view>
+          </view>
+
+          <!-- 第9关: 禁忌清单 - 红叉对比 -->
+          <view v-if="currentStep === 8" class="anim-taboo">
+            <view class="anim-taboo-item bad">
+              <text class="anim-taboo-icon">🚫</text>
+              <text class="anim-taboo-text">不切！</text>
+            </view>
+            <view class="anim-taboo-item bad">
+              <text class="anim-taboo-icon">🚫</text>
+              <text class="anim-taboo-text">不吸！</text>
+            </view>
+            <view class="anim-taboo-item bad">
+              <text class="anim-taboo-icon">🚫</text>
+              <text class="anim-taboo-text">不敷！</text>
+            </view>
+            <view class="anim-taboo-item good">
+              <text class="anim-taboo-icon">✅</text>
+              <text class="anim-taboo-text">多喝水！</text>
+            </view>
           </view>
         </view>
 
@@ -708,6 +832,115 @@ function goBack() {
   border-radius: 50rpx;
   font-size: 32rpx;
 }
+
+/* ===== 🎬 每关动画舞台 ===== */
+.anim-stage { height: 220rpx; display: flex; align-items: center; justify-content: center; margin: 20rpx 0; background: linear-gradient(135deg, #FFF3E0, #FFECB3); border-radius: 16rpx; position: relative; overflow: hidden; }
+.level-emoji-wrap { position: relative; width: 100rpx; height: 100rpx; }
+.level-emoji-anim { font-size: 64rpx; animation: pulseEmoji 1.5s ease-in-out infinite; display: block; }
+.level-emoji-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 3rpx solid #FF9800; border-radius: 50%; animation: ringPulse 2s ease-out infinite; }
+@keyframes pulseEmoji { 0%,100% { transform: scale(1) } 50% { transform: scale(1.2) } }
+@keyframes ringPulse { 0% { transform: scale(1); opacity: 0.8 } 100% { transform: scale(1.8); opacity: 0 } }
+
+/* 第1关 脱离 */
+.anim-escape { width: 100%; height: 100%; position: relative; }
+.anim-person { position: absolute; font-size: 70rpx; left: 60rpx; bottom: 60rpx; }
+.anim-snake { position: absolute; font-size: 60rpx; right: 60rpx; bottom: 70rpx; }
+.anim-arrows { position: absolute; font-size: 36rpx; animation: arrowFly 0.6s linear infinite; }
+.anim-arrow1 { top: 50rpx; animation-delay: 0s }
+.anim-arrow2 { top: 100rpx; animation-delay: 0.2s }
+.anim-arrow3 { top: 150rpx; animation-delay: 0.4s }
+.anim-ground { position: absolute; bottom: 40rpx; left: 0; width: 100%; height: 8rpx; background: #795548; border-radius: 4rpx; }
+.anim-run { animation: runBounce 0.4s ease-in-out infinite; }
+.anim-snake-warn { animation: snakeWarn 0.8s ease-in-out infinite; }
+@keyframes arrowFly { 0% { transform: translateX(-150rpx); opacity: 0 } 50% { opacity: 1 } 100% { transform: translateX(200rpx); opacity: 0 } }
+@keyframes runBounce { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-15rpx) } }
+@keyframes snakeWarn { 0%,100% { transform: rotate(-8deg) } 50% { transform: rotate(8deg) } }
+
+/* 第2关 辨认蛇种 SVG */
+.anim-identify { display: flex; gap: 30rpx; width: 100%; padding: 0 30rpx; }
+.anim-bad-snake, .anim-good-snake { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.anim-svg { width: 140rpx; height: 80rpx; }
+.anim-tooth { animation: toothPulse 0.8s ease-in-out infinite; transform-origin: center; }
+.anim-tri-head { animation: badWarn 0.6s ease-in-out infinite; }
+.anim-round-head { animation: goodFloat 2s ease-in-out infinite; }
+.anim-label { font-size: 20rpx; margin-top: 8rpx; font-weight: bold; }
+.anim-label.bad { color: #D32F2F; }
+.anim-label.good { color: #2E7D32; }
+@keyframes toothPulse { 0%,100% { transform: scaleY(1) } 50% { transform: scaleY(1.3) } }
+@keyframes badWarn { 0%,100% { fill: #D32F2F } 50% { fill: #FFCDD2 } }
+@keyframes goodFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-3rpx) } }
+
+/* 第3关 深呼吸光圈 */
+.anim-calm { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.anim-face { font-size: 80rpx; z-index: 10; animation: calmBreath 3s ease-in-out infinite; }
+.anim-breath-ring { position: absolute; width: 120rpx; height: 120rpx; border: 4rpx solid #81C784; border-radius: 50%; }
+.ring1 { animation: ringExpand 3s ease-out infinite; }
+.ring2 { animation: ringExpand 3s ease-out infinite 1s; }
+.ring3 { animation: ringExpand 3s ease-out infinite 2s; }
+.anim-breath-text { position: absolute; bottom: 30rpx; font-size: 22rpx; color: #388E3C; }
+@keyframes calmBreath { 0%,100% { transform: scale(1) } 50% { transform: scale(1.1) } }
+@keyframes ringExpand { 0% { transform: scale(0.5); opacity: 0.8 } 100% { transform: scale(2.5); opacity: 0 } }
+
+/* 第4关 手机震动 */
+.anim-phone-call { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.anim-phone { font-size: 100rpx; }
+.anim-vibrate { animation: phoneVibrate 0.15s linear infinite; }
+.anim-waves { position: absolute; font-size: 40rpx; }
+.wave1 { right: 80rpx; top: 60rpx; animation: wavePulse 1s ease-out infinite; }
+.wave2 { right: 80rpx; top: 100rpx; animation: wavePulse 1s ease-out infinite 0.3s; }
+.wave3 { right: 80rpx; top: 140rpx; animation: wavePulse 1s ease-out infinite 0.6s; }
+@keyframes phoneVibrate { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-4rpx) } 75% { transform: translateX(4rpx) } }
+@keyframes wavePulse { 0% { transform: translateX(0); opacity: 1 } 100% { transform: translateX(80rpx); opacity: 0 } }
+
+/* 第5关 水滴落下 */
+.anim-wash { position: relative; width: 100%; height: 100%; }
+.anim-drop { position: absolute; font-size: 40rpx; top: 10rpx; }
+.anim-drop1 { left: 60rpx; animation: dropFall 1.2s ease-in infinite; }
+.anim-drop2 { left: 130rpx; animation: dropFall 1.2s ease-in infinite 0.4s; }
+.anim-drop3 { left: 200rpx; animation: dropFall 1.2s ease-in infinite 0.8s; }
+.anim-wound { position: absolute; bottom: 50rpx; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+.anim-wound-mark { font-size: 60rpx; animation: woundPulse 1s ease-in-out infinite; }
+.anim-wound-label { font-size: 18rpx; color: #1565C0; margin-top: 5rpx; }
+@keyframes dropFall { 0% { top: 10rpx; opacity: 1 } 80% { top: 130rpx; opacity: 1 } 100% { top: 130rpx; opacity: 0 } }
+@keyframes woundPulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
+
+/* 第6关 伤肢制动 */
+.anim-limb { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.anim-limb-wrap { display: flex; align-items: center; gap: 10rpx; animation: limbFloat 2s ease-in-out infinite; }
+.anim-arm { font-size: 70rpx; }
+.anim-arrow.right { font-size: 50rpx; }
+.anim-limb-label { font-size: 22rpx; color: #2E7D32; margin-top: 20rpx; font-weight: bold; }
+@keyframes limbFloat { 0%,100% { transform: translateX(0) } 50% { transform: translateX(10rpx) } }
+
+/* 第7关 绷带缠绕 */
+.anim-bandage-scene { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.anim-bandage-target { position: relative; width: 200rpx; height: 100rpx; }
+.anim-bandage-arm { font-size: 80rpx; position: absolute; top: 10rpx; left: 40rpx; }
+.anim-bandage-wrap { position: absolute; left: 20rpx; height: 14rpx; background: #E57373; border-radius: 3rpx; animation: bandageWrap 1.5s ease-out infinite; }
+.wrap1 { top: 30rpx; width: 160rpx; animation-delay: 0s; }
+.wrap2 { top: 55rpx; width: 160rpx; animation-delay: 0.5s; }
+.wrap3 { top: 80rpx; width: 160rpx; animation-delay: 1s; }
+.anim-wound-mark-small { position: absolute; right: 30rpx; top: 45rpx; font-size: 28rpx; animation: woundPulse 1s ease-in-out infinite; }
+@keyframes bandageWrap { 0% { transform: translateX(-160rpx); opacity: 0 } 30% { opacity: 1 } 100% { transform: translateX(0); opacity: 1 } }
+
+/* 第8关 止痛禁止 */
+.anim-pain { display: flex; gap: 20rpx; width: 100%; padding: 0 30rpx; }
+.anim-ban { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8rpx; }
+.anim-ban-item { font-size: 60rpx; }
+.anim-shake { animation: shake 0.4s ease-in-out infinite; }
+.anim-ban-x { font-size: 40rpx; color: #D32F2F; animation: banPulse 1s ease-in-out infinite; }
+.anim-ban-label { font-size: 18rpx; color: #D32F2F; font-weight: bold; }
+@keyframes shake { 0%,100% { transform: rotate(0) } 25% { transform: rotate(-8deg) } 75% { transform: rotate(8deg) } }
+@keyframes banPulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.3) } }
+
+/* 第9关 禁忌清单 */
+.anim-taboo { display: flex; flex-wrap: wrap; gap: 16rpx; width: 100%; padding: 0 20rpx; }
+.anim-taboo-item { width: calc(50% - 8rpx); display: flex; align-items: center; gap: 10rpx; padding: 14rpx; border-radius: 12rpx; animation: tabooFloat 2s ease-in-out infinite; }
+.anim-taboo-item.bad { background: #FFEBEE; border: 2rpx solid #EF5350; }
+.anim-taboo-item.good { background: #E8F5E9; border: 2rpx solid #66BB6A; animation-delay: 1s; }
+.anim-taboo-icon { font-size: 36rpx; }
+.anim-taboo-text { font-size: 22rpx; font-weight: bold; }
+.anim-taboo-item.bad .anim-taboo-text { color: #C62828; }
+.anim-taboo-item.good .anim-taboo-text { color: #2E7D32; }
+@keyframes tabooFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6rpx) } }
 </style>
-
-
