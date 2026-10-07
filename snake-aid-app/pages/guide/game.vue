@@ -1,5 +1,10 @@
 <template>
   <view class="game-container">
+  <!-- 语音开关 -->
+  <view class="voice-switch" @click="toggleVoice">
+    <text class="voice-icon">{{ voiceOn ? '🔊' : '🔇' }}</text>
+    <text class="voice-label">{{ voiceOn ? '语音开' : '语音关' }}</text>
+  </view>
     <!-- 顶部进度条 -->
     <view class="progress-bar">
       <view class="progress-fill" :style="{ width: ((currentStep) / steps.length * 100) + '%' }"></view>
@@ -332,6 +337,27 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import voice from '../../utils/voice'
+
+// ===== 语音系统 =====
+const voiceOn = ref(true)
+function speak(text) {
+  if (!voiceOn.value) return
+  try {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel()
+      const u = new SpeechSynthesisUtterance(text)
+      u.lang = 'zh-CN'
+      u.rate = 1.0
+      const v = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('zh'))
+      if (v) u.voice = v
+      window.speechSynthesis.speak(u)
+    }
+  } catch(e) {}
+}
+function toggleVoice() {
+  voiceOn.value = !voiceOn.value
+  speak(voiceOn.value ? '语音已开启' : '语音已关闭')
+}
 import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
 
 const API = 'http://127.0.0.1:8080/api'
@@ -383,6 +409,8 @@ onMounted(async () => {
     steps.length = 0
     hardcodedStepsBackup.forEach(s => steps.push(s))
   }
+  // 语音欢迎
+  setTimeout(() => speak('欢迎来到急救闯关！开始学习蛇咬伤急救知识！'), 500)
 })
 
 function playSFX(type) {
@@ -530,6 +558,7 @@ function isInteractiveStep(idx) {
 }
 
 function startGame() {
+  speak('开始闯关！第 1 关，脱离险境！')
   gameState.value = 'playing'
   currentStep.value = 0
   score.value = 0
@@ -554,12 +583,15 @@ function selectOption(option) {
     feedbackType.value = 'right'
     score.value += 10
     canNext.value = true
+    speak('答对了！好样的！' + (steps[currentStep.value].feedbackRight || ''))
   } else {
     wrongChoice.value = true
     wrongCount.value++
     feedbackText.value = steps[currentStep.value].feedbackWrong
     feedbackType.value = 'wrong'
     canNext.value = false
+    const correctOpt = steps[currentStep.value].options?.find(o => o.correct)?.text || ''
+    speak('答错了！危险！正确答案是：' + correctOpt)
   }
 }
 
@@ -571,6 +603,7 @@ function call120() {
   feedbackText.value = steps[3].feedbackRight
   feedbackType.value = 'right'
   canNext.value = true
+  speak('拨打 120！蛇咬伤需要急救！')
 }
 
 // 第6关：伤肢摆放
@@ -582,11 +615,13 @@ function answerLimb(ans) {
     feedbackText.value = steps[5].feedbackRight
     feedbackType.value = 'right'
     canNext.value = true
+    speak('伤肢平放制动！正确！')
   } else {
     wrongCount.value++
     feedbackText.value = '❌ 这个位置不对！' + steps[5].feedbackRight
     feedbackType.value = 'wrong'
     canNext.value = false
+    speak('位置不对！伤肢应该平放！')
   }
 }
 
@@ -598,6 +633,7 @@ function dragBandage() {
   feedbackText.value = steps[6].feedbackRight
   feedbackType.value = 'right'
   canNext.value = true
+  speak('加压包扎完成！太棒了！')
 }
 
 function retryStep() {
@@ -614,7 +650,8 @@ function retryStep() {
 
 function nextStep() {
   if (currentStep.value < steps.length - 1) {
-    currentStep.value++
+    
+    speak('第 ' + (currentStep.value + 2) + ' 关，' + (steps[currentStep.value + 1]?.title || ''))currentStep.value++
     feedbackText.value = ''
     feedbackType.value = ''
     rightChoice.value = false
@@ -625,6 +662,7 @@ function nextStep() {
     limbAnswer.value = ''
   } else {
     gameState.value = 'done'
+    speak('🎉 恭喜通关！你已经完成了全部 9 关急救知识！')
   }
 }
 
@@ -643,6 +681,24 @@ function goBack() {
   background: linear-gradient(180deg, #FFEBEE 0%, #FFF 100%);
   padding-bottom: 180rpx;
 }
+
+/* 🔊 语音开关 */
+.voice-switch {
+  position: fixed;
+  top: 16rpx;
+  right: 16rpx;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  background: #FFF;
+  border: 2px solid #FF7043;
+  border-radius: 40rpx;
+  padding: 10rpx 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(255,112,67,.2);
+}
+.voice-icon { font-size: 28rpx; }
+.voice-label { font-size: 22rpx; color: #FF7043; font-weight: bold; }
 
 /* 进度条 */
 .progress-bar {
