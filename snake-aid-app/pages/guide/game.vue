@@ -1225,4 +1225,20 @@ function goBack() {
 .scene-wrong svg rect[stroke="#E53935"] { animation: redBlink 0.4s ease-in-out infinite; }
 @keyframes redBlink { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.5) drop-shadow(0 0 15px #FF0000); } }
 .scene-wrong svg rect[stroke="#43A047"] { opacity: .4; }
+
+/* 🔊 语音测试大按钮 */
+.test-voice-bar {
+  background: linear-gradient(135deg, #FF7043, #E64A19);
+  padding: 12rpx 20rpx;
+  display: flex; align-items: center; justify-content: space-between; gap: 12rpx;
+}
+.test-voice-btn {
+  display: flex; align-items: center; gap: 10rpx;
+  background: #FFF; color: #E64A19;
+  padding: 12rpx 24rpx; border-radius: 40rpx;
+  font-size: 28rpx; font-weight: bold;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,.2);
+}
+.tv-icon { font-size: 36rpx; }
+.voice-status { color: #FFF; font-size: 24rpx; font-weight: bold; }
 </style>

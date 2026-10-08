@@ -1,5 +1,14 @@
 <template>
   <view class="snake-learn-container" :class="{ 'big-font': bigFont }">
+    <!-- 🔊 语音测试大按钮 -->
+    <view class="test-voice-bar">
+      <view class="test-voice-btn" @click="speak('语音测试！如果你听到这段话，说明语音正常工作啦！')">
+        <text class="tv-icon">🔊</text>
+        <text class="tv-label">点我测试语音</text>
+      </view>
+      <view class="voice-status">状态: {{ voiceOn ? '🟢 已开启' : '🔴 已关闭' }}</view>
+    </view>
+
     <!-- 顶部进度 -->
     <view class="top-bar">
       <view class="tabs">
@@ -750,4 +759,20 @@ const testDesc = computed(() => {
   display: flex; align-items: center; justify-content: center;
   font-size: 36rpx;
 }
+
+/* 🔊 语音测试大按钮 */
+.test-voice-bar {
+  background: linear-gradient(135deg, #FF6F00, #E65100);
+  padding: 16rpx 24rpx;
+  display: flex; align-items: center; justify-content: space-between; gap: 16rpx;
+}
+.test-voice-btn {
+  display: flex; align-items: center; gap: 12rpx;
+  background: #FFF; color: #E65100;
+  padding: 16rpx 28rpx; border-radius: 40rpx;
+  font-size: 32rpx; font-weight: bold;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,.2);
+}
+.tv-icon { font-size: 40rpx; }
+.voice-status { color: #FFF; font-size: 26rpx; font-weight: bold; }
 </style>
