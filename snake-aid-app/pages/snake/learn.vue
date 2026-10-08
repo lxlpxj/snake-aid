@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <view class="snake-learn-container" :class="{ 'big-font': bigFont }">
     <!-- 顶部进度 -->
     <view class="top-bar">
@@ -230,24 +230,59 @@ import voice from '../../utils/voice'
 // ===== 状态 =====
 const phase = ref('play') // play / learn / practice / test
 const bigFont = ref(false)
-const voiceOn = ref(false)
+const voiceOn = ref(true)
 const totalScore = ref(0)
 
 // ===== 语音反馈 =====
+// 初始化 voices（Chrome 需要等 voiceschanged 事件）
+let voicesReady = false
+// #ifdef H5
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  const tryInit = () => {
+    const vs = window.speechSynthesis.getVoices()
+    if (vs && vs.length > 0) voicesReady = true
+  }
+  tryInit()
+  window.speechSynthesis.addEventListener('voiceschanged', tryInit)
+}
+// #endif
+
 function speak(text) {
-  if (!voiceOn.value) return
+  if (!voiceOn.value || !text) return
   try {
     // #ifdef H5
     if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
       const u = new SpeechSynthesisUtterance(text)
       u.lang = 'zh-CN'
       u.rate = 0.9
-      window.speechSynthesis.cancel()
+      u.pitch = 1.0
+      const voices = window.speechSynthesis.getVoices()
+      const v = voices.find(v => v.lang && (v.lang.startsWith('zh') || v.lang.includes('CN')))
+      if (v) u.voice = v
       window.speechSynthesis.speak(u)
+      // fallback
+      if (!v && !voicesReady) {
+        setTimeout(() => {
+          const v2 = window.speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith('zh'))
+          if (v2) {
+            const u2 = new SpeechSynthesisUtterance(text)
+            u2.lang = 'zh-CN'; u2.voice = v2; u2.rate = 0.9
+            window.speechSynthesis.speak(u2)
+          }
+        }, 500)
+      }
     }
     // #endif
-  } catch(e) {}
+  } catch(e) { console.warn('speak err', e) }
 }
+
+// ===== 页面加载后欢迎语 =====
+onMounted(() => {
+  setTimeout(() => {
+    speak('欢迎来到蛇类识别学习！玩一玩，认一认，练一练，测一测！')
+  }, 800)
+})
 
 function toggleVoice() {
   voiceOn.value = !voiceOn.value

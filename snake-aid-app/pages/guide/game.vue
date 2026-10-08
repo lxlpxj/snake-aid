@@ -365,19 +365,45 @@ import voice from '../../utils/voice'
 
 // ===== 语音系统 =====
 const voiceOn = ref(true)
+// ===== Web Speech API 初始化（等 voices 加载）=====
+let voicesReady = false;
+if (typeof window !== 'undefined' && window.speechSynthesis) {
+  const tryInit = () => {
+    const vs = window.speechSynthesis.getVoices();
+    if (vs && vs.length > 0) voicesReady = true;
+  };
+  tryInit();
+  window.speechSynthesis.addEventListener('voiceschanged', tryInit);
+}
+
 function speak(text) {
-  if (!voiceOn.value) return
+  if (!voiceOn.value || !text) return;
   try {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel()
-      const u = new SpeechSynthesisUtterance(text)
-      u.lang = 'zh-CN'
-      u.rate = 1.0
-      const v = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('zh'))
-      if (v) u.voice = v
-      window.speechSynthesis.speak(u)
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = 1.0;
+      u.pitch = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      const v = voices.find(v => v.lang && (v.lang.startsWith('zh') || v.lang.includes('CN')));
+      if (v) u.voice = v;
+      u.onstart = () => console.log('🔊', text.substring(0, 20));
+      u.onerror = (e) => console.warn('🔊 err:', e.error);
+      window.speechSynthesis.speak(u);
+      // fallback: 如果 voice 还没加载，500ms 后再试
+      if (!v && !voicesReady) {
+        setTimeout(() => {
+          const v2 = window.speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith('zh'));
+          if (v2) {
+            const u2 = new SpeechSynthesisUtterance(text);
+            u2.lang = 'zh-CN'; u2.voice = v2;
+            window.speechSynthesis.speak(u2);
+          }
+        }, 500);
+      }
     }
-  } catch(e) {}
+  } catch(e) { console.warn('speak err', e); }
 }
 function toggleVoice() {
   voiceOn.value = !voiceOn.value
@@ -676,7 +702,8 @@ function retryStep() {
 function nextStep() {
   if (currentStep.value < steps.length - 1) {
     
-    speak('第 ' + (currentStep.value + 2) + ' 关，' + (steps[currentStep.value + 1]?.title || ''))currentStep.value++
+    speak('第 ' + (currentStep.value + 2) + ' 关，' + (steps[currentStep.value + 1]?.title || ''))
+    currentStep.value++
     feedbackText.value = ''
     feedbackType.value = ''
     rightChoice.value = false
