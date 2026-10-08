@@ -9,6 +9,8 @@
             <el-option value="FIRST_AID" label="急救知识" />
             <el-option value="SNAKE" label="蛇种识别" />
             <el-option value="HOSPITAL" label="医院常识" />
+            <el-option value="LEARN" label="测一测(四步学)" />
+            <el-option value="PRACTICE" label="练一练(四步学)" />
           </el-select>
           <el-select v-model="filterType" placeholder="题型" style="width:120px;margin-right:10px;" clearable @change="load">
             <el-option :value="1" label="单选题" />
@@ -79,6 +81,8 @@
               <el-option value="FIRST_AID" label="急救知识" />
               <el-option value="SNAKE" label="蛇种识别" />
               <el-option value="HOSPITAL" label="医院常识" />
+              <el-option value="LEARN" label="测一测(四步学)" />
+              <el-option value="PRACTICE" label="练一练(四步学)" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -157,7 +161,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import request from '../utils/request'
 
-const categoryMap = { FIRST_AID: '急救知识', SNAKE: '蛇种识别', HOSPITAL: '医院常识' }
+const categoryMap = { FIRST_AID: '急救知识', SNAKE: '蛇种识别', HOSPITAL: '医院常识', LEARN: '测一测(四步学)', PRACTICE: '练一练(四步学)' }
 const typeMap = { 1: '单选', 2: '多选', 3: '判断' }
 
 const keyword = ref('')

@@ -194,11 +194,12 @@
         <view class="test-q-title">第 {{ testIdx + 1 }} 题：{{ testQuestions[testIdx].question }}</view>
         <view class="test-options">
           <view class="t-option"
-                :class="{ right: testAnswered && opt.correct, wrong: testAnswered && selectedOpt === i && !opt.correct }"
+                :class="{ right: testAnswered && i === correctTestIdx, wrong: testAnswered && selectedOpt === i && i !== correctTestIdx }"
                 v-for="(opt, i) in testQuestions[testIdx].options"
                 :key="i"
                 @click="answerTest(i)">
-            <text>{{ opt.text }}</text>
+            <text class="t-letter">{{ String.fromCharCode(65 + i) }}</text>
+            <text class="t-text">{{ opt }}</text>
           </view>
         </view>
         <view class="test-feedback" v-if="testFeedback">
@@ -241,6 +242,7 @@ const phase = ref('play') // play / learn / practice / test
 const bigFont = ref(false)
 const voiceOn = ref(true)
 const totalScore = ref(0)
+const backendLoaded = ref(false) // 是否已从后端拉到题目
 
 // ===== 语音反馈 =====
 // 初始化 voices（Chrome 需要等 voiceschanged 事件）
@@ -286,12 +288,73 @@ function speak(text) {
   } catch(e) { console.warn('speak err', e) }
 }
 
-// ===== 页面加载后欢迎语 =====
+// ===== 页面加载后欢迎语 + 后端拉题 =====
 onMounted(() => {
   setTimeout(() => {
     speak('欢迎来到蛇类识别学习！玩一玩，认一认，练一练，测一测！')
   }, 800)
+  loadQuestionsFromBackend()
 })
+
+// ===== 从后端拉 LEARN/PRACTICE 题目 =====
+// Question 表格式 → 前端格式转换
+function questionToPractice(q) {
+  const letters = ['A', 'B', 'C', 'D']
+  const opts = [q.optionA, q.optionB, q.optionC, q.optionD]
+    .filter(o => o != null && o !== '')
+    .map((text, idx) => ({
+      text: letters[idx] + '. ' + text,
+      correct: letters[idx] === q.correctAnswer
+    }))
+  return {
+    scene: q.question,
+    snakeName: '',
+    snakeEmoji: '🐍',
+    options: opts,
+    answer: q.correctAnswer,
+    explain: q.analysis || ''
+  }
+}
+function questionToTest(q) {
+  const opts = [q.optionA, q.optionB, q.optionC, q.optionD]
+    .filter(o => o != null && o !== '')
+  return {
+    id: q.id,
+    question: q.question,
+    options: opts,
+    correctAnswer: q.correctAnswer, // 'A'/'B'/'C'/'D'
+    analysis: q.analysis || ''
+  }
+}
+
+async function loadQuestionsFromBackend() {
+  // #ifdef H5
+  try {
+    const base = 'http://127.0.0.1:8080/api'
+    // PRACTICE 题
+    const pRes = await fetch(base + '/app/quiz/pick?category=PRACTICE&count=5')
+    const pJson = await pRes.json()
+    if (pJson && pJson.code === 200 && pJson.data && pJson.data.length > 0) {
+      const list = pJson.data.map(questionToPractice)
+      practiceQuestions.splice(0, practiceQuestions.length, ...list)
+    }
+    // LEARN 题
+    const lRes = await fetch(base + '/app/quiz/pick?category=LEARN&count=8')
+    const lJson = await lRes.json()
+    if (lJson && lJson.code === 200 && lJson.data && lJson.data.length > 0) {
+      const list = lJson.data.map(questionToTest)
+      testQuestions.splice(0, testQuestions.length, ...list)
+    }
+    backendLoaded.value = true
+    console.log('[learn.vue] 后端题目加载成功：PRACTICE=' + practiceQuestions.length + ', LEARN=' + testQuestions.length)
+  } catch (e) {
+    console.warn('[learn.vue] 后端拉题失败，使用硬编码 fallback:', e)
+  }
+  // #endif
+  // #ifndef H5
+  backendLoaded.value = false
+  // #endif
+}
 
 function toggleVoice() {
   voiceOn.value = !voiceOn.value
@@ -499,40 +562,52 @@ const testScore = ref(0)
 const testAnswered = ref(false)
 const testFeedback = ref('')
 const selectedOpt = ref(-1)
+const correctTestIdx = ref(1) // 默认正确答案在 index 1（大部分题都对）
+
+// 计算当前题正确答案 index（直接用 correctAnswer 字段，兼容旧硬编码）
+function getCorrectIdx() {
+  const q = testQuestions[testIdx.value]
+  // 后端加载的新格式：有 correctAnswer 字段
+  if (q.correctAnswer) {
+    const letterToIdx = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 }
+    return letterToIdx[q.correctAnswer] ?? 0
+  }
+  // 旧硬编码 fallback：根据题目匹配
+  const question = q.question
+  if (question.includes('毒蛇最典型')) return 1
+  if (question.includes('什么毒')) return 1
+  if (question.includes('咬伤后')) return 1
+  if (question.includes('哪个是无毒')) return 2
+  if (question.includes('不包括')) return 3
+  if (question.includes('竹叶青')) return 1
+  if (question.includes('尾巴')) return 1
+  if (question.includes('哪种不是')) return 1
+  return 1
+}
 
 function answerTest(i) {
   if (testAnswered.value) return
   selectedOpt.value = i
-  const correct = testQuestions[testIdx.value].options[1]
-  if (testQuestions[testIdx.value].question.includes('毒蛇最典型')) {
-    if (i === 1) { // 三角形
-      testScore.value++
-      testFeedback.value = '✅ 正确！三角头是毒蛇标志！'
-    } else { testFeedback.value = '❌ 不对！正确答案是三角形！' }
-  } else if (testQuestions[testIdx.value].question.includes('什么毒')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！神经毒！'; speak('神经毒！') }
-    else { testFeedback.value = '❌ 不对！神经毒！' }
-  } else if (testQuestions[testIdx.value].question.includes('咬伤后')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！保持制动！'; speak('制动！') }
-    else { testFeedback.value = '❌ 不对！保持冷静制动伤肢！' }
-  } else if (testQuestions[testIdx.value].question.includes('哪个是无毒')) {
-    if (i === 2) { testScore.value++; testFeedback.value = '✅ 正确！乌梢蛇是无毒蛇！' }
-    else { testFeedback.value = '❌ 不对！乌梢蛇是无毒的！' }
-  } else if (testQuestions[testIdx.value].question.includes('不包括')) {
-    if (i === 3) { testScore.value++; testFeedback.value = '✅ 正确！鸡蛋不禁！' }
-    else { testFeedback.value = '❌ 不对！不吃鸡蛋不是禁忌！' }
-  } else if (testQuestions[testIdx.value].question.includes('竹叶青')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！翠绿色！' }
-    else { testFeedback.value = '❌ 不对！竹叶青是翠绿色！' }
-  } else if (testQuestions[testIdx.value].question.includes('尾巴')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！侧扁像桨！' }
-    else { testFeedback.value = '❌ 不对！海蛇尾巴侧扁像桨！' }
-  } else if (testQuestions[testIdx.value].question.includes('哪种不是')) {
-    if (i === 1) { testScore.value++; testFeedback.value = '✅ 正确！王锦蛇(菜花蛇)无毒！' }
-    else { testFeedback.value = '❌ 不对！王锦蛇是无毒菜花蛇！' }
+  correctTestIdx.value = getCorrectIdx()
+  const q = testQuestions[testIdx.value]
+  const letter = String.fromCharCode(65 + i) // i=0→'A', i=1→'B'...
+  let isCorrect = false
+  if (q.correctAnswer) {
+    // 后端加载：直接比较 correctAnswer
+    isCorrect = letter === q.correctAnswer
+  } else {
+    // 旧硬编码 fallback
+    isCorrect = i === correctTestIdx.value
+  }
+  if (isCorrect) {
+    testScore.value++
+    testFeedback.value = '✅ 答对了！' + (q.analysis || '')
+  } else {
+    const correctLetter = q.correctAnswer || String.fromCharCode(65 + correctTestIdx.value)
+    testFeedback.value = '❌ 不对！正确答案是 ' + correctLetter + '！' + (q.analysis || '')
   }
   testAnswered.value = true
-  speak(testFeedback.value.startsWith('✅') ? '答对了！' : '答错了！')
+  speak(isCorrect ? '答对了！' : '答错了！')
 }
 
 function nextTest() {
@@ -730,9 +805,19 @@ const testDesc = computed(() => {
 .tp-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #2E7D32); transition: width 0.4s; }
 .test-q-title { font-size: 30rpx; font-weight: bold; color: #222; margin-bottom: 20rpx; }
 .test-options { display: flex; flex-direction: column; gap: 12rpx; }
-.t-option { padding: 20rpx; background: #F5F5F5; border-radius: 12rpx; font-size: 28rpx; }
-.t-option.right { background: #E8F5E9; color: #2E7D32; }
-.t-option.wrong { background: #FFEBEE; color: #C62828; }
+.t-option {
+  display: flex; align-items: center;
+  padding: 20rpx; background: #F5F5F5; border-radius: 12rpx; font-size: 28rpx;
+  border-left: 6rpx solid transparent;
+}
+.t-option.right { background: #E8F5E9; color: #2E7D32; border-left-color: #2E7D32; }
+.t-option.wrong { background: #FFEBEE; color: #C62828; border-left-color: #C62828; }
+.t-letter { width: 48rpx; height: 48rpx; line-height: 48rpx; background: #9E9E9E; color: #fff; border-radius: 50%; text-align: center; margin-right: 16rpx; font-size: 26rpx; font-weight: bold; flex-shrink: 0; }
+.t-option.right .t-letter { background: #2E7D32; }
+.t-option.wrong .t-letter { background: #C62828; }
+.t-text { flex: 1; font-size: 28rpx; color: #333; line-height: 1.5; }
+.t-option.right .t-text { color: #2E7D32; }
+.t-option.wrong .t-text { color: #C62828; }
 .test-feedback { padding: 20rpx; background: #E3F2FD; border-radius: 12rpx; margin-top: 20rpx; font-size: 26rpx; }
 
 .test-result { text-align: center; padding: 60rpx 30rpx; }

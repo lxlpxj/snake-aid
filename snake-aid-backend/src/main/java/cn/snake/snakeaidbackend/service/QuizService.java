@@ -79,8 +79,12 @@ public class QuizService {
         Collections.shuffle(all);
         int n = count != null ? count : Math.min(10, all.size());
         List<Question> picked = all.subList(0, Math.min(n, all.size()));
-        // 返回给前端时清除正确答案（防止前端直接作弊）
-        picked.forEach(q -> q.setCorrectAnswer(null));
+        // LEARN / PRACTICE 是学习场景，保留正确答案让前端即时反馈；
+        // 其他 category（正式考试场景）清除正确答案防作弊
+        boolean keepAnswer = "LEARN".equals(category) || "PRACTICE".equals(category);
+        if (!keepAnswer) {
+            picked.forEach(q -> q.setCorrectAnswer(null));
+        }
         return picked;
     }
 
@@ -263,7 +267,7 @@ public class QuizService {
         stats.put("disabled", total - enabled);
 
         List<Map<String, Object>> byCategory = new ArrayList<>();
-        String[] cats = {"FIRST_AID", "SNAKE", "HOSPITAL"};
+        String[] cats = {"FIRST_AID", "SNAKE", "HOSPITAL", "LEARN", "PRACTICE"};
         for (String c : cats) {
             Map<String, Object> m = new HashMap<>();
             m.put("category", c);
