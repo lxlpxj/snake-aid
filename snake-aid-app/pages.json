@@ -1,4 +1,4 @@
-﻿{
+{
     "pages":  [
                   {
                       "path":  "pages/index/index",
@@ -167,6 +167,14 @@
                       "style":  {
                                     "navigationBarTitleText":  "蛇伤四步学习",
                                     "navigationBarBackgroundColor":  "#FF6F00",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/video/list",
+                      "style":  {
+                                    "navigationBarTitleText":  "科普视频",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
                                     "navigationBarTextStyle":  "white"
                                 }
                   }

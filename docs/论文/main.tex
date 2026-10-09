@@ -1,0 +1,1119 @@
+% ======================================================================
+%  毒蛇咬伤自救科普系统的设计与实现 —— 论文主文件
+%  作者：（请填写）  学号：（请填写）
+% ======================================================================
+\documentclass[12pt, a4paper, oneside]{ctexrep}
+
+% ---- 页面布局 ----
+\usepackage[top=2.5cm, bottom=2cm, left=2.5cm, right=2cm]{geometry}
+\usepackage{iftex}
+\ifXeTeX
+  \setmainfont{Times New Roman}
+\fi
+
+% ---- 数学 ----
+\usepackage{amsmath, amssymb, amsfonts}
+
+% ---- 图表 ----
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{makecell}
+\usepackage{ragged2e}
+\usepackage{subfiles}
+\usepackage{tocloft}
+
+% ---- 代码与伪代码 ----
+\usepackage{listings}
+\usepackage[ruled, linesnumbered, algochapter]{algorithm2e}
+\SetAlgorithmName{算法}{算法}{算法列表}
+
+% ---- 超链接与引用 ----
+\usepackage[hidelinks]{hyperref}
+\usepackage[superscript]{cite}
+\makeatletter
+\def\@citess#1{\mbox{$\m@th^{\hbox{\OverciteFont{[#1]}}}$}}
+\makeatother
+
+% ---- 颜色 ----
+\usepackage{xcolor}
+
+% ---- TikZ 绘图 ----
+\usepackage{tikz}
+\usepackage{pgf-umlcd}
+\usepackage[underline=false,roundedcorners=true]{pgf-umlsd}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, fit}
+
+% ---- 页眉页脚 ----
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{第\chinese{chapter}章\quad #1}{}}
+\fancyhead[C]{\zihao{-5}\songti \leftmark}
+\fancyfoot[C]{\zihao{-5}\rmfamily \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyhead[C]{\zihao{-5}\songti \leftmark}
+  \fancyfoot[C]{\zihao{-5}\rmfamily \thepage}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+% ---- 章节格式 ----
+\ctexset{
+  chapter = {
+    format    = \centering\zihao{-2}\heiti,
+    name      = {第,章},
+    number    = \chinese{chapter},
+    aftername = \quad,
+    beforeskip = 20pt,
+    afterskip  = 20pt
+  },
+  section = {
+    format    = \zihao{4}\heiti,
+    aftername = \quad,
+    beforeskip = 24pt,
+    afterskip  = 6pt
+  },
+  subsection = {
+    format    = \zihao{-4}\heiti,
+    aftername = \quad,
+    beforeskip = 12pt,
+    afterskip  = 6pt
+  },
+  subsubsection = {
+    format    = \zihao{-4}\heiti,
+    aftername = \quad,
+    beforeskip = 12pt,
+    afterskip  = 6pt
+  }
+}
+
+% ---- 行距 ----
+\usepackage{setspace}
+\setstretch{1.5}
+\setlength{\emergencystretch}{2em}
+\AtBeginDocument{\zihao{-4}\songti}
+
+% ---- 目录样式 ----
+\setcounter{tocdepth}{2}
+\renewcommand{\contentsname}{目录}
+\renewcommand{\cfttoctitlefont}{\hfill\heiti\zihao{3}}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{\baselineskip}
+\renewcommand{\cftchapfont}{\heiti\zihao{5}}
+\renewcommand{\cftchappagefont}{\heiti\zihao{5}}
+\renewcommand{\cftsecfont}{\heiti\zihao{5}}
+\renewcommand{\cftsecpagefont}{\heiti\zihao{5}}
+\renewcommand{\cftsubsecfont}{\heiti\zihao{5}}
+\renewcommand{\cftsubsecpagefont}{\heiti\zihao{5}}
+\setlength{\cftbeforechapskip}{0pt}
+\setlength{\cftbeforesecskip}{0pt}
+\setlength{\cftbeforesubsecskip}{0pt}
+\renewcommand{\cftdotsep}{1}
+
+% ---- 参考文献样式 ----
+\makeatletter
+\renewenvironment{thebibliography}[1]
+     {\clearpage
+      \markboth{参考文献}{}
+      \phantomsection
+      \addcontentsline{toc}{chapter}{参考文献}
+      \vspace*{24pt}
+      \begin{center}
+        \heiti\fontsize{16pt}{16pt}\selectfont 参考文献
+      \end{center}
+      \vspace{18pt}
+      \songti\fontsize{10.5pt}{16pt}\selectfont
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \itemsep 0pt
+            \parsep 0pt
+            \topsep 0pt
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy\clubpenalty4000\widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\makeatother
+
+% ---- 表格与占位图辅助命令 ----
+\renewcommand\tabularxcolumn[1]{m{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{C}{>{\Centering\arraybackslash}X}
+\newcommand{\screenshotplaceholder}[3][0.88\textwidth]{%
+  \begin{figure}[H]
+    \centering
+    \fbox{%
+      \begin{minipage}[c][5.2cm][c]{#1}
+        \centering
+        {\zihao{-4}\heiti 截图占位}\par
+        \vspace{0.6em}
+        {\zihao{5}#2}\par
+        \vspace{0.5em}
+        {\zihao{-5}#3}
+      \end{minipage}}
+    \caption{#2}
+  \end{figure}}
+
+% ==============================================================
+\begin{document}
+
+% ======================== 封面 ========================
+
+% ======================== 摘要 ========================
+\pagenumbering{Roman}
+
+\clearpage
+\markboth{摘要}{}
+\thispagestyle{plain}
+\phantomsection
+\addcontentsline{toc}{chapter}{摘要}
+\vspace*{24pt}
+\begin{center}
+  {\heiti\bfseries\fontsize{16pt}{16pt}\selectfont 摘\quad 要}
+\end{center}
+\vspace{18pt}
+
+{\songti\setstretch{1}\fontsize{12pt}{20pt}\selectfont\parindent=0pt\parskip=0pt
+\noindent\hspace*{2em}毒蛇咬伤是我国南方和西南山区常见的急性伤害，救治时间窗短，现场正确的自救处置与尽快到达具备抗蛇毒血清的医疗机构，直接影响伤者预后。然而多数公众对本地毒蛇种类、咬伤后处置步骤和血清储备医院位置缺乏准确认知，民间偏方与错误操作仍较普遍。针对上述实际问题，本文设计并实现了一套面向公众与医疗顾问的毒蛇咬伤自救科普系统。\par
+\noindent\hspace*{2em}系统采用前后端分离架构。后端基于 Spring Boot 3.3.5 与 MyBatis-Plus 3.5.7，结合 Spring Security、JWT、Redis 与 Redisson 实现鉴权、令牌黑名单与分布式锁，使用 MySQL 持久化蛇种、医院、血清、急救指南、科普文章、咨询工单与积分等数据；移动端基于 uni-app 与 Vue 3，提供蛇种图库、AI 图片识别、紧急自救、附近医院导航、答题测验、积分等级、人工咨询与 AI 助手等页面；后台管理端基于 Vue 3 与 Element Plus，提供内容管理、医疗审核、用户管理、操作日志与数据看板。系统按系统管理员、内容管理员与医疗顾问三类角色划分权限，急救与蛇种内容须经医疗顾问审核后方可发布，已发布内容删除走下线流程以保证历史可追溯。
+}
+\par
+{\songti\setstretch{1}\fontsize{12pt}{20pt}\selectfont\parindent=0pt\parskip=0pt
+\noindent\hspace*{2em}系统测试表明，在模拟蛇伤场景下，AI 识别可对常见毒蛇给出候选结果，紧急模式全程固定显示免责声明，附近医院定位与血清查询响应稳定，工单流转与积分发放符合设计预期。系统具有良好工程可用性，可为毒蛇咬伤现场自救与科普教育提供基础平台。
+}
+
+\vspace{1em}
+\noindent{\songti\zihao{-4}\bfseries 关键词：}{\songti\zihao{-4}毒蛇咬伤；自救科普；AI 蛇种识别；抗蛇毒血清；咨询工单}
+
+\clearpage
+\markboth{ABSTRACT}{}
+\thispagestyle{plain}
+\phantomsection
+\addcontentsline{toc}{chapter}{ABSTRACT}
+\vspace*{24pt}
+\begin{center}
+  {\rmfamily\bfseries\fontsize{16pt}{16pt}\selectfont ABSTRACT}
+\end{center}
+\vspace{18pt}
+
+{\rmfamily\setstretch{1}\fontsize{12pt}{20pt}\selectfont\parindent=0pt\parskip=0pt
+\noindent\hspace*{2em}Snakebite is a common acute injury in southern and southwestern mountainous areas of China. The treatment time window is short, and correct on-site first aid together with rapid transfer to a hospital with antivenom directly affects prognosis. However, most of the public lacks accurate knowledge of local venomous snake species, post-bite procedures, and the location of hospitals stocking antivenom, while folk remedies and wrong operations remain common. To address these problems, this thesis designs and implements a snakebite self-aid popularization system for the public and medical advisors.\par
+\noindent\hspace*{2em}The system adopts a front-end and back-end separation architecture. The back-end is built on Spring Boot 3.3.5 and MyBatis-Plus 3.5.7, integrated with Spring Security, JWT, Redis, and Redisson for authentication, token blacklist, and distributed locking, and uses MySQL to persist data such as snake species, hospitals, serum stock, first-aid guides, popularization articles, consultation tickets, and points. The mobile client is based on uni-app and Vue 3, providing pages for snake gallery, AI image recognition, emergency self-aid, nearby hospital navigation, quiz, points and levels, manual consultation, and an AI assistant. The admin portal is based on Vue 3 and Element Plus, offering content management, medical review, user management, operation logs, and a dashboard. The system divides permissions among three roles: system administrator, content administrator, and medical advisor. First-aid and snake-species content must be reviewed by a medical advisor before release, and published content is taken offline rather than physically deleted to preserve traceability.
+}
+\par
+{\rmfamily\setstretch{1}\fontsize{12pt}{20pt}\selectfont\parindent=0pt\parskip=0pt
+\noindent\hspace*{2em}Tests show that, in simulated snakebite scenarios, AI recognition returns candidate results for common venomous snakes, emergency mode consistently displays a disclaimer, nearby hospital navigation and serum queries respond stably, and ticket flow and points awarding meet design expectations. The system has good engineering usability and can serve as a foundation for on-site self-aid and public education for snakebites.
+}
+
+\vspace{1em}
+\noindent{\rmfamily\zihao{-4}\bfseries Keywords: }{\rmfamily\zihao{-4}snakebite; self-aid popularization; AI snake recognition; antivenom; consultation ticket}
+
+% ======================== 目录 ========================
+\clearpage
+\markboth{目录}{}
+{\setstretch{1.0}
+\tableofcontents
+}
+\clearpage
+\markboth{}{}
+
+% ======================== 正文 ========================
+\pagenumbering{arabic}
+
+% ---- 第一章 引言 ----
+\chapter{引言}
+
+\section{研究背景}
+毒蛇咬伤是我国长江以南及西南山区常见的急性伤害。我国境内分布的蛇类超过 200 种，其中毒蛇约 50 余种，危害较大的有银环蛇、眼镜蛇、五步蛇、竹叶青等\cite{ref1}。毒蛇咬伤后毒素进入人体速度快，神经毒类可在 1--4 小时内引发呼吸衰竭，血液毒类会造成伤口剧痛、出血不止和组织坏死，严重者危及生命\cite{ref2}。
+
+在救治过程中，现场处置是否正确、能否尽快到达具备对应抗蛇毒血清的医疗机构，直接影响预后。然而公众对毒蛇种类、咬伤后正确处置步骤和血清储备医院位置的认知普遍不足，民间流传的“用嘴吸伤口”“刀切十字”“绑止血带”等做法不仅无效，反而会加重组织损伤和毒素扩散\cite{ref3}。同时，我国抗蛇毒血清并非所有医院均常备，伤者盲目就近就医可能因无血清而错过最佳治疗窗口。
+
+随着移动互联网、AI 视觉识别与位置服务的发展，将蛇种识别、急救指南、医院导航、人工咨询和科普教育整合到同一应用中成为可能。在技术层面，Spring Boot 微服务框架、MyBatis-Plus 持久层、Redis 分布式缓存、JWT 鉴权和 Leaflet 在线地图等技术为系统落地提供了工程基础\cite{ref4,ref7}；在内容层面，多模态大模型与视觉识别接口为图片蛇种识别提供了可用方案\cite{ref5}。
+
+基于上述背景，开发一套面向公众与医疗顾问的毒蛇咬伤自救科普系统具有明确的工程价值。系统不仅要完成科普内容展示，还要把蛇种识别、紧急自救、医院导航、人工咨询和积分激励串联起来，形成可持续运行的业务流程。
+
+\section{课题研究现状与分析}
+从现有研究与产品看，国内外在蛇伤救治与科普方面已经积累了一定成果。在毒蛇咬伤流行病学方面，相关研究对我国部分地区毒蛇种类、咬伤季节分布和救治情况进行了统计，指出基层公众对毒蛇识别和自救能力不足是预后较差的重要原因\cite{ref1}。在急救处置方面，临床指南明确了伤肢制动、伤口冲洗、保持呼吸道通畅和尽快使用抗蛇毒血清等关键步骤，并强调禁止切开创口、用嘴吸吮和绑止血带等错误操作\cite{ref2,ref3}。
+
+在信息化产品方面，部分应用提供了蛇种图鉴和急救知识查询功能，但普遍存在以下不足：第一，多数产品以静态图文为主，缺少图片 AI 识别能力，用户难以根据现场照片快速判断蛇种；第二，医院与血清库存信息分散，缺少按地理位置就近查询和血清库存查询的联动；第三，内容缺少医疗审核机制，错误科普信息可能误导伤者；第四，缺少人工咨询与积分激励，用户使用黏性和紧急情况下的专业指导能力不足。
+
+结合本项目实践可以看出，毒蛇咬伤自救系统不仅是内容展示问题，更是系统工程问题。系统要真正可用，需要同时解决多角色协同、内容审核、AI 识别降级、医院与血清联动、紧急模式免责、工单流转和积分防刷等主要问题。本文的研究工作即围绕这些问题展开。
+
+\section{研究目的}
+本文的研究目的在于结合实际项目开发，设计并实现一套面向公众与医疗顾问的毒蛇咬伤自救科普系统，使其能够在真实业务流程中完成科普教育、蛇种识别、紧急自救和人工咨询的综合任务。具体目标包括：
+
+\begin{enumerate}
+  \item 建立适合蛇伤科普场景的数据模型与权限模型，实现系统管理员、内容管理员与医疗顾问三类后台角色的分工协作，并支持 APP 端普通用户的注册与登录；
+  \item 完成蛇种图库、急救指南、医院与血清库存、科普文章、答题测验与积分等级等主要模块设计，使系统能够支撑公众科普学习与紧急情况下的查询；
+  \item 实现基于 AI 视觉接口的蛇种图片识别，并在识别失败时降级为特征描述检索，保证现场可用性；
+  \item 基于高德地图与 Leaflet 实现附近医院定位与导航，并联动抗蛇毒血清库存查询；
+  \item 构建咨询工单与 AI 助手双通道，实现从公众提问到医疗顾问处理的完整流程，并通过积分系统激励持续学习。
+\end{enumerate}
+
+\section{研究意义}
+本文的研究意义主要体现在应用与方法两个层面。
+
+应用方面，系统把蛇种识别、急救指南、医院导航、人工咨询和科普教育集中到同一平台，减少了公众面对蛇伤时的信息空白。紧急模式全程固定显示免责声明，避免用户误将系统当作替代就医的依据；附近医院与血清库存联动查询帮助伤者更快找到具备抗蛇毒血清的医疗机构。
+
+工程方面，本文把内容审核、AI 识别降级、地图代理、工单流转和积分防刷组合成一套实用框架，并按业务层次划分数据与服务关系。这样的结构不仅适合当前蛇伤科普场景，也为其他急救科普类系统提供借鉴。
+
+在方法上，本文不采用单一识别路径，而是通过 AI 视觉接口与特征描述检索相结合建立识别逻辑，并辅以医疗顾问审核机制保证内容准确性。相比纯模型或纯图文方案，这种做法更便于专业人员理解与调整，更符合现场软件的可维护性要求。
+
+\section{本文主要内容}
+本文围绕毒蛇咬伤自救科普系统的设计与实现展开，共分为七章。
+
+第一章为引言，介绍课题研究背景、国内外研究现状、研究目的与意义。第二章为系统需求分析，定义系统用户类型，梳理功能与非功能需求。第三章介绍系统相关算法与技术，重点分析 AI 蛇种识别流程、特征检索匹配与积分防刷逻辑。第四章为系统详细设计，从系统架构、数据库模型、主要模块和通信机制等方面展开。第五章为系统实现，说明技术选型以及主要页面与功能模块的实现情况。第六章给出系统测试内容，对功能流程、主要模块与运行效果进行验证。第七章总结全文工作，并对系统后续优化方向进行展望。
+
+% ---- 第二章 需求分析 ----
+\chapter{毒蛇咬伤自救科普系统需求分析}
+
+\section{系统用户类型定义}
+结合当前系统实现情况，本文将系统用户划分为两大类：APP 端普通用户与后台管理用户。后台管理用户进一步分为系统管理员、内容管理员和医疗顾问三类。
+
+\begin{enumerate}
+  \item APP 端普通用户：APP 端用户以手机号注册登录，对应实际场景中的伤者本人、同行者和学习人群。他们可以浏览蛇种图库、使用 AI 识别、查看急救指南、查询附近医院、参与答题、向医疗顾问发起咨询工单、与 AI 助手对话，并通过积分与等级体系激励持续学习。
+  \item 系统管理员：负责整个平台的账户管理、系统统计与操作日志查看。受权限约束，系统管理员仅可访问用户管理、操作日志与数据看板相关菜单，不参与业务内容审核。
+  \item 内容管理员：负责蛇种库、医院与血清库存、科普文章等业务内容的增删改。内容管理员提交的内容须由医疗顾问审核后方可发布，已发布内容删除走下线流程。
+  \item 医疗顾问：负责审核蛇种与文章内容的医学准确性，维护急救指南，并处理 APP 用户提交的咨询工单。审核接口仅对医疗顾问角色开放。
+\end{enumerate}
+
+\section{功能需求分析}
+\subsection{功能概述}
+本系统的功能按现场实际流程整理：先保证科普内容看得见，再保证紧急情况下用得上，最后让公众与医疗顾问能够协同。结合项目调研结果，系统功能被划分为六个模块：用户与认证、蛇种识别与科普、紧急自救、医院与血清、咨询与助手、系统管理。下面通过功能模块概览图说明各部分关系。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.94\textwidth}{!}{%
+\begin{tikzpicture}[node distance=1.1cm, every node/.style={font=\small}]
+  \node[draw, rounded corners, minimum width=2.4cm, minimum height=0.9cm] (core) {毒蛇咬伤自救科普系统};
+  \node[draw, rounded corners, above left=1.3cm and 2.6cm of core, minimum width=2.6cm] (u) {用户与认证管理};
+  \node[draw, rounded corners, left=3.2cm of core, minimum width=2.6cm] (d) {蛇种识别与科普};
+  \node[draw, rounded corners, below left=1.3cm and 2.6cm of core, minimum width=2.6cm] (h) {紧急自救指南};
+  \node[draw, rounded corners, above right=1.3cm and 2.6cm of core, minimum width=2.6cm] (w) {医院与血清};
+  \node[draw, rounded corners, right=3.2cm of core, minimum width=2.6cm] (a) {咨询与 AI 助手};
+  \node[draw, rounded corners, below right=1.3cm and 2.6cm of core, minimum width=2.6cm] (r) {系统管理与审核};
+  \draw[-{Stealth}] (core) -- (u);
+  \draw[-{Stealth}] (core) -- (d);
+  \draw[-{Stealth}] (core) -- (h);
+  \draw[-{Stealth}] (core) -- (w);
+  \draw[-{Stealth}] (core) -- (a);
+  \draw[-{Stealth}] (core) -- (r);
+\end{tikzpicture}
+}
+\caption{毒蛇咬伤自救科普系统功能模块概览}
+\label{fig:module-overview}
+\end{figure}
+
+\subsection{用户管理与认证需求}
+用户与认证模块面向 APP 端普通用户和后台管理用户。APP 端用户以手机号注册登录，登录成功后前端存储 appUser 对象和 JWT token，后续请求通过全局拦截器自动携带 Authorization 头。后台管理用户以账号密码登录，密码采用 BCrypt 加密存储，登录后由 Spring Security 按 URL 路径与角色进行权限控制。考虑到现场使用习惯，APP 端未登录时也可浏览蛇种、文章和医院等公开内容，但提交咨询工单等操作时会触发登录提示。
+
+\subsection{蛇种识别与科普需求}
+蛇种识别与科普是系统的核心模块。蛇种图库需要展示蛇种中文名、拉丁学名、是否有毒、毒液类型、头型、花纹、颜色、尾部特征、外观描述、分布地区、咬伤后特异性症状和特异性处理要点。APP 端支持按有毒/无毒、省份和关键词筛选蛇种，并支持上传图片由 AI 进行识别，识别失败时可降级为按特征描述检索。科普文章模块支持图文展示和按状态筛选。所有蛇种与文章内容须经医疗顾问审核后方可发布。
+
+\subsection{紧急自救需求}
+紧急自救模块面向蛇伤发生后的现场处置场景。系统需要提供通用自救指南和按毒液类型（神经毒、血液毒）分类的特异性指南，并支持按蛇种获取对应的急救要点。紧急模式全程固定显示免责声明，提醒用户系统内容不能替代专业医疗救治，且该免责声明不可被运营关闭。紧急模式触发时会记录访问统计，便于后续分析高发区域。
+
+\subsection{医院与血清需求}
+医院与血清模块服务于伤者尽快找到具备抗蛇毒血清的医疗机构。系统需要维护医院名称、地址、省市、经纬度、急救电话、医院等级和是否常备抗蛇毒血清等信息，并维护各医院不同类型血清的库存数量。APP 端支持按地理位置查询附近医院，并在地图上展示医院位置和血清库存，地图集成采用 Leaflet 与高德中文瓦片，地理编码与逆地理编码通过后端代理高德 Web API 完成。
+
+\subsection{咨询与助手需求}
+系统需要支持 APP 用户与医疗顾问之间的咨询工单，工单默认指派给医疗顾问角色用户，状态流转为 PENDING（待接单）$\to$ IN\_PROGRESS（处理中）$\to$ RESOLVED（已解决）。工单内支持用户与顾问的多轮对话消息，并记录已读状态。同时系统提供 AI 助手对话通道，由后端调用大模型接口回答蛇伤相关问题，对话历史可保存供用户回看。未登录用户访问咨询接口时，后端返回 HTTP 200 但响应体 code 为 401，前端据此弹出登录提示。
+
+\subsection{系统管理需求}
+系统管理模块承担后台治理职责，包括后台用户管理、内容审核、操作日志和数据看板。内容管理员维护蛇种、医院血清与文章等业务内容，医疗顾问审核后内容方可发布，已发布内容删除走下线流程。系统管理员负责后台账户管理、操作日志查看与数据统计。操作日志通过 AOP 切面自动记录，分为 SYSTEM、CONTENT、AUDIT、LOGIN 等类别，便于追溯。数据看板提供蛇种数量、医院数量、文章数量、用户数量与紧急模式触发次数等汇总指标。
+
+\section{性能需求分析}
+\subsection{响应时间需求}
+登录、蛇种查询、文章浏览、医院检索等高频操作需要保持稳定响应。普通接口控制在秒级返回，地图地理编码与 AI 识别等外部依赖接口设置超时时间，避免长时间阻塞。对内容保存、审核和工单回复等操作，页面必须给出明确状态反馈，防止用户重复提交。
+
+\subsection{可靠性需求}
+毒蛇咬伤自救科普系统属于公众科普与急救辅助系统，内容准确性直接影响用户决策，因此需要具备较高可靠性。系统应支持长时间连续运行，接口需要有清晰的异常处理和错误反馈。AI 识别、地图代理、工单流转、积分发放和权限校验等模块出现局部异常时，不应让整体流程中断。紧急模式内容必须可靠展示，且免责声明不可缺失。
+
+\subsection{界面设计需求}
+APP 端界面以移动端使用效率为优先，要求信息层级清楚、入口直观。蛇种详情、急救步骤和医院导航页面需要在紧急情况下快速定位关键信息。对是否有毒、审核状态、血清库存和工单状态等信息，需要通过颜色和标签明确区分，减少误读。后台管理端界面采用 Element Plus 风格，保证表格、表单和审核操作的统一性。
+
+\subsection{可扩展性需求}
+系统采用前后端分离与模块化设计，目的是给后续扩展留空间。后续若新增蛇种字段、急救指南类型、血清类型或通知渠道，不应大幅改动现有结构。数据库侧通过蛇种扩展字段、内容版本表和工单分类承载扩展需求，支持继续接入新的 AI provider 与地图服务。
+
+\subsection{安全性需求}
+系统按角色做权限隔离，不同后台用户只能访问其授权范围内的数据和操作。APP 端接口虽默认放开，但涉及咨询、积分和个人资料的操作仍需 JWT 鉴权。JWT token 支持黑名单机制，登出后令牌立即失效。密码采用 BCrypt 加密，敏感操作通过 AOP 切面记录操作日志，便于事后追溯。急救与蛇种内容必须经医疗顾问审核，未审核内容对公众不可见。
+
+% ---- 第三章 相关算法与技术 ----
+\chapter{系统相关算法与技术}
+
+\section{AI 蛇种识别流程}
+系统在 APP 端提供图片蛇种识别功能。用户上传蛇的照片后，后端将图片转为 Base64 编码，并按照配置调用不同的 AI 视觉接口（如 DeepSeek 或豆包视觉 API）进行识别。AI 识别流程的核心步骤如下：
+
+\begin{enumerate}
+  \item 接收上传文件，校验文件大小与类型，避免超大文件占用带宽；
+  \item 将图片转换为 Base64 字符串，构造符合 AI provider 要求的请求体；
+  \item 调用 AI 视觉接口，设置超时时间，解析返回结果中的蛇种名称与置信度；
+  \item 将 AI 返回的蛇种名称与数据库蛇种表进行匹配，命中则返回蛇种详情，未命中则进入降级流程。
+\end{enumerate}
+
+为提高现场可用性，系统在 AI 识别失败或返回结果无法匹配数据库时，降级为按用户描述的特征（头型、花纹、颜色、尾部特征等）进行特征检索，从数据库中筛选候选蛇种。这种“AI 优先 + 特征降级”的双路径设计，避免了完全依赖外部 AI 接口导致的单点失效问题。
+
+\section{特征检索匹配算法}
+当 AI 识别不可用时，系统基于用户输入或描述的特征进行数据库检索。特征检索的核心是将用户提供的特征描述与蛇种表中的字段进行匹配。具体做法是：将头型、花纹、颜色、尾部特征等字段拆分为关键词，对每个关键词在数据库对应字段执行 LIKE 模糊匹配，并按命中字段数量排序，命中最多的蛇种排在候选列表前列。
+
+此外，蛇种筛选接口接收 isVenomous 参数进行有毒/无毒数据过滤，并接收 province 参数，通过 resolveDistributionKeywords() 方法将省名映射为大区关键词进行 OR LIKE 匹配，以适配蛇种分布地区字段的自然语言描述形式。例如“广东省”会被映射为“华南”“广东”等关键词，提升检索召回率。
+
+\section{积分防刷逻辑}
+积分系统通过 UserPointsLog 表记录用户每次积分变动，并通过 refId（如 snake\_id、article\_id）关联具体业务对象。为防止刷分行为，系统对同一 refId 的同类事件当日仅能触发一次积分。积分发放核心逻辑见算法~\ref{alg:points}。
+
+\begin{algorithm}[H]
+\caption{积分发放核心逻辑}
+\label{alg:points}
+\KwIn{用户ID $uid$，事件类型 $event$，关联对象ID $refId$}
+\KwOut{是否发放成功 $ok$，本次积分 $pts$}
+\If{$event$ 不在规则表 $R$ 中}{
+  \Return $(false, 0)$\;
+}
+$rule \leftarrow R[event]$\;
+\If{$event == REGISTER$ 且 用户当日已注册奖励}{
+  \Return $(false, 0)$\;
+}
+\If{$refId \neq null$ 且 当日已对 $refId$ 触发过 $event$}{
+  \Return $(false, 0)$\;
+}
+\If{今日该 $event$ 次数 $\geq rule.dailyLimit$}{
+  \Return $(false, 0)$\;
+}
+$pts \leftarrow rule.basePoints$\;
+更新 $app\_user$ 表积分与等级\;
+插入 $user\_points\_log$ 记录\;
+\Return $(true, pts)$\;
+\end{algorithm}
+
+该机制保证了注册奖励只发一次、对同一蛇种或文章的查看当日只计一次积分，从而在激励学习的同时防止恶意刷分。
+
+\section{地图与地理编码技术}
+系统医院导航采用 Leaflet 作为前端地图库，瓦片源使用高德中文瓦片，无需 API Key。地理编码（地址转经纬度）和逆地理编码（经纬度转地址）通过后端代理调用高德 Web API 完成，避免在前端暴露 API Key。后端代理接口对地址参数做合法性校验，并设置超时时间，防止外部服务异常影响主流程。
+
+附近医院查询基于用户当前经纬度，通过 Haversine 公式计算用户与各医院的球面距离并排序，返回距离最近的若干家医院及其血清库存信息。Haversine 公式如下：
+
+\begin{equation}
+d = 2R \cdot \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta\varphi}{2}\right) + \cos\varphi_1 \cos\varphi_2 \sin^2\left(\frac{\Delta\lambda}{2}\right)}\right)
+\end{equation}
+
+其中 $R$ 为地球半径，$\varphi_1,\varphi_2$ 为两点纬度，$\Delta\varphi,\Delta\lambda$ 为纬度差与经度差。
+
+% ---- 第四章 系统详细设计 ----
+\chapter{毒蛇咬伤自救科普系统详细设计}
+
+\section{系统总体架构设计}
+毒蛇咬伤自救科普系统采用前后端分离架构，整体分为移动端、后台管理端与后端服务三部分。移动端基于 uni-app 与 Vue 3，承担蛇种图库、AI 识别、紧急自救、医院导航、答题测验、咨询工单与 AI 助手等页面；后台管理端基于 Vue 3 与 Element Plus，承担内容管理、医疗审核、用户管理、操作日志与数据看板等页面；后端基于 Spring Boot 3.3.5 与 MyBatis-Plus 3.5.7，负责鉴权、业务处理、AI 调用、地图代理、数据持久化和工单流转；数据库采用 MySQL，用于存储后台用户、APP 用户、蛇种、医院、血清、急救指南、文章、工单、积分等主要数据；Redis 用于 JWT 令牌黑名单与分布式锁。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.92\textwidth}{!}{%
+\begin{tikzpicture}[node distance=1.4cm, every node/.style={font=\small}]
+  \node[draw, rounded corners, minimum width=3.2cm, minimum height=1.0cm] (app) {uni-app 移动端};
+  \node[draw, rounded corners, right=1.6cm of app, minimum width=3.2cm, minimum height=1.0cm] (admin) {Vue 3 后台管理端};
+  \node[draw, rounded corners, below=of app, minimum width=3.2cm, minimum height=1.0cm] (gateway) {REST API / JWT};
+  \node[draw, rounded corners, below=of admin, minimum width=3.2cm, minimum height=1.0cm] (gateway2) {Spring Security};
+  \node[draw, rounded corners, below left=1.4cm and 1.8cm of gateway, minimum width=3.4cm, minimum height=1.0cm] (service1) {蛇种/文章/医院服务};
+  \node[draw, rounded corners, below=1.4cm of gateway, minimum width=3.4cm, minimum height=1.0cm] (service2) {工单/积分/答题服务};
+  \node[draw, rounded corners, below right=1.4cm and 1.8cm of gateway, minimum width=3.4cm, minimum height=1.0cm] (service3) {AI/地图/日志服务};
+  \node[draw, rounded corners, below=1.4cm of service2, minimum width=3.6cm, minimum height=1.0cm] (db) {MySQL + Redis};
+  \draw[-{Stealth}] (app) -- node[right]{HTTP} (gateway);
+  \draw[-{Stealth}] (admin) -- node[right]{HTTP} (gateway2);
+  \draw[-{Stealth}] (gateway) -- (service1);
+  \draw[-{Stealth}] (gateway) -- (service2);
+  \draw[-{Stealth}] (gateway) -- (service3);
+  \draw[-{Stealth}] (gateway2) -- (service1);
+  \draw[-{Stealth}] (service1) -- (db);
+  \draw[-{Stealth}] (service2) -- (db);
+  \draw[-{Stealth}] (service3) -- (db);
+\end{tikzpicture}
+}
+\caption{系统总体架构图}
+\label{fig:architecture}
+\end{figure}
+
+系统总体设计有四个特点：一是 APP 端页面按“科普、紧急、医院、我的”四条主线组织，贴合公众使用习惯；二是后台按角色权限分层，便于内容审核与运营；三是 AI 识别与特征检索相结合，保证现场可用性；四是 JWT 令牌黑名单与 Redisson 分布式锁保证鉴权与并发安全。
+
+\section{数据库设计}
+\subsection{数据库总体关系}
+系统数据库围绕后台用户、APP 用户、蛇种、蛇种图片、医院、血清库存、急救指南、急救步骤、科普文章、地区字典、访问统计、操作日志、内容版本、积分流水、等级配置、咨询工单、工单消息、AI 对话历史和答题记录展开。后台用户与操作日志是一对多关系；蛇种与蛇种图片是一对多关系；医院与血清库存是一对多关系；急救指南与急救步骤是一对多关系；APP 用户与积分流水、咨询工单、答题记录和 AI 对话历史均为一对多关系；咨询工单与工单消息是一对多关系。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.3cm, every node/.style={font=\small}]
+  \node[draw, rectangle, minimum width=2.2cm] (sysuser) {sys\_user};
+  \node[draw, rectangle, right=2.4cm of sysuser, minimum width=2.2cm] (log) {operation\_log};
+  \node[draw, rectangle, below=1.4cm of sysuser, minimum width=2.2cm] (appuser) {app\_user};
+  \node[draw, rectangle, right=2.4cm of appuser, minimum width=2.2cm] (points) {user\_points\_log};
+  \node[draw, rectangle, right=2.4cm of points, minimum width=2.6cm] (ticket) {consultation\_ticket};
+  \node[draw, rectangle, below=1.4cm of ticket, minimum width=2.6cm] (msg) {consultation\_message};
+  \node[draw, rectangle, below=1.4cm of appuser, minimum width=2.2cm] (snake) {snake\_species};
+  \node[draw, rectangle, left=2.4cm of snake, minimum width=2.2cm] (img) {snake\_image};
+  \node[draw, rectangle, right=2.4cm of snake, minimum width=2.2cm] (hospital) {hospital};
+  \node[draw, rectangle, right=2.4cm of hospital, minimum width=2.2cm] (serum) {serum\_stock};
+
+  \draw[-{Stealth}] (sysuser) -- node[above]{1:N} (log);
+  \draw[-{Stealth}] (appuser) -- node[above]{1:N} (points);
+  \draw[-{Stealth}] (appuser) -- node[above]{1:N} (ticket);
+  \draw[-{Stealth}] (ticket) -- node[right]{1:N} (msg);
+  \draw[-{Stealth}] (snake) -- node[above]{1:N} (img);
+  \draw[-{Stealth}] (hospital) -- node[above]{1:N} (serum);
+\end{tikzpicture}
+\caption{系统核心实体关系示意图}
+\label{fig:er}
+\end{figure}
+
+\subsection{核心实体类图}
+为了更清晰地反映系统的领域模型与后端实体关系，这里给出了核心实体类图。图中展示了用户、蛇种、医院、急救指南、工单与积分的主要类及其关联关系。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.92\textwidth}{!}{%
+\begin{tikzpicture}[node distance=1.6cm, every node/.style={font=\small},
+  class/.style={draw, thick, rectangle, rounded corners=1mm, minimum width=3.4cm, inner sep=4pt, text width=3.4cm},
+  arrow/.style={-{Stealth[length=3mm,width=2mm]}, thick}
+]
+  \node[class] (SysUser) {
+    \textbf{SysUser}\\
+    \footnotesize - id: Long\\
+    - username: String\\
+    - password: String\\
+    - roleType: String\\
+    - status: Integer
+  };
+  \node[class, right=2.8cm of SysUser] (AppUser) {
+    \textbf{AppUser}\\
+    \footnotesize - id: Long\\
+    - phone: String\\
+    - nickname: String\\
+    - points: Integer\\
+    - level: Integer
+  };
+  \node[class, below=2.2cm of SysUser] (SnakeSpecies) {
+    \textbf{SnakeSpecies}\\
+    \footnotesize - id: Long\\
+    - name: String\\
+    - isPoisonous: Integer\\
+    - venomType: String\\
+    - auditStatus: Integer
+  };
+  \node[class, right=4cm of SnakeSpecies] (Hospital) {
+    \textbf{Hospital}\\
+    \footnotesize - id: Long\\
+    - name: String\\
+    - longitude: BigDecimal\\
+    - latitude: BigDecimal\\
+    - hasSerum: Integer
+  };
+  \node[class, right=4cm of Hospital, minimum width=4cm, text width=4cm] (SerumStock) {
+    \textbf{SerumStock}\\
+    \footnotesize - id: Long\\
+    - hospitalId: Long\\
+    - serumType: String\\
+    - quantity: Integer
+  };
+  \node[class, below=3cm of SerumStock, minimum width=4cm, text width=4cm] (ConsultTicket) {
+    \textbf{ConsultationTicket}\\
+    \footnotesize - id: Long\\
+    - userId: Long\\
+    - status: String\\
+    - assigneeId: Long
+  };
+  \node[class, above left=1cm and 1cm of AppUser] (PointsLog) {
+    \textbf{UserPointsLog}\\
+    \footnotesize - id: Long\\
+    - userId: Long\\
+    - eventType: String\\
+    - points: Integer\\
+    - refId: Long
+  };
+  \node[draw, rectangle, right=2.4cm of SysUser, minimum width=2.2cm] (log) {operation\_log};
+  \node[class, below=3cm of SysUser] (FirstAidGuide) {
+    \textbf{FirstAidGuide}\\
+    \footnotesize - id: Long\\
+    - title: String\\
+    - snakeType: String\\
+    - auditStatus: Integer
+  };
+
+  \draw[arrow] (SysUser) -- node[above]{1:N 操作} (log);
+  \draw[arrow] (AppUser) -- node[above]{1:N} (PointsLog);
+  \draw[arrow] (AppUser) -- node[above]{1:N} (ConsultTicket);
+  \draw[arrow] (Hospital) -- node[above]{1:N} (SerumStock);
+  \draw[arrow] (FirstAidGuide) -- node[below]{1:N 步骤} (SnakeSpecies);
+\end{tikzpicture}
+}
+\caption{系统核心实体类图}
+\label{fig:core-entity-class}
+\end{figure}
+
+\subsection{核心数据表设计}
+表~\ref{tab:sysuser-table} 给出了后台用户表的主要字段。该表承担后台登录鉴权与角色权限控制等职责。
+
+\begin{table}[H]
+\centering
+\caption{sys\_user 表关键字段设计}
+\label{tab:sysuser-table}
+\small
+\begin{tabularx}{0.96\textwidth}{C C Y Y}
+\toprule
+字段名 & 类型 & 说明 & 备注 \\
+\midrule
+id & bigint & 主键 & 自增 \\
+username & varchar & 登录账号 & 唯一 \\
+password & varchar & 密码摘要 & BCrypt 存储 \\
+real\_name & varchar & 真实姓名 & 可为空 \\
+role\_type & varchar & 角色类型 & SYS\_ADMIN/CONTENT\_ADMIN/MEDICAL\_ADVISOR \\
+phone & varchar & 手机号 & 可为空 \\
+status & int & 账号状态 & 0-禁用 1-正常 \\
+is\_deleted & int & 逻辑删除 & 0-正常 1-删除 \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{table}
+
+蛇种表是系统的核心业务表之一，记录蛇种基础信息与审核状态；医院表记录医院位置与血清储备，为附近医院查询提供数据基础。表~\ref{tab:snake-hospital-table} 给出了两者的主要字段。
+
+\begin{table}[H]
+\centering
+\caption{snake\_species 与 hospital 表关键字段}
+\label{tab:snake-hospital-table}
+\small
+\begin{tabularx}{0.96\textwidth}{C C Y Y}
+\toprule
+表名 & 字段名 & 说明 & 备注 \\
+\midrule
+snake\_species & id & 蛇种主键 & 自增 \\
+snake\_species & name & 中文名称 & 页面主显示字段 \\
+snake\_species & scientific\_name & 拉丁学名 & 学名识别 \\
+snake\_species & is\_poisonous & 是否有毒 & 0-无毒 1-有毒 \\
+snake\_species & venom\_type & 毒液类型 & 神经毒/血液毒/混合毒 \\
+snake\_species & audit\_status & 审核状态 & 0-草稿 1-待审 2-已发布 3-已驳回 \\
+hospital & id & 医院主键 & 自增 \\
+hospital & name & 医院名称 & 页面主显示字段 \\
+hospital & longitude & 经度 & 高德返回 \\
+hospital & latitude & 纬度 & 高德返回 \\
+hospital & has\_serum & 是否有血清 & 0-无 1-有 \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{table}
+
+咨询工单与工单消息共同构成人工咨询流程的数据基础。工单表记录咨询标题、分类、状态和指派顾问，消息表记录用户与顾问的多轮对话内容。积分流水表与等级配置表用于激励用户持续学习。
+
+\section{系统核心模块设计}
+\subsection{用户与权限模块设计}
+用户与权限模块主要包括 APP 端注册登录、后台登录、JWT 鉴权和角色权限控制。APP 端用户以手机号注册，登录成功后后端签发 JWT token，前端将 appUser 对象与 token 一并存入本地存储；后续请求通过全局拦截器自动携带 Authorization 头。后台用户以账号密码登录，密码采用 BCrypt 加密，登录后由 Spring Security 按 URL 路径与角色进行权限控制。JWT 支持黑名单机制，登出后令牌写入 Redis 黑名单并立即失效。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.88\textwidth}{!}{%
+\begin{sequencediagram}
+  \newinst{u}{APP用户}
+  \newinst[1.2]{app}{登录页}
+  \newinst[1.6]{ctl}{AuthAppController}
+  \newinst[1.6]{svc}{AuthService}
+  \newinst[1.6]{jwt}{JwtUtil}
+  \newinst[1.6]{db}{MySQL}
+  \begin{call}{u}{手机号+验证码}{app}{返回 token}
+    \begin{call}{app}{login()}{ctl}{统一响应}
+      \begin{call}{ctl}{loginByPhone()}{svc}{appUser}
+        \begin{call}{svc}{selectByPhone()}{db}{用户记录}
+        \end{call}
+        \begin{call}{svc}{generateToken()}{jwt}{JWT token}
+        \end{call}
+      \end{call}
+    \end{call}
+  \end{call}
+\end{sequencediagram}
+}
+\caption{APP 用户登录流程时序图}
+\label{fig:seq-app-login}
+\end{figure}
+
+\subsection{蛇种识别与科普模块设计}
+蛇种识别模块由 APP 端识别页、SnakeAppController 和 AIVisionService 组成。用户上传图片后，控制器校验文件大小并转 Base64，调用 AIVisionService 进行识别；AIVisionService 按配置调用不同的 AI provider，解析返回结果并匹配数据库蛇种，未命中时降级为特征描述检索。蛇种列表与详情接口支持按有毒/无毒、省份和关键词筛选，省份通过 resolveDistributionKeywords() 方法映射为大区关键词进行 OR LIKE 匹配。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.88\textwidth}{!}{%
+\begin{sequencediagram}
+  \newinst{u}{APP用户}
+  \newinst[1.0]{page}{识别页}
+  \newinst[1.4]{ctl}{SnakeAppController}
+  \newinst[1.4]{ai}{AIVisionService}
+  \newinst[1.4]{db}{MySQL}
+  \begin{call}{u}{上传蛇照片}{page}{展示识别结果}
+    \begin{call}{page}{recognizeImage()}{ctl}{统一响应}
+      \begin{call}{ctl}{recognize()}{ai}{候选蛇种}
+        \begin{call}{ai}{matchSpecies()}{db}{蛇种详情}
+        \end{call}
+        \alt{AI 命中}
+          \multicell{返回蛇种详情}
+        \else{AI 未命中}
+          \begin{call}{ai}{searchByFeature()}{db}{候选列表}
+          \end{call}
+        \end{alt}
+      \end{call}
+    \end{call}
+  \end{call}
+\end{sequencediagram}
+}
+\caption{AI 蛇种识别与降级检索流程时序图}
+\label{fig:seq-ai-recognize}
+\end{figure}
+
+\subsection{紧急自救模块设计}
+紧急自救模块由 APP 端紧急页、EmergencyAppController 和 FirstAidGuideService 组成。系统提供通用自救指南和按毒液类型分类的特异性指南，并支持按蛇种获取对应的急救要点。紧急模式全程固定显示免责声明，不可被运营关闭。紧急模式触发时，后端记录访问统计，便于后续分析高发区域与时段。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.88\textwidth}{!}{%
+\begin{sequencediagram}
+  \newinst{u}{APP用户}
+  \newinst[1.0]{page}{紧急页}
+  \newinst[1.4]{ctl}{EmergencyAppController}
+  \newinst[1.4]{svc}{FirstAidGuideService}
+  \newinst[1.4]{stat}{AccessStatisticsService}
+  \begin{call}{u}{进入紧急模式}{page}{展示指南+免责}
+  \begin{call}{page}{getGuide()}{ctl}{指南数据}
+    \begin{call}{ctl}{getGuideByType()}{svc}{步骤列表}
+    \end{call}
+    \begin{call}{ctl}{recordEmergency()}{stat}{记录成功}
+    \end{call}
+  \end{call}
+  \end{call}
+\end{sequencediagram}
+}
+\caption{紧急自救流程时序图}
+\label{fig:seq-emergency}
+\end{figure}
+
+\subsection{医院与血清模块设计}
+医院与血清模块由 APP 端附近医院页、HospitalAppController 和 HospitalService 组成。APP 端提交用户经纬度，后端通过 Haversine 公式计算距离并排序，返回附近医院列表及其血清库存。医院地址变更时，后端代理调用高德地理编码 API 获取经纬度并回写。地图展示采用 Leaflet 与高德中文瓦片，无需 API Key。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.88\textwidth}{!}{%
+\begin{sequencediagram}
+  \newinst{u}{APP用户}
+  \newinst[1.0]{page}{附近医院页}
+  \newinst[1.4]{ctl}{HospitalAppController}
+  \newinst[1.4]{svc}{HospitalService}
+  \newinst[1.4]{db}{MySQL}
+  \begin{call}{u}{提交定位}{page}{展示医院列表}
+    \begin{call}{page}{nearby()}{ctl}{附近医院}
+      \begin{call}{ctl}{queryNearby()}{svc}{排序结果}
+        \begin{call}{svc}{selectWithSerum()}{db}{医院+血清}
+        \end{call}
+      \end{call}
+    \end{call}
+  \end{call}
+\end{sequencediagram}
+}
+\caption{附近医院查询流程时序图}
+\label{fig:seq-hospital-nearby}
+\end{figure}
+
+\subsection{咨询与助手模块设计}
+咨询与助手模块由 APP 端咨询页、ConsultAppController、TicketService 和 AiAssistantService 组成。咨询工单默认指派给医疗顾问角色用户，状态流转为 PENDING $\to$ IN\_PROGRESS $\to$ RESOLVED。工单内支持用户与顾问的多轮对话消息。AI 助手通道由后端调用大模型接口回答蛇伤相关问题，对话历史保存至 ai\_chat\_history 表。未登录用户访问咨询接口时，后端返回 HTTP 200 但响应体 code 为 401，前端据此弹出登录提示。
+
+\begin{figure}[H]
+\centering
+\resizebox{0.88\textwidth}{!}{%
+\begin{sequencediagram}
+  \newinst{u}{APP用户}
+  \newinst[1.0]{page}{咨询页}
+  \newinst[1.4]{ctl}{ConsultAppController}
+  \newinst[1.4]{svc}{TicketService}
+  \newinst[1.4]{db}{MySQL}
+  \begin{call}{u}{提交咨询}{page}{工单创建成功}
+    \begin{call}{page}{createTicket()}{ctl}{统一响应}
+      \begin{call}{ctl}{create()}{svc}{工单ID}
+        \begin{call}{svc}{insertTicket()}{db}{写入成功}
+        \end{call}
+        \begin{call}{svc}{assignAdvisor()}{db}{指派顾问}
+        \end{call}
+        \begin{call}{svc}{insertMessage()}{db}{首条消息}
+        \end{call}
+      \end{call}
+    \end{call}
+  \end{call}
+\end{sequencediagram}
+}
+\caption{咨询工单创建流程时序图}
+\label{fig:seq-consult-create}
+\end{figure}
+
+\subsection{积分与答题模块设计}
+积分与答题模块由 PointsService 和 QuizService 组成。积分系统定义了注册、答题、阅读、查看蛇种/医院等事件的基础积分与每日上限，并通过 refId 防止同对象当日重复刷分。注册奖励一次性发放，其余事件按规则表配置。答题模块支持题库管理、用户答题记录与答题详情，答题完成后触发积分发放。
+
+\section{前端页面设计}
+APP 端页面按业务职责划分为首页、蛇种、紧急自救、医院、答题、我的和管理入口。首页强调入口聚合，蛇种页侧重图库浏览与 AI 识别，紧急页侧重步骤化展示与免责声明，医院页侧重地图定位与血清查询，答题页侧重测验与积分，我的页承担个人资料、积分流水、咨询工单和 AI 助手等功能。后台管理端页面按角色划分为数据看板、用户管理、蛇种管理、医院管理、文章管理、急救指南、审核工作台、咨询工作台和操作日志等。
+
+\section{JWT 鉴权与令牌黑名单设计}
+为满足 APP 端与后台的鉴权需求，系统采用 JWT 实现无状态认证。登录成功后，后端通过 JwtUtil 签发 token，token 中包含 userId、username 和 role 等声明。后续请求由 JwtAuthenticationFilter 解析 token，校验通过后构造 Authentication 写入 SecurityContext；同时过滤器依赖 RedisTemplate 检查 token 是否在黑名单中，登出时将 token 写入黑名单并设置与 token 相同的过期时间。该设计避免了高频查库，也保证了登出后令牌立即失效。
+
+% ---- 第五章 系统实现 ----
+\chapter{毒蛇咬伤自救科普系统实现}
+
+\section{开发环境与工具}
+本项目采用前后端分离方式开发。后端运行在 Windows 11 环境，语言为 Java 17，使用 Maven 构建，框架组合为 Spring Boot 3.3.5 与 MyBatis-Plus 3.5.7，数据库为 MySQL，缓存与分布式锁使用 Redis 与 Redisson 3.34.1，鉴权使用 Spring Security 与 JJWT 0.12.6，API 文档使用 Knife4j 4.5.0。除业务接口外，后端还接入了 AOP 操作日志切面与阿里云对象存储等组件。
+
+移动端基于 uni-app 与 Vue 3 实现移动端页面，覆盖蛇种图库、AI 识别、紧急自救、附近医院、答题测验、咨询工单、AI 助手和个人中心等功能。后台管理端基于 Vue 3 与 Element Plus 实现，覆盖数据看板、用户管理、蛇种管理、医院管理、文章管理、急救指南、审核工作台、咨询工作台和操作日志等页面。接口调用通过统一请求封装完成，自动携带 JWT token。系统主要开发环境见表~\ref{tab:env}。
+
+\begin{table}[H]
+\centering
+\caption{系统开发环境}
+\label{tab:env}
+\begin{tabularx}{0.92\textwidth}{C C C}
+\toprule
+类别 & 工具/框架 & 版本 \\
+\midrule
+后端框架 & Spring Boot & 3.3.5 \\
+ORM & MyBatis-Plus & 3.5.7 \\
+JDK & Java Toolchain & 17 \\
+数据库 & MySQL & 8.x \\
+缓存 & Redis + Redisson & 3.34.1 \\
+鉴权 & Spring Security + JJWT & 0.12.6 \\
+API 文档 & Knife4j & 4.5.0 \\
+移动端框架 & uni-app + Vue & Vue 3 体系 \\
+后台框架 & Vue 3 + Element Plus & Vue 3 体系 \\
+地图 & Leaflet + 高德 & 在线瓦片 \\
+构建工具 & Maven & 3.x \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\section{系统登录与注册模块实现}
+登录模块支持 APP 端手机号登录和后台账号密码登录。APP 端平时以手机号登录为主，登录成功后后端返回 appUser 对象和 JWT token，前端将其存入本地存储，后续请求通过全局拦截器自动携带 Authorization 头。后台登录密码采用 BCrypt 加密，登录后由 Spring Security 按角色权限控制 URL 访问。
+
+后台用户由系统管理员在用户管理页面维护，新增用户时选择角色类型并设置初始密码。用户状态分为正常与禁用，禁用用户无法登录。操作日志通过 AOP 切面自动记录登录、内容操作和审核等行为，便于事后追溯。
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.47\textwidth}
+    \centering
+    \screenshotplaceholder{APP 登录界面}{手机号登录}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.47\textwidth}
+    \centering
+    \screenshotplaceholder{后台登录界面}{账号密码登录}
+  \end{subfigure}
+  \caption{APP 与后台登录界面}
+  \label{fig:login-ui}
+\end{figure}
+
+\section{蛇种识别与科普模块实现}
+蛇种识别模块对应 APP 端蛇种图库与 AI 识别页面。蛇种图库支持按有毒/无毒、省份和关键词筛选，列表展示蛇种封面、名称与是否有毒标签。蛇种详情页展示蛇种完整特征、分布地区、咬伤症状和特异性处理要点，并关联蛇种图片。AI 识别页面支持上传蛇的照片，后端调用 AI 视觉接口识别并匹配数据库蛇种，识别失败时降级为按特征描述检索。
+
+后端由 SnakeAppController 接收识别请求，AIVisionService 按配置调用 DeepSeek 或豆包视觉 API，解析返回结果并匹配数据库蛇种。匹配命中时返回蛇种详情，未命中时调用特征检索接口返回候选列表。该设计保证了 AI 不可用时仍可提供候选蛇种。
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{蛇种图库列表}{按有毒/省份筛选}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{AI 识别页面}{上传照片识别}
+\end{subfigure}
+\caption{蛇种图库与 AI 识别界面}
+\label{fig:snake-ui}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\screenshotplaceholder{蛇种详情界面}{特征、症状与处理要点}
+\caption{蛇种详情界面}
+\label{fig:snake-detail-ui}
+\end{figure}
+
+\section{紧急自救模块实现}
+紧急自救模块对应 APP 端紧急页与急救指南页面。系统提供通用自救指南和按毒液类型分类的特异性指南，指南以步骤化形式展示，每步包含标题、内容与禁止动作提示。紧急模式全程固定显示免责声明，提醒用户系统内容不能替代专业医疗救治，且该免责声明不可被运营关闭。紧急模式触发时，后端记录访问统计，便于后续分析高发区域与时段。
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{紧急自救主页}{免责声明+指南入口}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{自救步骤页}{步骤化展示+禁止动作}
+\end{subfigure}
+\caption{紧急自救界面}
+\label{fig:emergency-ui}
+\end{figure}
+
+\section{医院与血清模块实现}
+医院与血清模块对应 APP 端附近医院页面。页面获取用户定位后，调用后端附近医院接口，后端通过 Haversine 公式计算距离并排序，返回附近医院列表及其血清库存。地图展示采用 Leaflet 与高德中文瓦片，医院位置以标记点形式展示，点击标记可查看医院详情与血清库存。医院地址变更时，后端代理调用高德地理编码 API 获取经纬度并回写。
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{附近医院地图}{Leaflet+高德瓦片}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{医院详情与血清}{库存数量展示}
+\end{subfigure}
+\caption{附近医院与血清库存界面}
+\label{fig:hospital-ui}
+\end{figure}
+
+\section{咨询与助手模块实现}
+咨询与 AI 助手模块对应 APP 端咨询页与 AI 助手页。咨询工单默认指派给医疗顾问角色用户，状态流转为 PENDING $\to$ IN\_PROGRESS $\to$ RESOLVED。工单内支持用户与顾问的多轮对话消息，并记录已读状态。AI 助手通道由后端调用大模型接口回答蛇伤相关问题，对话历史保存至 ai\_chat\_history 表。未登录用户访问咨询接口时，后端返回 HTTP 200 但响应体 code 为 401，前端据此弹出带取消按钮的登录提示。
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{咨询工单列表}{状态标签展示}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{AI 助手对话}{多轮问答}
+\end{subfigure}
+\caption{咨询工单与 AI 助手界面}
+\label{fig:consult-ui}
+\end{figure}
+
+\section{积分与答题模块实现}
+积分模块由 PointsService 实现，定义了注册、答题、阅读、查看蛇种/医院等事件的基础积分与每日上限。注册奖励一次性发放，其余事件按规则表配置，并通过 refId 防止同对象当日重复刷分。等级配置表定义了各等级所需积分与称号图标，用户积分达到阈值时自动升级。答题模块由 QuizService 实现，支持题库管理、用户答题记录与答题详情，答题完成后触发积分发放。
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{答题测验页}{题目与选项}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{积分与等级}{流水与称号}
+\end{subfigure}
+\caption{答题与积分等级界面}
+\label{fig:quiz-points-ui}
+\end{figure}
+
+\section{系统管理与审核模块实现}
+系统管理页面承担后台治理职责，包括后台用户管理、内容审核、操作日志和数据看板。内容管理员维护蛇种、医院血清与文章等业务内容，医疗顾问审核后内容方可发布，已发布内容删除走下线流程。系统管理员负责后台账户管理、操作日志查看与数据统计。操作日志通过 AOP 切面自动记录，分为 SYSTEM、CONTENT、AUDIT、LOGIN 等类别。数据看板提供蛇种数量、医院数量、文章数量、用户数量与紧急模式触发次数等汇总指标。
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{数据看板}{汇总指标}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \screenshotplaceholder{审核工作台}{医疗顾问审核}
+\end{subfigure}
+\caption{数据看板与审核工作台界面}
+\label{fig:admin-ui}
+\end{figure}
+
+% ---- 第六章 系统测试 ----
+\chapter{毒蛇咬伤自救科普系统测试}
+
+\section{测试目的}
+本章测试的目标是验证毒蛇咬伤自救科普系统能否稳定支撑实际业务流程，并检查主要功能是否达到设计要求。测试内容覆盖 APP 端登录注册、蛇种图库、AI 识别、紧急自救、附近医院、答题测验、咨询工单、AI 助手和后台管理审核等主要场景。另外，也对系统编译稳定性、接口一致性和鉴权安全性进行了验证。
+
+\section{测试环境}
+\subsection{后端测试环境}
+后端测试环境为 Windows 11 + Java 17，主要框架为 Spring Boot 3.3.5，数据库为 MySQL，缓存为 Redis + Redisson。测试中通过 Maven 编译任务验证后端代码可正常编译，并通过接口联调检查控制器、服务层和数据模型之间的一致性。
+
+\subsection{前端测试环境}
+APP 端测试环境为 Windows 11，技术栈为 uni-app 与 Vue 3，主要在 HBuilderX 调试器和浏览器辅助环境中进行联调。后台管理端测试环境为 Windows 11，技术栈为 Vue 3 与 Element Plus。通过页面静态检查、接口联调和主要流程操作测试，验证页面交互、提示文案和字段回显是否一致。
+
+\subsection{AI 与地图链路测试环境}
+AI 与地图链路测试主要基于 AI 视觉接口、高德地图代理和 Leaflet 地图实现。AI 识别测试覆盖正常识别与降级检索两条路径，地图测试覆盖地理编码与附近医院查询。
+
+\section{功能测试}
+\subsection{登录与注册模块测试}
+表~\ref{tab:test-login} 给出了登录与注册模块的典型测试结果。
+
+\begin{table}[H]
+\centering
+\caption{登录与注册模块测试结果}
+\label{tab:test-login}
+\small
+\begin{tabularx}{0.98\textwidth}{C C C Y C}
+\toprule
+序号 & 功能 & 测试输入 & 预期结果 & 实际结果 \\
+\midrule
+1 & APP 登录 & 正确手机号与验证码 & 登录成功并返回 token & 通过 \\
+2 & APP 登录 & 错误验证码 & 提示验证码错误 & 通过 \\
+3 & 后台登录 & 正确账号密码 & 登录成功并进入对应角色页面 & 通过 \\
+4 & 后台登录 & 禁用账号 & 提示账号已禁用 & 通过 \\
+5 & 权限控制 & CONTENT\_ADMIN 访问用户管理 & 返回 403 拒绝访问 & 通过 \\
+6 & 令牌黑名单 & 登出后使用旧 token & 提示未登录 & 通过 \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{table}
+
+\subsection{蛇种与 AI 识别模块测试}
+表~\ref{tab:test-snake} 给出了蛇种与 AI 识别模块的测试情况。
+
+\begin{table}[H]
+\centering
+\caption{蛇种与 AI 识别模块测试结果}
+\label{tab:test-snake}
+\small
+\begin{tabularx}{0.98\textwidth}{C C C Y C}
+\toprule
+序号 & 功能 & 测试输入 & 预期结果 & 实际结果 \\
+\midrule
+1 & 蛇种列表 & 按有毒筛选 & 正确返回有毒蛇种列表 & 通过 \\
+2 & 蛇种列表 & 按省份筛选 & 正确返回该地区蛇种 & 通过 \\
+3 & 蛇种详情 & 查看蛇种详情 & 返回特征、症状与处理要点 & 通过 \\
+4 & AI 识别 & 上传常见毒蛇照片 & 返回候选蛇种与详情 & 通过 \\
+5 & AI 降级 & 上传模糊或非蛇照片 & 降级为特征检索返回候选 & 通过 \\
+6 & 审核可见性 & 未审核蛇种 & APP 端不可见 & 通过 \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{table}
+
+\subsection{紧急自救与医院模块测试}
+表~\ref{tab:test-emergency-hospital} 给出了紧急自救与医院模块的测试结果。
+
+\begin{table}[H]
+\centering
+\caption{紧急自救与医院模块测试结果}
+\label{tab:test-emergency-hospital}
+\small
+\begin{tabularx}{0.98\textwidth}{C C C Y C}
+\toprule
+序号 & 功能 & 测试输入 & 预期结果 & 实际结果 \\
+\midrule
+1 & 紧急模式 & 进入紧急模式 & 全程显示免责声明 & 通过 \\
+2 & 自救指南 & 按毒液类型查询 & 返回对应步骤与禁止动作 & 通过 \\
+3 & 附近医院 & 提交用户定位 & 返回附近医院与血清库存 & 通过 \\
+4 & 地图展示 & 打开地图页 & Leaflet 正确加载高德瓦片 & 通过 \\
+5 & 地理编码 & 输入医院地址 & 后端代理返回经纬度 & 通过 \\
+6 & 血清查询 & 查看医院血清 & 返回血清类型与库存 & 通过 \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{table}
+
+\subsection{咨询、积分与管理模块测试}
+表~\ref{tab:test-consult-admin} 给出了咨询、积分与后台管理模块的测试结果。
+
+\begin{table}[H]
+\centering
+\caption{咨询、积分与管理模块测试结果}
+\label{tab:test-consult-admin}
+\small
+\begin{tabularx}{0.98\textwidth}{C C C Y C}
+\toprule
+序号 & 功能 & 测试输入 & 预期结果 & 实际结果 \\
+\midrule
+1 & 未登录咨询 & 未登录访问咨询接口 & 返回 code:401 并弹出登录提示 & 通过 \\
+2 & 工单创建 & 登录后提交咨询 & 工单创建并指派医疗顾问 & 通过 \\
+3 & 工单流转 & 顾问回复消息 & 状态变为 IN\_PROGRESS & 通过 \\
+4 & 积分防刷 & 同蛇种当日重复查看 & 仅首次计积分 & 通过 \\
+5 & 注册奖励 & 注册成功 & 一次性发放注册积分 & 通过 \\
+6 & 内容审核 & 医疗顾问审核蛇种 & 状态更新为已发布 & 通过 \\
+7 & 下线流程 & 删除已发布内容 & 走下线而非物理删除 & 通过 \\
+8 & 操作日志 & 执行任意后台操作 & AOP 自动记录日志 & 通过 \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{table}
+
+\section{性能与稳定性分析}
+当前系统在工程实现上采用了较轻量的处理策略。第一，普通管理接口采用聚合查询和统一返回结构，减少了前端多次往返请求；第二，AI 识别与地图代理设置超时时间，避免外部服务异常阻塞主流程；第三，积分防刷与工单流转采用事务保证数据一致性；第四，JWT 令牌黑名单与 Redisson 分布式锁保证鉴权与并发安全。
+
+从稳定性看，系统已通过后端编译检查、前端页面静态检查和多轮前后端联调验证，说明当前代码结构具有较好的可维护性。同时，系统仍需在更大规模用户并发、AI 识别准确率优化和地图大数据量场景下继续进行专项压测和优化，这也是后续工作的重点。
+
+\section{测试结果总结}
+综合测试结果显示，毒蛇咬伤自救科普系统已基本达到预期设计目标。系统在 APP 端登录、蛇种图库、AI 识别、紧急自救、附近医院、答题测验、咨询工单、AI 助手和后台管理审核等主要场景下均可完成预期流程；前后端字段回显、保存提示、删除提示和上传返回值在联调后保持一致；审核流程、积分防刷和工单流转也能够实现完整闭环。
+
+总体来看，本文实现的系统具有较好的工程可用性，可作为毒蛇咬伤现场自救与科普教育的基础平台。
+
+% ---- 第七章 总结与展望 ----
+\chapter{总结与展望}
+
+\section{课题总结}
+本课题围绕毒蛇咬伤自救科普需求，完成了从需求分析到系统实现的完整工作。前期先对公众在蛇种识别、自救处置和血清医院查询方面的认知不足做了梳理，再结合项目场景明确用户体系、功能范围和非功能指标。系统实现阶段完成了 APP 端注册登录、蛇种图库与 AI 识别、紧急自救、附近医院、答题测验、咨询工单、AI 助手和后台管理审核等模块，并通过积分系统激励用户持续学习。最后通过测试验证了主要流程可以稳定跑通。
+
+结合项目落地情况来看，这套系统在实际使用中体现出了较好的工程可用性。从公众注册登录到医疗顾问审核、咨询工单流转这一链路已经能够跑通，前后端职责边界也比较清楚。AI 识别与特征检索相结合的设计保证了现场可用性，紧急模式全程固定免责声明保证了内容安全性。移动端页面和后台管理页面都能够满足当前使用需求，适合蛇伤科普场景持续迭代。
+
+通过本课题的实现与验证，可以认为该系统已具备可运行、可维护的基本条件。本文形成的设计思路和实现路径，对其他急救科普类系统建设也具有一定参考价值。
+
+\section{未来展望}
+目前系统已经完成主要功能并通过了现阶段测试，但在后续工程化部署中仍有继续优化的空间。
+
+在 AI 识别方面，当前实现以通用视觉接口为主。后续可逐步引入针对本地蛇种的专用模型，提升复杂背景与远距离照片的识别准确率\cite{ref5,ref6}。同时可结合用户上传的识别结果与医疗顾问反馈，构建持续优化的数据闭环。
+
+在地图与医院数据方面，当前医院与血清库存以手工维护为主。后续可接入医院开放数据或对接区域急救中心，实现血清库存的实时同步和动态推荐，并结合交通状况给出更准确的预计到达时间。
+
+在内容与社区方面，后续可扩展用户UGC通道，允许公众上传蛇种照片与咬伤案例，经医疗顾问审核后纳入图库，逐步形成更完整的蛇伤知识库。积分与等级体系也可结合用户行为画像进行个性化推荐，提升学习效果\cite{ref6}。
+
+% ======================== 参考文献 ========================
+\begin{thebibliography}{99}
+  \bibitem{ref1} 王威, 李金, 谌德荣, 等. 我国毒蛇咬伤流行病学及临床救治现状[J]. 蛇志, 2023, 35(02):89-93.
+  \bibitem{ref2} 中华医学会急诊医学分会创伤中毒学组. 毒蛇咬伤救治专家共识[J]. 中华急诊医学杂志, 2020, 29(8):1016-1020.
+  \bibitem{ref3} 张文武. 急诊内科学[M]. 第4版. 北京: 人民卫生出版社, 2018.
+  \bibitem{ref4} 汪祥, 刘红梅, 周晓英. 基于 Spring Boot 的前后端分离 Web 框架设计与实现[J]. 软件工程, 2022, 25(06):29-32.
+  \bibitem{ref5} He K, Gkioxari G, Dollr P, et al. Mask R-CNN[C]//Proceedings of the IEEE International Conference on Computer Vision. 2017: 2961-2969.
+  \bibitem{ref6} 王森, 刘琛, 邢帅杰. K-means 聚类算法研究综述[J]. 华东交通大学学报, 2022, 39(05):119-126.
+  \bibitem{ref7} 赵彦敏, 陈红. 基于 Vue 与 Spring Boot 的高校实验室管理系统设计[J]. 实验技术与管理, 2021, 38(10):221-225.
+  \bibitem{ref8} Jones M. JSON Web Token (JWT)[S]. RFC 7519, IETF, 2015.
+  \bibitem{ref9} 阿里云. 对象存储 OSS 开发者指南[EB/OL]. https://help.aliyun.com/product/31815.html.
+  \bibitem{ref10} 高德开放平台. Web 服务 API 参考文档[EB/OL]. https://lbs.amap.com/api/webservice/guide/api.
+  \bibitem{ref11} Leaflet. Leaflet -- an open-source JavaScript library for mobile-friendly interactive maps[EB/OL]. https://leafletjs.com.
+  \bibitem{ref12} baomidou. MyBatis-Plus 官方文档[EB/OL]. https://baomidou.com.
+  \bibitem{ref13} Redisson. Redis Java client with features of In-Memory Data Grid[EB/OL]. https://redisson.org.
+\end{thebibliography}
+
+% ======================== 致谢 ========================
+\clearpage
+\markboth{致谢}{}
+\phantomsection
+\addcontentsline{toc}{chapter}{致谢}
+\vspace*{24pt}
+\begin{center}
+  {\heiti\fontsize{16pt}{16pt}\selectfont 致谢}
+\end{center}
+\vspace{18pt}
+
+{\fangsong\fontsize{12pt}{20pt}\selectfont
+本论文能够完成，离不开老师和同学们在各个阶段的帮助。无论是选题确定、系统设计、代码实现，还是后期论文修改，指导教师都给了我很多具体而细致的建议，让我在推进过程中少走了不少弯路。项目实施期间，我也把课程中学到的软件工程、数据库和前后端开发知识真正用到了实际问题上，这些经历对我理解工程开发流程很有帮助。在此，向所有关心、指导和支持我的老师与同学表示衷心感谢。
+}
+
+% ======================== 附录 ========================
+
+\end{document}

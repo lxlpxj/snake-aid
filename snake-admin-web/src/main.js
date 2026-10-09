@@ -20,6 +20,7 @@ import LogPage from './views/LogPage.vue'
 import QuestionPage from './views/QuestionPage.vue'
 import ConsultWorkbench from './views/ConsultWorkbench.vue'
 import FirstAidStepPage from './views/FirstAidStepPage.vue'
+import VideoPage from './views/VideoPage.vue'
 
 const routes = [
   { path: '/login', component: LoginPage },
@@ -50,7 +51,9 @@ const routes = [
       // 我的待审 —— 仅内容管理员（只读看自己提交的内容状态）
       { path: 'my-audit', component: MyAuditList, meta: { title: '我的待审', roles: ['CONTENT_ADMIN'] } },
       // 急救闯关 —— 内容管理员维护 + 医疗顾问查看
-      { path: 'first-aid-steps', component: FirstAidStepPage, meta: { title: '急救闯关', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } }
+      { path: 'first-aid-steps', component: FirstAidStepPage, meta: { title: '急救闯关', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } },
+      // 科普视频 —— 内容管理员维护 + 医疗顾问只读
+      { path: 'videos', component: VideoPage, meta: { title: '科普视频', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } }
     ]
   }
 ]

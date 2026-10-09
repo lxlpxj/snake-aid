@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="home">
 		<!-- 顶部紧急大按钮：2 步内到达自救 -->
 		<view class="hero">
@@ -66,7 +66,12 @@
 				<text class="entry-icon">📝</text>
 				<text class="entry-title">考试自测</text>
 				<text class="entry-sub">随机抽题 · 巩固知识</text>
-		</view>
+			</view>
+			<view class="entry-card highlight-video" @click="goVideo">
+				<text class="entry-icon">🎬</text>
+				<text class="entry-title">科普视频</text>
+				<text class="entry-sub">急救教学 · 专家讲解</text>
+			</view>
 
 		<!-- 本地高发毒蛇（FR9：按地区浏览） -->
 		<view class="section">
@@ -174,6 +179,9 @@ export default {
 		},
 		goLearn() {
 			uni.navigateTo({ url: '/pages/snake/learn' })
+		},
+		goVideo() {
+			uni.navigateTo({ url: '/pages/video/list' })
 		},
 		goSnakeDetail(id) {
 			uni.navigateTo({ url: '/pages/snake/detail?id=' + id })
@@ -296,6 +304,18 @@ export default {
 	font-size: 18rpx; padding: 2rpx 10rpx; border-radius: 20rpx;
 }
 .entry-card.highlight-orange .entry-title { color: #E65100; }
+.entry-card.highlight-video {
+	background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+	border: 2rpx solid #7B1FA2;
+	position: relative;
+}
+.entry-card.highlight-video::before {
+	content: 'NEW';
+	position: absolute; top: 12rpx; right: 16rpx;
+	background: #7B1FA2; color: #fff;
+	font-size: 18rpx; padding: 2rpx 12rpx; border-radius: 20rpx;
+}
+.entry-card.highlight-video .entry-title { color: #6A1B9A; }
 
 /* 区块 */
 .section { margin-top: 36rpx; padding: 0 24rpx; }
