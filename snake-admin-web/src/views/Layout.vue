@@ -35,6 +35,7 @@
           <el-menu-item index="/guides"><el-icon><Document /></el-icon><span>急救指南维护</span></el-menu-item>
           <el-menu-item index="/hospitals"><el-icon><OfficeBuilding /></el-icon><span>医院与血清</span></el-menu-item>
           <el-menu-item index="/questions"><el-icon><Collection /></el-icon><span>题库管理</span></el-menu-item>
+          <el-menu-item index="/first-aid-steps"><el-icon><Promotion /></el-icon><span>急救闯关</span></el-menu-item>
           <el-menu-item index="/my-audit"><el-icon><Tickets /></el-icon><span>我的待审</span></el-menu-item>
           <el-menu-item index="/logs"><el-icon><Tickets /></el-icon><span>业务操作日志</span></el-menu-item>
         </template>

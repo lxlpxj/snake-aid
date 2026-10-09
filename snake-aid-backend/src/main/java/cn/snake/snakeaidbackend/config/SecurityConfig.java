@@ -93,6 +93,9 @@ public class SecurityConfig {
                         // ============ CONTENT_ADMIN + MEDICAL_ADVISOR：急救指南（内容管理员提交，医疗顾问审核/编辑） ============
                         .requestMatchers("/admin/guide/**").hasAnyRole("CONTENT_ADMIN", "MEDICAL_ADVISOR")
 
+                        // ============ CONTENT_ADMIN + MEDICAL_ADVISOR：急救闯关关卡 ============
+                        .requestMatchers("/admin/first-aid-step/**").hasAnyRole("CONTENT_ADMIN", "MEDICAL_ADVISOR")
+
                         // 兜底：其余 /admin/** 至少需要后台任一角色
                         .requestMatchers("/admin/**").hasAnyRole("SYS_ADMIN", "CONTENT_ADMIN", "MEDICAL_ADVISOR")
 
