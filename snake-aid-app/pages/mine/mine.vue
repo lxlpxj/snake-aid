@@ -1,4 +1,4 @@
-﻿<template>
+<template>
         <view class="mine">
                 <!-- 用户信息卡片 -->
                 <view class="user-card" @click="goLogin">
@@ -51,6 +51,25 @@
                         <view class="menu-item" @click="toHospital">
                                 <text class="m-icon">🏥</text>
                                 <text class="m-text">就近医院</text>
+                                <text class="m-arrow">›</text>
+                        </view>
+                </view>
+
+                <!-- 临床工具 -->
+                <view class="menu-group">
+                        <view class="menu-item" @click="toAssessment">
+                                <text class="m-icon">⚖️</text>
+                                <text class="m-text">严重程度评估</text>
+                                <text class="m-arrow">›</text>
+                        </view>
+                        <view class="menu-item" @click="toProtocol">
+                                <text class="m-icon">🆘</text>
+                                <text class="m-text">血清规范 / 并发症流程</text>
+                                <text class="m-arrow">›</text>
+                        </view>
+                        <view class="menu-item" @click="toRecord">
+                                <text class="m-icon">📋</text>
+                                <text class="m-text">我的蛇伤病历</text>
                                 <text class="m-arrow">›</text>
                         </view>
                 </view>
@@ -186,6 +205,9 @@ export default {
                 toEmergency() { uni.navigateTo({ url: '/pages/emergency/emergency' }) },
                 toSnake() { uni.navigateTo({ url: '/pages/snake/gallery' }) },
                 toHospital() { uni.navigateTo({ url: '/pages/hospital/nearby' }) },
+                toAssessment() { uni.navigateTo({ url: '/pages/assessment/severity' }) },
+                toProtocol() { uni.navigateTo({ url: '/pages/protocol/index' }) },
+                toRecord() { uni.navigateTo({ url: '/pages/record/index' }) },
                 toAdmin() {
                         // #ifdef H5
                         window.location.href = 'http://localhost:5173/#/pages/mine/admin-entry'

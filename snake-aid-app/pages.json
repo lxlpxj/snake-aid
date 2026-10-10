@@ -177,6 +177,30 @@
                                     "navigationBarBackgroundColor":  "#6A1B9A",
                                     "navigationBarTextStyle":  "white"
                                 }
+                  },
+                  {
+                      "path":  "pages/assessment/severity",
+                      "style":  {
+                                    "navigationBarTitleText":  "严重程度评估",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/protocol/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "院内处置规范",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/record/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇伤病历",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
                   }
 												],
     "globalStyle":  {

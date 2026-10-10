@@ -24,6 +24,7 @@
         <template v-if="role === 'SYS_ADMIN'">
           <el-menu-item index="/dashboard"><el-icon><DataAnalysis /></el-icon><span>数据看板</span></el-menu-item>
           <el-menu-item index="/users"><el-icon><UserFilled /></el-icon><span>账号管理</span></el-menu-item>
+          <el-menu-item index="/snake-records"><el-icon><Tickets /></el-icon><span>蛇伤病历统计</span></el-menu-item>
           <el-menu-item index="/logs"><el-icon><Tickets /></el-icon><span>系统操作日志</span></el-menu-item>
         </template>
 
@@ -37,6 +38,8 @@
           <el-menu-item index="/questions"><el-icon><Collection /></el-icon><span>题库管理</span></el-menu-item>
           <el-menu-item index="/first-aid-steps"><el-icon><Promotion /></el-icon><span>急救闯关</span></el-menu-item>
           <el-menu-item index="/videos"><el-icon><VideoCamera /></el-icon><span>科普视频</span></el-menu-item>
+          <el-menu-item index="/serum-usage"><el-icon><FirstAidKit /></el-icon><span>血清使用规范</span></el-menu-item>
+          <el-menu-item index="/complications"><el-icon><Document /></el-icon><span>并发症流程</span></el-menu-item>
           <el-menu-item index="/my-audit"><el-icon><Tickets /></el-icon><span>我的待审</span></el-menu-item>
           <el-menu-item index="/logs"><el-icon><Tickets /></el-icon><span>业务操作日志</span></el-menu-item>
         </template>
@@ -51,6 +54,9 @@
           <el-menu-item index="/guides"><el-icon><Document /></el-icon><span>急救指南（编辑）</span></el-menu-item>
           <el-menu-item index="/questions"><el-icon><Collection /></el-icon><span>题库管理（只读）</span></el-menu-item>
           <el-menu-item index="/videos"><el-icon><VideoCamera /></el-icon><span>科普视频（只读）</span></el-menu-item>
+          <el-menu-item index="/serum-usage"><el-icon><FirstAidKit /></el-icon><span>血清使用规范</span></el-menu-item>
+          <el-menu-item index="/complications"><el-icon><CircleCheckFilled /></el-icon><span>并发症流程（审核）</span></el-menu-item>
+          <el-menu-item index="/snake-records"><el-icon><Tickets /></el-icon><span>蛇伤病历统计</span></el-menu-item>
           <el-menu-item index="/logs"><el-icon><Tickets /></el-icon><span>审核操作日志</span></el-menu-item>
         </template>
       </el-menu>

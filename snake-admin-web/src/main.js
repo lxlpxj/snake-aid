@@ -21,6 +21,9 @@ import QuestionPage from './views/QuestionPage.vue'
 import ConsultWorkbench from './views/ConsultWorkbench.vue'
 import FirstAidStepPage from './views/FirstAidStepPage.vue'
 import VideoPage from './views/VideoPage.vue'
+import SerumUsagePage from './views/SerumUsagePage.vue'
+import ComplicationPage from './views/ComplicationPage.vue'
+import SnakeRecordPage from './views/SnakeRecordPage.vue'
 
 const routes = [
   { path: '/login', component: LoginPage },
@@ -53,7 +56,13 @@ const routes = [
       // 急救闯关 —— 内容管理员维护 + 医疗顾问查看
       { path: 'first-aid-steps', component: FirstAidStepPage, meta: { title: '急救闯关', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } },
       // 科普视频 —— 内容管理员维护 + 医疗顾问只读
-      { path: 'videos', component: VideoPage, meta: { title: '科普视频', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } }
+      { path: 'videos', component: VideoPage, meta: { title: '科普视频', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } },
+      // 血清使用规范 —— MEDICAL_ADVISOR 主负责录入
+      { path: 'serum-usage', component: SerumUsagePage, meta: { title: '血清使用规范', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } },
+      // 并发症流程 —— CONTENT_ADMIN 草稿 + MEDICAL_ADVISOR 审核发布
+      { path: 'complications', component: ComplicationPage, meta: { title: '并发症流程', roles: ['CONTENT_ADMIN', 'MEDICAL_ADVISOR'] } },
+      // 蛇伤病历统计 —— SYS_ADMIN 看全局数据
+      { path: 'snake-records', component: SnakeRecordPage, meta: { title: '蛇伤病历统计', roles: ['SYS_ADMIN', 'MEDICAL_ADVISOR'] } }
     ]
   }
 ]

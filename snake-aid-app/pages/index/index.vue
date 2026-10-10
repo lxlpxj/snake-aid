@@ -72,6 +72,16 @@
 				<text class="entry-title">科普视频</text>
 				<text class="entry-sub">急救教学 · 专家讲解</text>
 			</view>
+			<view class="entry-card" @click="goAssessment">
+				<text class="entry-icon">⚖️</text>
+				<text class="entry-title">严重程度评估</text>
+				<text class="entry-sub">4步向导 · 临床评分</text>
+			</view>
+			<view class="entry-card" @click="goProtocol">
+				<text class="entry-icon">🆘</text>
+				<text class="entry-title">院内处置规范</text>
+				<text class="entry-sub">血清使用 · 并发症流程</text>
+			</view>
 
 		<!-- 本地高发毒蛇（FR9：按地区浏览） -->
 		<view class="section">
@@ -182,6 +192,12 @@ export default {
 		},
 		goVideo() {
 			uni.navigateTo({ url: '/pages/video/list' })
+		},
+		goAssessment() {
+			uni.navigateTo({ url: '/pages/assessment/severity' })
+		},
+		goProtocol() {
+			uni.navigateTo({ url: '/pages/protocol/index' })
 		},
 		goSnakeDetail(id) {
 			uni.navigateTo({ url: '/pages/snake/detail?id=' + id })
