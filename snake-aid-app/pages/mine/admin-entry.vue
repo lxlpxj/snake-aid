@@ -29,7 +29,7 @@
 </template>
 
 <script>
-const API = 'http://127.0.0.1:8080/api'
+const API = '/api'
 const ADMIN_TOKEN = 'snake_admin_token'
 const ADMIN_INFO = 'snake_admin_info'
 

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="protocol-page">
     <!-- Tabs -->
     <view class="tab-bar">
@@ -76,7 +76,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-const BASE = 'http://127.0.0.1:8080/api'
+const BASE = '/api'
 
 const tab = ref('serum')
 const serumList = ref([])

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="assessment-page">
     <!-- 顶部进度 -->
     <view class="progress-bar">
@@ -186,7 +186,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 
-const BASE = 'http://127.0.0.1:8080/api'
+const BASE = '/api'
 
 const step = ref(1)
 const form = reactive({

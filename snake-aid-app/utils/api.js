@@ -15,14 +15,14 @@ function detectBaseUrl() {
   
   // #ifdef APP-PLUS
   // App: Docker 跑在本机 8080
-  return 'http://localhost:8080'
+  return 'http://192.168.142.41:8080'
   // #endif
   
   // #ifdef MP-WEIXIN
   return 'https://your-server.com'
   // #endif
   
-  return 'http://localhost:8080'
+  return 'http://192.168.142.41:8080'
 }
 
 export function getBaseUrl() {

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="video-page">
     <!-- 顶部标题 -->
     <view class="page-header">
@@ -77,7 +77,7 @@ const list = ref([])
 const loading = ref(true)
 const playingVideo = ref(null)
 
-const BASE = 'http://127.0.0.1:8080/api'
+const BASE = '/api'
 
 function fullUrl(url) {
   if (!url) return ''

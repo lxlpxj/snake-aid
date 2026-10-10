@@ -1,4 +1,4 @@
-<template>
+﻿<template>
         <view class="mine">
                 <!-- 用户信息卡片 -->
                 <view class="user-card" @click="goLogin">
@@ -118,7 +118,7 @@
 <script>
 const TOKEN_KEY = 'token'
 const USER_KEY = 'appUser'
-const API = 'http://127.0.0.1:8080/api'
+const API = '/api'
 
 export default {
         data() {

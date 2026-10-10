@@ -23,7 +23,7 @@
 
 <script>
 const TOKEN_KEY = 'snake_token'
-const API = 'http://127.0.0.1:8080/api'
+const API = '/api'
 
 export default {
         data() { return { token: '', logs: [], loading: true } },

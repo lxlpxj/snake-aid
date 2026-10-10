@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="game-container">
   <!-- 语音开关 -->
   <view class="voice-switch" @click="toggleVoice">
@@ -411,7 +411,7 @@ function toggleVoice() {
 }
 import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
 
-const API = 'http://127.0.0.1:8080/api'
+const API = '/api'
 const hardcodedStepsBackup = []
 
 // 从后端拉关卡数据，失败用硬编码 fallback
