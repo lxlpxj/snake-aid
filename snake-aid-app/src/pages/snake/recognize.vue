@@ -154,7 +154,7 @@ function goDetail(id) {
 }
 
 function goFeaturePage() {
-  uni.switchTab({ url: '/pages/snake/list' });
+  uni.switchTab({ url: '/pages/snake/list', fail: () => {} });
 }
 </script>
 
@@ -283,4 +283,5 @@ function goFeaturePage() {
   line-height: 1.6;
 }
 </style>
+
 

@@ -1,0 +1,247 @@
+{
+    "pages":  [
+                  {
+                      "path":  "pages/index/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "毒蛇自救",
+                                    "navigationBarBackgroundColor":  "#E53935",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/emergency/emergency",
+                      "style":  {
+                                    "navigationBarTitleText":  "紧急自救",
+                                    "navigationBarBackgroundColor":  "#E53935",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/snake/list",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇种图库",
+                                    "navigationBarBackgroundColor":  "#2E7D32",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/snake/recognize",
+                      "style":  {
+                                    "navigationBarTitleText":  "AI 蛇种识别",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/hospital/list",
+                      "style":  {
+                                    "navigationBarTitleText":  "就近医院",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/mine",
+                      "style":  {
+                                    "navigationBarTitleText":  "我的",
+                                    "navigationBarBackgroundColor":  "#455A64",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/snake/detail",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇种详情"
+                                }
+                  },
+                  {
+                      "path":  "pages/guide/guide",
+                      "style":  {
+                                    "navigationBarTitleText":  "自救指引"
+                                }
+                  },
+                  {
+                      "path":  "pages/guide/steps",
+                      "style":  {
+                                    "navigationBarTitleText":  "自救步骤"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/login",
+                      "style":  {
+                                    "navigationBarTitleText":  "登录"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/admin-entry",
+                      "style":  {
+                                    "navigationBarTitleText":  "管理后台"
+                                }
+                  },
+                  {
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇种图库",
+                                    "navigationBarBackgroundColor":  "#2E7D32",
+                                    "navigationBarTextStyle":  "white"
+                                },
+                      "path":  "pages/snake/gallery"
+                  },
+                  {
+                      "style":  {
+                                    "navigationBarTitleText":  "就近医院",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                },
+                      "path":  "pages/hospital/nearby"
+                  },
+                  {
+                      "style":  {
+                                    "navigationBarTitleText":  "我的",
+                                    "navigationBarBackgroundColor":  "#455A64",
+                                    "navigationBarTextStyle":  "white"
+                                },
+                      "path":  "pages/mine/profile"
+                  }
+                  ,
+                  {
+                      "path":  "pages/quiz/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "急救知识自测",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  }
+                  ,
+                  {
+                      "path":  "pages/quiz/quiz",
+                      "style":  {
+                                    "navigationBarTitleText":  "答题中",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  }
+                  ,
+                  {
+                      "path":  "pages/quiz/result",
+                      "style":  {
+                                    "navigationBarTitleText":  "考试成绩",
+                                    "navigationBarBackgroundColor":  "#1565C0",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/points-logs",
+                      "style":  {
+                                    "navigationBarTitleText":  "积分明细"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/leaderboard",
+                      "style":  {
+                                    "navigationBarTitleText":  "积分排行榜"
+                                }
+                  }
+              ,
+                  {
+                      "path":  "pages/mine/ai-chat",
+                      "style":  {
+                                    "navigationBarTitleText":  "AI 蛇伤助手"
+                                }
+                  },
+                  {
+                      "path":  "pages/mine/consult",
+                      "style":  {
+                                    "navigationBarTitleText":  "咨询医疗顾问"
+                                }
+                  },
+                  {
+                      "path":  "pages/guide/game",
+                      "style":  {
+                                    "navigationBarTitleText":  "急救闯关",
+                                    "navigationBarBackgroundColor":  "#E53935",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/snake/learn",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇伤四步学习",
+                                    "navigationBarBackgroundColor":  "#FF6F00",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/video/list",
+                      "style":  {
+                                    "navigationBarTitleText":  "科普视频",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/assessment/severity",
+                      "style":  {
+                                    "navigationBarTitleText":  "严重程度评估",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/protocol/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "院内处置规范",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  },
+                  {
+                      "path":  "pages/record/index",
+                      "style":  {
+                                    "navigationBarTitleText":  "蛇伤病历",
+                                    "navigationBarBackgroundColor":  "#6A1B9A",
+                                    "navigationBarTextStyle":  "white"
+                                }
+                  }
+												],
+    "globalStyle":  {
+                        "navigationBarTextStyle":  "black",
+                        "navigationBarTitleText":  "毒蛇自救",
+                        "navigationBarBackgroundColor":  "#FFFFFF",
+                        "backgroundColor":  "#F5F5F5",
+                        "backgroundTextStyle":  "light"
+                    },
+    "tabBar":  {
+                   "color":  "#9E9E9E",
+                   "selectedColor":  "#E53935",
+                   "backgroundColor":  "#FFFFFF",
+                   "borderStyle":  "black",
+                   "list":  [
+                                {
+                                    "pagePath":  "pages/index/index",
+                                    "text":  "首页"
+                                },
+                                {
+                                    "pagePath":  "pages/snake/list",
+                                    "text":  "蛇种"
+                                },
+                                {
+                                    "pagePath":  "pages/hospital/list",
+                                    "text":  "医院"
+                                },
+                                {
+                                    "pagePath":  "pages/mine/mine",
+                                    "text":  "我的"
+                                }
+                            ]
+               },
+    "permission":  {
+                       "scope.userLocation":  {
+                                                  "desc":  "用于查找附近有血清的医院"
+                                              }
+                   },
+    "uniIdRouter":  {
+
+                    }
+}
+
+

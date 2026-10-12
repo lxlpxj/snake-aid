@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# ?????? (COPY ??? target/)
+snake-aid-backend/target/classes
+snake-aid-backend/target/generated-sources
+snake-aid-backend/target/maven-*
+!snake-aid-backend/target/*.jar
+
+# ?? node_modules
+snake-aid-app/node_modules
+snake-aid-app/src
+snake-aid-app/package-lock.json
+
+# IDE
+.idea
+*.iml
+.vscode
+*.log
+
+# ???
+mysql_data
+uploads
+src_bak
+tools
+docs/??
+docs/????
+
+# ????
+Thumbs.db
+.DS_Store

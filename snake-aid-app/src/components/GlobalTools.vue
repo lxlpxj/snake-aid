@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="global-tools" :class="{ expanded }">
     <!-- 触发按钮 -->
     <view class="tools-fab" @click="toggle">
@@ -61,8 +61,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getTheme, setTheme, getThemeConfig, onThemeChange } from '@/utils/theme.js'
-import { getDialect, setDialect, dialects, onDialectChange } from '@/utils/dialect.js'
+import { getTheme, setTheme as _setTheme, getThemeConfig, onThemeChange } from '@/utils/theme.js'
+import { getDialect, setDialect as _setDialect, dialects, onDialectChange } from '@/utils/dialect.js'
 import { playBGM, stopBGM, toggleBGM as audioToggleBGM, sfxClick, sfxCorrect, sfxWrong, isBGMPlaying } from '@/utils/audio.js'
 import { isSpeechOn, toggleSpeech as dialectToggleSpeech, speak } from '@/utils/dialect.js'
 
@@ -77,8 +77,8 @@ const themeConfig = computed(() => getThemeConfig())
 const dialectName = computed(() => dialects[currentDialect.value].name)
 
 function toggle() { expanded.value = !expanded.value; sfxClick() }
-function setTheme(name) { currentTheme.value = name; setTheme(name); sfxClick(); }
-function setDialect(name) { currentDialect.value = name; setDialect(name); sfxClick(); }
+function setTheme(name) { currentTheme.value = name; _setTheme(name); sfxClick(); }
+function setDialect(name) { currentDialect.value = name; _setDialect(name); sfxClick(); }
 
 function toggleSFX() { sfxOn.value = !sfxOn.value; if (sfxOn.value) sfxCorrect(); }
 function toggleSpeech() { 
@@ -166,3 +166,4 @@ onMounted(() => {
   font-size: 26rpx; border-radius: 30rpx; margin-top: 10rpx;
 }
 </style>
+

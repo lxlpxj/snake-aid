@@ -141,7 +141,7 @@ export default {
           content: '查看/新建病历需要登录 APP 账号',
           showCancel: false,
           confirmText: '去登录',
-          success: () => { uni.switchTab({ url: '/pages/mine/mine' }) }
+          success: () => { uni.switchTab({ url: '/pages/mine/mine', fail: () => {} }) }
         })
       } else if (j.code !== undefined) {
         uni.showToast({ title: j.message || '加载失败', icon: 'none' })
@@ -226,3 +226,4 @@ export default {
 .btn.ghost { background:#E0E0E0; color:#555; }
 .btn.danger { background:#C62828; color:#fff; }
 </style>
+

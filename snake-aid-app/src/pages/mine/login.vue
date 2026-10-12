@@ -103,7 +103,7 @@ export default {
 						}
 						uni.setStorageSync('appUser', userData)
 						uni.showToast({ title: '登录成功', icon: 'success' })
-						setTimeout(() => { uni.switchTab({ url: '/pages/mine/mine' }) }, 600)
+						setTimeout(() => { uni.switchTab({ url: '/pages/mine/mine', fail: () => {} }) }, 600)
 					} else {
 						uni.showToast({ title: d?.msg || '登录失败', icon: 'none' })
 					}
@@ -171,5 +171,6 @@ export default {
 	text-align: center; font-size: 22rpx; color: #999; line-height: 1.6;
 }
 </style>
+
 
 
