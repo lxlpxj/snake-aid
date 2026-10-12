@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="video-page">
     <!-- 顶部标题 -->
     <view class="page-header">

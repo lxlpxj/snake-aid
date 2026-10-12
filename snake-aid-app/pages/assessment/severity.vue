@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="assessment-page">
     <!-- 顶部进度 -->
     <view class="progress-bar">

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="snake-learn-container" :class="{ 'big-font': bigFont }">
     <!-- 🔊 语音测试大按钮 -->
     <view class="test-voice-bar">

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="protocol-page">
     <!-- Tabs -->
     <view class="tab-bar">

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
         <view class="mine">
                 <!-- 用户信息卡片 -->
                 <view class="user-card" @click="goLogin">

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<view class="home">
 		<!-- 顶部紧急大按钮：2 步内到达自救 -->
 		<view class="hero">

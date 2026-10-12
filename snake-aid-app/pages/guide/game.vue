@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="game-container">
   <!-- 语音开关 -->
   <view class="voice-switch" @click="toggleVoice">
