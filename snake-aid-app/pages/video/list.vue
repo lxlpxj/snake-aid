@@ -69,6 +69,7 @@
 </template>
 
 <script setup>
+import { API_BASE } from '@/utils/api'
 import { ref, onMounted, watch } from 'vue'
 
 const categories = ['急救操作', '蛇种识别', '案例讲解', '其他']
@@ -77,7 +78,7 @@ const list = ref([])
 const loading = ref(true)
 const playingVideo = ref(null)
 
-const BASE = 'http://127.0.0.1:8080/api'
+const BASE = API_BASE
 
 function fullUrl(url) {
   if (!url) return ''

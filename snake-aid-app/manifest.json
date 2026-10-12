@@ -1,6 +1,6 @@
-﻿{
-    "name" : "snake-aid-app",
-    "appid" : "",
+{
+    "name" : "蛇伤急救",
+    "appid" : "__UNI__D737C0C",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -78,11 +78,11 @@
             "https" : false,
             "proxy" : {
                 "/api" : {
-                    "target" : "http://127.0.0.1:8080",
+                    "target" : "http://192.168.1.105:8080",
                     "changeOrigin" : true
                 },
                 "/uploads" : {
-                    "target" : "http://127.0.0.1:8080",
+                    "target" : "http://192.168.1.105:8080",
                     "changeOrigin" : true
                 }
             }

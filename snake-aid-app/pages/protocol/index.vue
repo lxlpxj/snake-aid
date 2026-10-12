@@ -75,8 +75,9 @@
 </template>
 
 <script setup>
+import { API_BASE } from '@/utils/api'
 import { ref, onMounted } from 'vue'
-const BASE = 'http://127.0.0.1:8080/api'
+const BASE = API_BASE
 
 const tab = ref('serum')
 const serumList = ref([])

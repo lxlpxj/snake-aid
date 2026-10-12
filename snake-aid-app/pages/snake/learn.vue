@@ -234,6 +234,7 @@
 </template>
 
 <script setup>
+import { API_BASE } from '@/utils/api'
 import { ref, reactive, computed, onMounted } from 'vue'
 import voice from '../../utils/voice'
 
@@ -330,7 +331,7 @@ function questionToTest(q) {
 async function loadQuestionsFromBackend() {
   // #ifdef H5
   try {
-    const base = 'http://127.0.0.1:8080/api'
+    const base = API_BASE
     // PRACTICE 题
     const pRes = await fetch(base + '/app/quiz/pick?category=PRACTICE&count=5')
     const pJson = await pRes.json()

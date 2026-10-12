@@ -1,4 +1,4 @@
-﻿<template>
+<template>
         <view class="points-logs">
                 <view v-if="loading" class="empty">加载中...</view>
                 <view v-else-if="!logs.length" class="empty">
@@ -22,8 +22,9 @@
 </template>
 
 <script>
+import { API_BASE } from '@/utils/api'
 const TOKEN_KEY = 'snake_token'
-const API = 'http://127.0.0.1:8080/api'
+const API = API_BASE
 
 export default {
         data() { return { token: '', logs: [], loading: true } },

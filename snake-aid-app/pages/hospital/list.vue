@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="hospital-list">
 		<!-- 省市区筛选（内置全国数据，不依赖数据库） -->
 		<view class="locator">
@@ -50,8 +50,9 @@
 </template>
 
 <script>
+import { API_BASE } from '@/utils/api'
 import { china } from '@/common/china.js'
-const API = 'http://127.0.0.1:8080/api'
+const API = API_BASE
 
 export default {
 	data() {

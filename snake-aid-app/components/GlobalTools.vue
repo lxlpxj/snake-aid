@@ -13,9 +13,9 @@
       <view class="tool-group">
         <text class="group-label">👁️ 显示模式</text>
         <view class="btn-row">
-          <view class="tool-btn" :class="{ active: currentTheme==='normal' }" @click="setTheme('normal')">标准</view>
-          <view class="tool-btn" :class="{ active: currentTheme==='bigFont' }" @click="setTheme('bigFont')">大字</view>
-          <view class="tool-btn elder" :class="{ active: currentTheme==='elder' }" @click="setTheme('elder')">👴老人</view>
+          <view class="tool-btn" :class="{ active: currentTheme==='normal' }" @click="applyTheme('normal')">标准</view>
+          <view class="tool-btn" :class="{ active: currentTheme==='bigFont' }" @click="applyTheme('bigFont')">大字</view>
+          <view class="tool-btn elder" :class="{ active: currentTheme==='elder' }" @click="applyTheme('elder')">👴老人</view>
         </view>
         <text class="hint-text">字号 {{ themeConfig.fontScale }}x · 对比度 {{ themeConfig.contrastRatio }}</text>
       </view>
@@ -24,10 +24,10 @@
       <view class="tool-group">
         <text class="group-label">🗣️ 语音方言</text>
         <view class="btn-row">
-          <view class="tool-btn" :class="{ active: currentDialect==='mandarin' }" @click="setDialect('mandarin')">普通话</view>
-          <view class="tool-btn" :class="{ active: currentDialect==='sichuan' }" @click="setDialect('sichuan')">四川话</view>
-          <view class="tool-btn" :class="{ active: currentDialect==='cantonese' }" @click="setDialect('cantonese')">粤语</view>
-          <view class="tool-btn" :class="{ active: currentDialect==='henan' }" @click="setDialect('henan')">河南话</view>
+          <view class="tool-btn" :class="{ active: currentDialect==='mandarin' }" @click="applyDialect('mandarin')">普通话</view>
+          <view class="tool-btn" :class="{ active: currentDialect==='sichuan' }" @click="applyDialect('sichuan')">四川话</view>
+          <view class="tool-btn" :class="{ active: currentDialect==='cantonese' }" @click="applyDialect('cantonese')">粤语</view>
+          <view class="tool-btn" :class="{ active: currentDialect==='henan' }" @click="applyDialect('henan')">河南话</view>
         </view>
       </view>
       
@@ -77,8 +77,8 @@ const themeConfig = computed(() => getThemeConfig())
 const dialectName = computed(() => dialects[currentDialect.value].name)
 
 function toggle() { expanded.value = !expanded.value; sfxClick() }
-function setTheme(name) { currentTheme.value = name; setTheme(name); sfxClick(); }
-function setDialect(name) { currentDialect.value = name; setDialect(name); sfxClick(); }
+function applyTheme(name) { currentTheme.value = name; setTheme(name); sfxClick(); }
+function applyDialect(name) { currentDialect.value = name; setDialect(name); sfxClick(); }
 
 function toggleSFX() { sfxOn.value = !sfxOn.value; if (sfxOn.value) sfxCorrect(); }
 function toggleSpeech() { 

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="ai-chat">
 		<!-- 顶部 -->
 		<view class="chat-header">
@@ -54,7 +54,8 @@
 </template>
 
 <script>
-const API = 'http://127.0.0.1:8080/api'
+import { API_BASE } from '@/utils/api'
+const API = API_BASE
 
 export default {
 	data() {

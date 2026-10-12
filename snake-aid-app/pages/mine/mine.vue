@@ -116,9 +116,10 @@
 </template>
 
 <script>
+import { API_BASE } from '@/utils/api'
 const TOKEN_KEY = 'token'
 const USER_KEY = 'appUser'
-const API = 'http://127.0.0.1:8080/api'
+const API = API_BASE
 
 export default {
         data() {

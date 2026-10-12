@@ -184,9 +184,10 @@
 </template>
 
 <script setup>
+import { API_BASE } from '@/utils/api'
 import { ref, reactive, computed } from 'vue'
 
-const BASE = 'http://127.0.0.1:8080/api'
+const BASE = API_BASE
 
 const step = ref(1)
 const form = reactive({

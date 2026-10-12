@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="login-page">
 		<!-- 品牌区 -->
 		<view class="brand">
@@ -44,7 +44,8 @@
 </template>
 
 <script>
-const API = 'http://127.0.0.1:8080/api'
+import { API_BASE } from '@/utils/api'
+const API = API_BASE
 
 export default {
 	data() {
