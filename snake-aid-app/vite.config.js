@@ -8,20 +8,20 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://192.168.1.105:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         rewrite: (path) => path
       },
       '/uploads': {
-        target: 'http://192.168.1.105:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true
       },
       '/doc.html': {
-        target: 'http://192.168.1.105:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true
       },
       '/swagger-ui.html': {
-        target: 'http://192.168.1.105:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true
       }
     }

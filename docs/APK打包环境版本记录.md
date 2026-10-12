@@ -107,8 +107,9 @@ foreach($file in @("App.vue","main.js","manifest.json","pages.json","uni.scss","
 **3. 校验产物地址**
 
 ```powershell
-Select-String -Path "$env:TEMP\uni-tpl-test\tpl\dist\build\app\app-service.js" -Pattern "192.168.1.105"
-# 应命中；再查旧地址 127.0.0.1:8080/api 应为 0 命中
+Select-String -Path "$env:TEMP\uni-tpl-test\tpl\dist\build\app\app-service.js" -Pattern "http://localhost:8080"
+# 应命中，且与 snake-aid-app\utils\api.js 的 APP-PLUS 值一致
+# （真机调试包应是电脑局域网 IP，届时按实际 IP 校验）
 ```
 
 **4. 拷入 Android 工程**（/MIR 镜像，清掉旧资源）
@@ -129,7 +130,7 @@ $env:Path="$env:JAVA_HOME\bin;$env:Path"
 
 **6. 产物**：`simpleDemo\build\outputs\apk\release\simpleDemo-release.apk`
 
-**7. 验证**：aapt 查包名 `cn.snake.aid`、appkey 已写入；装机后确认接口能连 `192.168.1.105:8080`（本机 Docker）
+**7. 验证**：aapt 查包名 `cn.snake.aid`、appkey 已写入；装机后确认接口地址与 `api.js` APP-PLUS 值一致（默认 `localhost:8080`，手机直连真机需改为电脑局域网 IP）
 
 ---
 
