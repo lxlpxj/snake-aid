@@ -1,8 +1,10 @@
-﻿// ==========================================
-// api.js — 统一 API 地址管理
+// ==========================================
+// api.js — 统一 API 地址管理（全项目唯一开关）
 // H5 开发: 用相对路径 /api (走 vite proxy)
 // 生产环境: Docker 前后端同域部署, /api 反代到 8080
-// App 打包: 用 http://localhost:8080/api
+// App 打包: 手机没有 nginx 转发, 必须写完整地址 → 本机 Docker localhost:8080
+//   真机调试时 localhost 指手机自己, 需改成电脑的局域网 IP（如 192.168.1.x）
+//   换服务器只改下面 APP-PLUS 这两行
 // ==========================================
 
 let _baseUrl = null
@@ -12,17 +14,17 @@ function detectBaseUrl() {
   // H5: 用相对路径, 由 vite dev server 或 Nginx proxy 转发
   return ''
   // #endif
-  
+
   // #ifdef APP-PLUS
-  // App: Docker 跑在本机 8080
-  return 'http://192.168.142.41:8080'
+  // App 直连后端（默认本机 Docker；真机访问需改为电脑局域网 IP）
+  return 'http://localhost:8080'
   // #endif
-  
+
   // #ifdef MP-WEIXIN
   return 'https://your-server.com'
   // #endif
-  
-  return 'http://192.168.142.41:8080'
+
+  return 'http://localhost:8080'
 }
 
 export function getBaseUrl() {
@@ -36,5 +38,5 @@ export function apiUrl(path) {
   return base + '/' + path
 }
 
-// 直接替换: 'http://192.168.2.15:8080/api' => apiUrl('') + path
+// 用法: apiUrl('/user/login') → http://localhost:8080/user/login
 export const API_BASE = getBaseUrl() + '/api'

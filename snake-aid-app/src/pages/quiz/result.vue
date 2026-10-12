@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="result-page">
 		<!-- 成绩头部 -->
 		<view class="result-hero" :class="scoreClass">
@@ -109,7 +109,8 @@
 </template>
 
 <script>
-	const API = '/api'
+import { API_BASE } from '@/utils/api'
+	const API = API_BASE
 	export default {
 		data() {
 			return {

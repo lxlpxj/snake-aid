@@ -1,4 +1,4 @@
-﻿<template>
+<template>
 	<view class="admin-entry">
 		<view class="header">
 			<view class="logo">🔐</view>
@@ -29,7 +29,8 @@
 </template>
 
 <script>
-const API = '/api'
+import { API_BASE } from '@/utils/api'
+const API = API_BASE
 const ADMIN_TOKEN = 'snake_admin_token'
 const ADMIN_INFO = 'snake_admin_info'
 

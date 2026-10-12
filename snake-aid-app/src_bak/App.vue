@@ -2,6 +2,9 @@
 import { setTheme as _setTheme, getThemeConfig, onThemeChange } from '@/utils/theme.js'
 import { speak as _speak, isSpeechOn as _isSpeechOn } from '@/utils/dialect.js'
 import { sfxClick, sfxCorrect, sfxWrong, sfxSnake, sfxWin, sfxEmergency, sfxDone, playBGM, stopBGM } from '@/utils/audio.js'
+import SnakeAnim from '@/components/SnakeAnim.vue'
+import FirstAidAnim from '@/components/FirstAidAnim.vue'
+import GlobalTools from '@/components/GlobalTools.vue'
 
 let showing401 = false
 
@@ -17,9 +20,9 @@ function is401(res) {
 export default {
   // 全局注册组件
   components: {
-    SnakeAnim: () => import('@/components/SnakeAnim.vue'),
-    FirstAidAnim: () => import('@/components/FirstAidAnim.vue'),
-    GlobalTools: () => import('@/components/GlobalTools.vue')
+    SnakeAnim,
+    FirstAidAnim,
+    GlobalTools
   },
   
   // 全局 provide 给所有页面用

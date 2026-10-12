@@ -58,8 +58,9 @@
 </template>
 
 <script>
+import { API_BASE } from '@/utils/api'
 import { china } from '@/common/china.js'
-const API = '/api'
+const API = API_BASE
 
 export default {
 	data() {

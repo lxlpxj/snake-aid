@@ -1,4 +1,4 @@
-﻿﻿<template>
+﻿<template>
 	<view class="snake-detail">
 		<!-- 头图区 -->
 		<view class="banner">
@@ -60,7 +60,8 @@
 </template>
 
 <script>
-const API = '/api'
+import { API_BASE } from '@/utils/api'
+const API = API_BASE
 
 export default {
 	data() {

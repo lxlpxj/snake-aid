@@ -360,6 +360,7 @@
 </template>
 
 <script setup>
+import { API_BASE } from '@/utils/api'
 import { ref, reactive, computed, onMounted } from 'vue'
 import voice from '../../utils/voice'
 
@@ -411,7 +412,7 @@ function toggleVoice() {
 }
 import { sfxClick, sfxCorrect, sfxWrong, sfxWin, sfxEmergency, sfxDone } from '@/utils/audio.js'
 
-const API = '/api'
+const API = API_BASE
 const hardcodedStepsBackup = []
 
 // 从后端拉关卡数据，失败用硬编码 fallback

@@ -29,7 +29,7 @@ services:
       TZ: Asia/Shanghai
       LANG: C.UTF-8
     ports:
-      - "3307:3306"
+      - "127.0.0.1:3307:3306"   # 只绑本机回环，局域网不可直连（容器间走内部网络不受影响）
     volumes:
       - snake-mysql-data:/var/lib/mysql
       # 自动初始化（仅空卷时执行一次，用 backend 下最新版）
@@ -56,7 +56,7 @@ services:
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes"]
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"   # 只绑本机回环，局域网不可直连
     volumes:
       - snake-redis-data:/data
     healthcheck:
@@ -74,6 +74,7 @@ services:
     build:
       context: ./snake-aid-backend
       dockerfile: Dockerfile
+    image: snakebite-first-aid-backend:latest   # 离线部署: docker load 后按此 tag 认领
     container_name: snake-backend
     restart: unless-stopped
     ports:
@@ -110,10 +111,21 @@ services:
     build:
       context: ./snake-admin-web
       dockerfile: Dockerfile
+    image: snakebite-first-aid-frontend:latest  # 离线部署: docker load 后按此 tag 认领
     container_name: snake-frontend
     restart: unless-stopped
     ports:
       - "8081:80"          # 如果本地 80 被 IIS/其他占用，改成 "8081:80"
+    volumes:
+      # 用源码里的 nginx.conf 覆盖镜像内置配置（镜像内是旧版，缺 client_max_body_size 250m）
+      - ./snake-admin-web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      # 镜像内置 HEALTHCHECK 用 localhost（容器内解析成 ::1，而 nginx 只监听 IPv4，会误报 unhealthy）
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
     depends_on:
       - backend          # 后端先起
     networks:

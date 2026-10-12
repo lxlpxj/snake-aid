@@ -1,4 +1,4 @@
-﻿<template>
+<template>
         <view class="leaderboard">
                 <view class="lb-header">
                         <text class="lb-title">🏆 蛇伤急救达人榜</text>
@@ -43,8 +43,9 @@
 </template>
 
 <script>
+import { API_BASE } from '@/utils/api'
 const TOKEN_KEY = 'snake_token'
-const API = '/api'
+const API = API_BASE
 
 export default {
         data() { return { list: [] } },
