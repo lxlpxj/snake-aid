@@ -10,8 +10,6 @@ snake-aid-backend/target/maven-*
 
 # ?? node_modules
 snake-aid-app/node_modules
-snake-aid-app/src
-snake-aid-app/package-lock.json
 
 # IDE
 .idea
